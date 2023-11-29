@@ -1,4 +1,4 @@
-  <!-- ##FOOTER## -->
+<link href="/css/global.CSS" rel="stylesheet" />
 
   <footer>
     <div class="footer">

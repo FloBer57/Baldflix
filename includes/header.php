@@ -1,4 +1,4 @@
-<link href="css/global.CSS" rel="stylesheet" />
+<!-- <link href="css/global.CSS" rel="stylesheet" /> -->
 
 <header class="header">
 
@@ -51,6 +51,9 @@
           <li class="nav-item">
             <a href="bald.html" class="nav-link">Bald</a>
           </li>
+          <li class="nav-item">
+            <a href="logout.php" class="nav-link">Déconnexion</a>
+          </li>
         </ul>
       </nav>
       <script src="js/burger.js"></script>
@@ -65,7 +68,7 @@
     </div>
 
     <div class="search_phone" role="search">
-      <a href="#"><img src="/image/loupe.png" alt=""></a>
+      <a href="#"><img src="image/loupe.png" alt=""></a>
     </div>
 
   </header>

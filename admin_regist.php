@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </form>
             </div>
 
-            <div class="container_title">
+            <div class="container__title">
                 <div class="title">
                     <h1>Baldflix</h1>
                 </div>

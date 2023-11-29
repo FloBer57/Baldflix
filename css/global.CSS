@@ -509,7 +509,7 @@ a.hero img {
   .navbar {
     right: -750px;
     width: 100%;
-    height: 100%;
+    height: calc(100%-6em);
     border: none;
   }
 
@@ -546,7 +546,7 @@ a.hero img {
     position: fixed;
     top: 1.8em;
     right: 6em;
-    width: 3em;
+    width: 2.6em;
     z-index: 3;
   }
   /* footer */
@@ -587,16 +587,16 @@ a.hero img {
   .navbar {
     right: -750px;
     width: 100%;
-    height: 100%;
+    height: calc(100%-6em);
     border: none;
   }
 
   .nav-item {
-    margin: 1.2em;
+    margin: 0.8em;
   }
 
   .nav-link {
-    font-size: 1.2em;
+    font-size: 0.8em;
   }
 
   .container {
@@ -627,7 +627,7 @@ a.hero img {
     position: fixed;
     top: 1.8em;
     right: 6em;
-    width: 3em;
+    width: 2.6em;
     z-index: 3;
   }
 
@@ -654,20 +654,6 @@ a.hero img {
 }
 
 @media screen and (max-width: 450px) {
-  .box {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    flex-wrap: wrap;
-    height: 50%;
-  }
-
-  .box a {
-    flex-basis: calc(50% - 20px);
-    /* 33% moins l'espacement entre les éléments */
-    margin-bottom: 20px;
-    /* Espace entre les lignes */
-  }
 
   #watched,
   #serie,
@@ -681,6 +667,10 @@ a.hero img {
   #watched {
     margin-top: -1.4em;
     margin-bottom: -0.8em;
+  }
+
+  .title {
+    margin-left: 0.7em;
   }
 
   .text-video {
@@ -704,25 +694,29 @@ a.hero img {
     margin-top: -7px;
     right: 20px;
   }
-  /* Search_bar */
+  /* header */
 
-  .search_nav {
-    display: none;
+  .navbar {
+    right: -750px;
+    width: 100%;
+    height: calc(100%-5em);
+    border: none;
+    top: 5em;
   }
-  .search_phone {
-    display: flex;
-    position: sticky;
-    opacity: 1;
-    right: 65px;
-    top: 22px;
-    width: 3em;
-    min-width: 2.5em;
-  }
-  /* Header */
 
-  .main-nav div ul {
-    display: none;
+  .nav-item {
+    margin: 0.8em;
   }
+
+  .nav-link {
+    font-size: 0.8em;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+  }
+
   .change {
     right: 0px;
   }
@@ -732,19 +726,22 @@ a.hero img {
     margin-bottom: 500px;
   }
 
-  .navbar {
-    right: -750px;
-    width: 100%;
-    height: 100%;
-    border: none;
+  .main-nav div ul {
+    display: none;
+  }
+  /* Search */
+
+  .search_nav {
+    display: none;
   }
 
-  .nav-item {
-    margin: 1.2em;
-  }
-
-  .nav-link {
-    font-size: 1em;
+  .search_phone {
+    display: block;
+    position: fixed;
+    top: 1.55em;
+    right: 4.5em;
+    width: 2.6em;
+    z-index: 3;
   }
 
   /* Footer */
