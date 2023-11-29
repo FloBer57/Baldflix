@@ -1,2 +1,2 @@
 # baldflix
-Projet baldflix perso
+baldFlix

@@ -1,0 +1,157 @@
+/* CSS VARIABLES */
+:root {
+  --primary: #141414;
+  --light: #f3f3f3;
+  --gray: #686868;
+  --red: #9d040b;
+  --wooburn: #7a0309;
+}
+
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--primary);
+  color: var(--light);
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  line-height: 1.4;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: url("/image/back.svg") center center no-repeat fixed;
+  background-size: cover;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  line-height: 1.4;
+  color: var(--light);
+  filter: grayscale(10%);
+}
+
+.fond {
+  display: none;
+}
+
+.main__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+
+.container {
+  display: flex;
+  box-shadow: 0 0 10px rgba(31, 31, 31, 0.2);
+  width: 90%;
+}
+
+.container__form,
+.container__title {
+  flex: 1;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0px 0px 20px rgba(66, 66, 66, 0.75);
+  background-color: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10vh 0px;
+  text-align: center;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: -50px;
+  /* Ajustez la marge supérieure selon vos préférences */
+}
+
+.title a {
+  color: var(--light);
+  text-decoration: none;
+}
+
+.title :visited {
+  color: var(--light);
+  text-decoration: none;
+}
+
+.wai {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 15px;
+  margin-right: 10px;
+  margin-left: 10px;
+  /* Ajustez la marge supérieure selon vos préférences */
+}
+
+#username,
+#password,
+.input {
+  padding: 15px;
+  font-size: 15px;
+  border-width: 4px;
+  border-color: #000000;
+  background-color: 0px 0px 20px rgba(255, 255, 255, 0.75);
+  color: var(--red);
+  border-style: solid;
+  border-radius: 22px;
+  text-shadow: 0px 0px 5px rgba(243, 243, 243, 0.75);
+  width: 80%;
+  background: var(--light);
+}
+
+input[type="submit"] {
+  background-color: var(--light);
+  color: var(--red)
+}
+
+.input {
+  width: 90%;
+  cursor: pointer;
+}
+
+.input:focus {
+  outline: none;
+  border-style: none;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    flex-direction: column;
+    width: 90%;
+    height: 100%;
+    margin: 0;
+  }
+
+  .wai {
+    display: none;
+  }
+
+  .container__title {
+    padding: 25px;
+    order: 1;
+    box-shadow: none;
+    border: none;
+    background-color: none;
+    padding: 0;
+    margin: 0;
+  }
+  .container__form {
+    padding: 25px;
+    order: 2;
+    margin-bottom: 50%;
+  }
+
+  h1 {
+    margin-top: 50%;
+  }
+}

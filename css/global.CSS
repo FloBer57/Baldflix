@@ -1,0 +1,770 @@
+/* CSS VARIABLES */
+:root {
+  --primary: #141414;
+  --light: #f3f3f3;
+  --gray: #686868;
+  --red: #9d040b;
+  --wooburn: #7a0309;
+}
+
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--primary);
+  color: var(--light);
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  line-height: 1.4;
+}
+
+li {
+  list-style: none;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  /* Chemin relatif vers votre fichier SVG */
+  background-size: cover;
+  background-repeat: repeat;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* HEADER */
+header {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary);
+  width: 100%;
+  margin-bottom: 0px;
+  z-index: 2;
+  top: 0;
+  height: 6em;
+  border-bottom: 3px solid var(--red);
+}
+
+header::after {
+  content: "";
+  /* Élément vide */
+}
+
+.title {
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-size: 1.4em;
+  letter-spacing: 0px;
+  word-spacing: 0px;
+  color: var(--light);
+  font-weight: bold;
+  text-decoration: none solid var(--gray);
+  font-style: normal;
+  font-variant: small-caps;
+  text-transform: uppercase;
+  margin-left: 1.5em;
+  display: flex;
+  position: sticky;
+}
+
+.title a {
+  color: var(--light);
+  text-decoration: none;
+}
+
+title :visited {
+  color: var(--light);
+  text-decoration: none;
+}
+
+.main-nav {
+  display: flex;
+  position: absolute;
+  left: 300px;
+}
+.main-nav div ul {
+  display: flex;
+  flex-direction: row;
+  font-size: 1.5em;
+}
+
+.main-nav div ul a {
+  color: var(--light);
+  text-decoration: none;
+  margin: 0.5em;
+}
+
+.main-nav div ul a:hover {
+  color: var(--wooburn);
+}
+
+/* Search */
+
+.search_nav {
+  display: flex;
+  position: absolute;
+  border: 3px solid var(--red);
+  border-radius: 15px;
+  padding: 7px 10px;
+  left: calc(100% - 6em);
+  transform: translateX(-100%);
+  top: 1.6em;
+}
+
+#search {
+  border: none;
+  outline: none;
+  background: transparent;
+  margin-right: 0px;
+  color: var(--light);
+}
+
+.search-button {
+  background-color: var(--red);
+  border: none;
+  border-radius: 20px;
+  color: var(--light);
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.search-button:hover {
+  background-color: var(--red);
+}
+
+.search_phone {
+  display: none;
+}
+
+/* Menu burger */
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.navbar {
+  width: 350px;
+  position: fixed;
+  top: 6em;
+  right: -370px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 0%;
+  transition: right 0.5s cubic-bezier(1, 0, 0, 1);
+  z-index: 0;
+  background-color: transparent;
+  border: 3px solid var(--red);
+  background-color: #141414;
+}
+
+.change {
+  right: 0;
+}
+
+.hamburger-menu {
+  width: 40px;
+  height: 35px;
+  background-color: var(--primary);
+  position: fixed;
+  top: 2.2em;
+  right: 2em;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  z-index: 2;
+}
+
+.line {
+  width: 100%;
+  height: 4px;
+  background-color: var(--red);
+  transition: all 0.8s;
+}
+
+.change .line-1 {
+  transform: rotateZ(-405deg) translate(-8px, 6px);
+}
+
+.change .line-2 {
+  opacity: 0;
+}
+
+.change .line-3 {
+  transform: rotateZ(405deg) translate(-8px, -6px);
+}
+
+.nav-list {
+  display: inline-block;
+  align-items: center;
+  background-color: transparent;
+  margin-right: 1.5em;
+}
+
+.nav-item {
+  list-style: none;
+  margin: 2em;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-size: 1.5em;
+  color: var(--light);
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.nav-link::before,
+.nav-link::after {
+  content: "";
+  width: 100%;
+  height: 2px;
+  background-color: var(--red);
+  left: 0;
+  transform: scaleX(0);
+  transition: transform 0.5s;
+}
+
+.nav-link::after {
+  bottom: 0;
+  transform-origin: right;
+}
+
+.nav-link::before {
+  top: 0;
+  transform-origin: left;
+}
+
+.nav-link:hover::before,
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.nav-hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a.hero img {
+  align-items: center;
+  max-width: 100px;
+  min-width: auto;
+}
+
+/* Video */
+
+.trailer {
+  position: relative;
+  z-index: 1;
+}
+
+.text-video {
+  position: absolute;
+  top: 60%;
+  left: 15%;
+  transform: translate(-23%, -60%);
+  background: linear-gradient(var(--red), transparent);
+  padding: 20px;
+  color: var(--light);
+  font-size: 4em;
+  font-weight: bold;
+  border-radius: 30px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.text-video:hover {
+  background-color: var(--primary);
+}
+
+.preview {
+  margin-top: 6em;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 20.5em);
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  touch-action: none;
+}
+
+/* MAIN CONTAINER */
+
+#watched,
+#serie,
+#films,
+#anime,
+#spectacles,
+#burger,
+#bald {
+  margin-top: -1em;
+  margin-bottom: -1em;
+  margin-left: -0.2em;
+  padding: 0.3em;
+  color: var(--light);
+  font-size: 2em;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: none;
+  justify-content: center;
+  text-decoration: none;
+  text-shadow: 1px 1px 2px var(--red);
+  display: flex;
+  justify-content: center;
+}
+
+#watched {
+  margin-top: -0.5em;
+  margin-left: -0.2em;
+}
+
+.main-container {
+  padding: 2em;
+}
+
+/* box  A SOCCUPER */
+
+.box {
+  border: var(--red);
+  transition: background-color 0.3s ease;
+}
+
+.box-div {
+  margin: 8px;
+}
+
+.box img {
+  border-radius: 10px;
+}
+
+.box-watched,
+.box-serie,
+.box-anime,
+.box-spectacles,
+.box-films {
+  padding: 1em;
+}
+
+/* Slick */
+
+/* FOOTER */
+
+.footer {
+  background: linear-gradient(to top, var(--wooburn), transparent);
+  height: 7em;
+  text-align: center;
+}
+
+.footer .row {
+  width: 100%;
+  color: var(--light);
+  font-size: 15px;
+}
+
+.footer .row a {
+  text-decoration: none;
+  color: var(--light);
+  transition: 0.1s;
+  margin: 0px 30px;
+}
+
+.footer .row a:hover {
+  color: var(--red);
+}
+
+.footer .row ul li {
+  display: inline-block;
+  margin-top: 1.8em;
+  font-weight: 600;
+}
+
+.footer .row ul li a {
+  font-size: 1.5em;
+  margin: 0 40px;
+}
+
+/* Media querie d'un ecran d'ordi */
+
+@media screen and (min-width: 1400px) {
+  #watched {
+    margin-top: -1em;
+  }
+}
+
+@media screen and (min-width: 1100px) and (max-width: 1400px) {
+  #watched,
+  #serie,
+  #films,
+  #anime,
+  #spectacles,
+  #bald {
+    font-size: 2em;
+  }
+
+  #watched {
+    margin-top: -1em;
+  }
+
+  .text-video {
+    top: 70%;
+    left: 15%;
+    transform: translate(-23%, -60%);
+    font-size: 3em;
+  }
+
+  /* header */
+  .main-nav div ul {
+    display: none;
+  }
+
+  /* box */
+  .box a {
+    flex-basis: calc(33% - 20px);
+    margin-bottom: 20px;
+  }
+}
+
+/* Media querie d'une tablette */
+@media screen and (min-width: 750px) and (max-width: 1100px) {
+  #watched,
+  #serie,
+  #films,
+  #anime,
+  #spectacles,
+  #bald {
+    font-size: 1.8em;
+    margin-top: -1em;
+  }
+
+  .text-video {
+    top: 70%;
+    /* Position verticale au milieu */
+    left: 22%;
+    /* Position horizontale au milieu */
+    transform: translate(-23%, -60%);
+    /* Centrez horizontalement et verticalement */
+    font-size: 2.5em;
+  }
+
+  /* header */
+
+  .main-nav div ul {
+    display: none;
+  }
+
+  /* footer */
+
+  .footer .row ul li a {
+    font-size: 1em;
+    margin: 0 30px;
+  }
+}
+
+@media screen and (min-width: 600px) and (max-width: 750px) {
+  #watched,
+  #serie,
+  #films,
+  #anime,
+  #spectacle,
+  #bald {
+    font-size: 1.8em;
+  }
+
+  #watched {
+    margin-top: -1.4em;
+    margin-bottom: -0.8em;
+  }
+
+  .text-video {
+    top: 70%;
+    left: 22%;
+    transform: translate(-23%, -60%);
+    font-size: 2.2em;
+  }
+
+  /* header */
+
+  .main-nav div ul {
+    display: none;
+  }
+  .navbar {
+    right: -750px;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .nav-item {
+    margin: 1.2em;
+  }
+
+  .nav-link {
+    font-size: 1.4em;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+  }
+
+  .change {
+    right: 0px;
+    overflow: hidden;
+  }
+
+  .nav-list {
+    font-size: 25px;
+    margin-bottom: 500px;
+  }
+  /* search */
+
+  .search_nav {
+    display: none;
+  }
+
+  .search_phone {
+    display: block;
+    position: fixed;
+    top: 1.8em;
+    right: 6em;
+    width: 3em;
+    z-index: 3;
+  }
+  /* footer */
+
+  .footer .row ul li a {
+    font-size: 1em;
+    margin: 0 16.5px;
+  }
+}
+/* Media querie d'un téléphone */
+@media screen and (min-width: 450px) and (max-width: 600px) {
+  #watched,
+  #serie,
+  #films,
+  #anime,
+  #spectacle,
+  #bald {
+    font-size: 1.8em;
+  }
+
+  #watched {
+    margin-top: -1.4em;
+    margin-bottom: -0.8em;
+  }
+
+  .text-video {
+    top: 70%;
+    /* Position verticale au milieu */
+    left: 20%;
+    /* Position horizontale au milieu */
+    transform: translate(-23%, -60%);
+    /* Centrez horizontalement et verticalement */
+    font-size: 1.5em;
+  }
+
+  /* header */
+
+  .navbar {
+    right: -750px;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .nav-item {
+    margin: 1.2em;
+  }
+
+  .nav-link {
+    font-size: 1.2em;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+  }
+
+  .change {
+    right: 0px;
+  }
+
+  .nav-list {
+    font-size: 25px;
+    margin-bottom: 500px;
+  }
+
+  .main-nav div ul {
+    display: none;
+  }
+  /* Search */
+
+  .search_nav {
+    display: none;
+  }
+
+  .search_phone {
+    display: block;
+    position: fixed;
+    top: 1.8em;
+    right: 6em;
+    width: 3em;
+    z-index: 3;
+  }
+
+  /* footer */
+
+  .footer {
+    background: none;
+    margin-top: -2em;
+  }
+
+  .footer .row {
+    font-size: 0.8em;
+  }
+
+  .footer .row ul li {
+    background-color: #7a0309;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
+    margin: 10px 2px;
+    margin-right: 50px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .box {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 50%;
+  }
+
+  .box a {
+    flex-basis: calc(50% - 20px);
+    /* 33% moins l'espacement entre les éléments */
+    margin-bottom: 20px;
+    /* Espace entre les lignes */
+  }
+
+  #watched,
+  #serie,
+  #films,
+  #anime,
+  #spectacles,
+  #bald {
+    font-size: 1.5em;
+  }
+
+  #watched {
+    margin-top: -1.4em;
+    margin-bottom: -0.8em;
+  }
+
+  .text-video {
+    top: 70%;
+    /* Position verticale au milieu */
+    left: 25%;
+    /* Position horizontale au milieu */
+    transform: translate(-23%, -60%);
+    /* Centrez horizontalement et verticalement */
+    font-size: 1.3em;
+  }
+
+  .trailer {
+    margin-top: -1em;
+  }
+  header {
+    height: 5em;
+  }
+
+  .hamburger-menu {
+    margin-top: -7px;
+    right: 20px;
+  }
+  /* Search_bar */
+
+  .search_nav {
+    display: none;
+  }
+  .search_phone {
+    display: flex;
+    position: sticky;
+    opacity: 1;
+    right: 65px;
+    top: 22px;
+    width: 3em;
+    min-width: 2.5em;
+  }
+  /* Header */
+
+  .main-nav div ul {
+    display: none;
+  }
+  .change {
+    right: 0px;
+  }
+
+  .nav-list {
+    font-size: 25px;
+    margin-bottom: 500px;
+  }
+
+  .navbar {
+    right: -750px;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .nav-item {
+    margin: 1.2em;
+  }
+
+  .nav-link {
+    font-size: 1em;
+  }
+
+  /* Footer */
+
+  .footer {
+    background: none;
+    margin-top: -2em;
+  }
+
+  .footer .row {
+    font-size: 0.8em;
+  }
+
+  .footer .row ul li {
+    background-color: #7a0309;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
+    margin: 10px 2px;
+    margin-right: 50px;
+  }
+}
