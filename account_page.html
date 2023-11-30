@@ -1,0 +1,124 @@
+<link href="css/global.CSS" rel="stylesheet" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon compte</title>
+    <script href="js/account.js"></script>
+</head>
+<body>
+    
+</body>
+</html>
+<header class="header">
+
+    <div class="title">
+      <h1><a href="index.php">BaldFlix</a></h1>
+    </div>
+
+    <nav class="main-nav" role="navigation">
+      <div class="menu">
+        <ul class="menu-list">
+          <li><a href="index.php">Home</a></li>
+          <li><a href="serie.html">Séries</a></li>
+          <li><a href="films.html">Films</a></li>
+          <li><a href="anime.html">Anime</a></li>
+          <li><a href="spectacles.html">Spectacles</a></li>
+          <li><a href="bald.html">Bald</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <nav class="navbar" role="navigation">
+        <div class="hamburger-menu">
+          <div class="line line-1"></div>
+          <div class="line line-2"></div>
+          <div class="line line-3"></div>
+        </div>
+        <ul class="nav-list">
+          <li class="nav-item nav-hero">
+            <a href="#" class="hero" id="herro"><img src="image/users_icon/icon.png" alt=""></a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link connect">Mon compte</a>
+          </li>
+          <li class="nav-item">
+            <a href="index.php" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="serie.html" class="nav-link">Séries</a>
+          </li>
+          <li class="nav-item">
+            <a href="films.html" class="nav-link">Films</a>
+          </li>
+          <li class="nav-item">
+            <a href="anime.html" class="nav-link">Anime</a>
+          </li>
+          <li class="nav-item">
+            <a href="spectacles.html" class="nav-link">Spectacles</a>
+          </li>
+          <li class="nav-item">
+            <a href="bald.html" class="nav-link">Bald</a>
+          </li>
+          <li class="nav-item">
+            <a href="logout.php" class="nav-link">Déconnexion</a>
+          </li>
+        </ul>
+      </nav>
+      <script src="js/burger.js"></script>
+    </div>
+
+    </div>
+    </nav>
+
+    <div class="search_nav">
+      <input type="text" id="search" placeholder="Rechercher...">
+      <button class="search-button" onclick="searchFunction()">Rechercher</button>
+    </div>
+
+    <div class="search_phone" role="search">
+      <a href="#"><img src="image/loupe.png" alt=""></a>
+    </div>
+
+  </header>
+
+  <main>
+    <div class="account__container">
+        <div class="sub__container">
+            <nav class="account__nav">
+                <ul>
+                    <li id="profile-tab" onclick="showTab('profile-tab-content')">
+                        Mon profil
+                    </li>
+                    <li id="password-tab" onclick="showTab('password-tab-content')">
+                        Mot de passe et Sécurité
+                    </li>
+                    <li id="delete-tab" onclick="showTab('delete-tab-content')">
+                        Supprimer le compte
+                    </li>
+                </ul>
+            </nav>
+
+            <div id="profile-tab-content" class="tab__content">
+                <!-- Contenu pour modifier la photo de profil -->
+                <h2>Modifier la photo de profil</h2>
+                <h2>Date de naissance</h2>
+                <!-- Ajoutez ici le formulaire ou les éléments nécessaires -->
+            </div>
+
+            <!-- <div id="password-tab-content" class="tab__content">
+                <!-- Contenu pour modifier le mot de passe -->
+               <!-- <h2>Modifier le mot de passe</h2> -->
+                <!-- Ajoutez ici le formulaire ou les éléments nécessaires -->
+           <!-- </div> -->
+
+            <!-- <div id="delete-tab-content" class="tab__content"> -->
+                <!-- Contenu pour supprimer le compte -->
+               <!-- <h2>Supprimer le compte</h2> -->
+                <!-- Ajoutez ici le formulaire ou les éléments nécessaires -->
+            <!-- </div> -->
+        </div>
+    </div>
+</main>

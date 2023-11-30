@@ -402,6 +402,45 @@ a.hero img {
   margin: 0 40px;
 }
 
+/* Account_page */
+.account__container {
+  position :relative;
+  display: flex;
+  flex-direction: row;
+  top: 5em;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--light);
+  margin: 0;
+  text-align:start;
+}
+
+.sub__container {
+  display: flex;
+}
+
+.account__nav {
+  right: 200px; /* Ajustez la marge droite selon vos besoins */
+  flex-basis: 30%;
+}
+
+.account__nav li {
+  padding: 1em;
+  border: 3px solid var(--wooburn);
+}
+
+.account__nav li::selection {
+  color: blue;
+}
+.tab__content {
+  margin-right: 2em;
+  font-size: 0.8em;
+  padding: 1em;
+  margin-top: 20px;
+  border: 3px solid var(--wooburn);
+  flex-basis: 50%;
+}
+
 /* Media querie d'un ecran d'ordi */
 
 @media screen and (min-width: 1400px) {
