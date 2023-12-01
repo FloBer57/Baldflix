@@ -62,12 +62,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       // Close statement
       mysqli_stmt_close($stmt);
     }
+  } else {
+    echo "Erreur de validation du mot de passe : " . $new_password_err . " " . $confirm_password_err;
   }
 
   // Separate block for account deletion
   if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
     // Validate password for account deletion
-    $password = trim($_POST["password"]); // Assuming you define $password somewhere
+    $password = trim($_POST["password_delete"]); // Assuming you define $password somewhere
 
     // Prepare a select statement to verify the password
     $sql_verify = "SELECT id, username, password FROM users WHERE id = ?";
@@ -103,10 +105,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (mysqli_stmt_execute($delete_stmt)) {
                   // Redirect to the login page or home page after successful deletion
                   session_destroy();
-                  header("location: login.php");
+                  header("location: baldflix_login.php");
                   exit();
                 } else {
-                  echo "Oops! Something went wrong. Please try again later.";
+                  echo "Erreur MySQL lors de la suppression du compte : " . mysqli_error($link);
                 }
 
                 // Close statement
@@ -127,6 +129,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       // Close statement
       mysqli_stmt_close($stmt_verify);
+    }
+  }
+  if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) {
+    $suggestion_firstname = trim($_POST["suggestion_firstname"]);
+    $suggestion_lastname = trim($_POST["suggestion_lastname"]);
+    $suggestion_message = trim($_POST["suggestion_message"]);
+
+    // Construisez le corps de l'email
+    $email_body = "Nom: $suggestion_lastname\n";
+    $email_body .= "Prénom: $suggestion_firstname\n";
+    $email_body .= "Message:\n$suggestion_message";
+
+    // Envoie de l'email
+    $to = "contact@florentbernar.fr";
+    $subject = "Nouvelle suggestion de $suggestion_firstname $suggestion_lastname";
+    $headers = "From: $suggestion_firstname $suggestion_lastname <noreply@votresite.com>";
+
+    // Utilisez la fonction mail() pour envoyer l'email
+    if (mail($to, $subject, $email_body, $headers)) {
+      echo "Votre suggestion a été envoyée avec succès!";
+    } else {
+      echo "Erreur lors de l'envoi de la suggestion. Veuillez réessayer plus tard.";
     }
   }
 
@@ -167,6 +191,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </li>
             <li id="delete-tab" onclick="showTab('delete-tab-content')">
               Supprimer le compte
+            </li>
+            <li id="mail-tab" onclick="showTab('suggest-tab-content')">
+              Une suggestion?
             </li>
           </ul>
         </nav>
@@ -239,7 +266,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <br><br>
             </div>
             <div class="form-group">
-              <input type="submit" value="Supprimer le compte">
+              <input type="submit" name="delete_account" value="Supprimer le compte">
+            </div>
+          </form>
+        </div>
+        <div id="suggest-tab-content" class="tab__content active-tab">
+          <h2>Une suggestion?</h2>
+          <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+            <div class="form-group">
+              <label for="suggestion_firstname">Prénom :</label>
+              <input type="text" placeholder="Prénom" name="suggestion_firstname" id="suggestion_firstname" required
+                class="form-control">
+              <br><br>
+            </div>
+            <div class="form-group">
+              <label for="suggestion_lastname">Nom :</label>
+              <input type="text" placeholder="Nom" name="suggestion_lastname" id="suggestion_lastname" required
+                class="form-control">
+              <br><br>
+            </div>
+            <div class="form-group">
+              <label for="suggestion_message">Message :</label>
+              <textarea placeholder="Votre suggestion" name="suggestion_message" id="suggestion_message" required
+                class="form-control"></textarea>
+              <br><br>
+            </div>
+            <div class="form-group">
+              <input type="submit" name="submit_suggestion" value="Envoyer la suggestion">
             </div>
           </form>
         </div>
