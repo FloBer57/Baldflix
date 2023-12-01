@@ -1,5 +1,4 @@
 <?php
-// Initialize the session
 session_start();
 
 // Check if the user is logged in, otherwise redirect to login page
@@ -22,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty(trim($_POST["new_password"]))) {
     $new_password_err = "Please enter the new password.";
   } elseif (strlen(trim($_POST["new_password"])) < 6) {
-    $new_password_err = "Password must have atleast 6 characters.";
+    $new_password_err = "Password must have at least 6 characters.";
   } else {
     $new_password = trim($_POST["new_password"]);
   }
@@ -65,13 +64,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 
+  // Separate block for account deletion
+  if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
+    // Validate password for account deletion
+    $password = trim($_POST["password"]); // Assuming you define $password somewhere
+
+    // Prepare a select statement to verify the password
+    $sql_verify = "SELECT id, username, password FROM users WHERE id = ?";
+
+    if ($stmt_verify = mysqli_prepare($link, $sql_verify)) {
+      // Bind variables to the prepared statement as parameters
+      mysqli_stmt_bind_param($stmt_verify, "i", $param_id_verify);
+
+      // Set parameters
+      $param_id_verify = $_SESSION["id"];
+
+      // Attempt to execute the prepared statement
+      if (mysqli_stmt_execute($stmt_verify)) {
+        // Store result
+        mysqli_stmt_store_result($stmt_verify);
+
+        // Check if the username exists and verify the password
+        if (mysqli_stmt_num_rows($stmt_verify) == 1) {
+          // Bind result variables
+          mysqli_stmt_bind_result($stmt_verify, $id_verify, $username_verify, $hashed_password_verify);
+          if (mysqli_stmt_fetch($stmt_verify)) {
+            if (password_verify($password, $hashed_password_verify)) {
+              // Password is correct, delete the account
+              $delete_sql = "DELETE FROM users WHERE id = ?";
+              if ($delete_stmt = mysqli_prepare($link, $delete_sql)) {
+                // Bind variable to the prepared statement as a parameter
+                mysqli_stmt_bind_param($delete_stmt, "i", $id_delete);
+
+                // Set parameters
+                $id_delete = $_SESSION["id"];
+
+                // Attempt to execute the prepared statement
+                if (mysqli_stmt_execute($delete_stmt)) {
+                  // Redirect to the login page or home page after successful deletion
+                  session_destroy();
+                  header("location: login.php");
+                  exit();
+                } else {
+                  echo "Oops! Something went wrong. Please try again later.";
+                }
+
+                // Close statement
+                mysqli_stmt_close($delete_stmt);
+              }
+            } else {
+              // Display an error message if the password is not valid
+              $password_err = "The password you entered was not valid.";
+            }
+          }
+        } else {
+          // Display an error message if the username doesn't exist
+          $username_err = "No account found with that username.";
+        }
+      } else {
+        echo "Oops! Something went wrong. Please try again later.";
+      }
+
+      // Close statement
+      mysqli_stmt_close($stmt_verify);
+    }
+  }
+
   // Close connection
   mysqli_close($link);
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8">
@@ -157,23 +222,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="form-group">
               <input type="submit" value="Modifier le mot de passe">
-              <input type="submit" class="btn btn-primary" href="account_page" value="Annuler">
             </div>
           </form>
           <!-- You can include additional HTML content if needed -->
         </div>
         <div id="delete-tab-content" class="tab__content active-tab">
           <h2>Supprimer le compte</h2>
-          <p>Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.</p>
-          <form action="delete_account.php" method="post">
+          <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">
-              <label for="password">Entrez votre mot de passe pour confirmer :</label>
-              <input type="password" name="password" id="password" required
+              <label for="password_delete">Entrez votre mot de passe pour confirmer :</label>
+              <input type="password" placeholder="Mot de passe" name="password_delete" id="password_delete" required
                 class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
               <span class="invalid-feedback">
-                <?php echo $password; ?>
-                <br><br>
+                <?php echo $password_err; ?>
               </span>
+              <br><br>
             </div>
             <div class="form-group">
               <input type="submit" value="Supprimer le compte">
