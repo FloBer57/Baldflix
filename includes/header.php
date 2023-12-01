@@ -31,7 +31,7 @@
             <a href="#" class="hero" id="herro"><img src="image/users_icon/icon.png" alt=""></a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link connect">Mon compte</a>
+            <a href="account_page.php" class="nav-link connect">Mon compte</a>
           </li>
           <li class="nav-item">
             <a href="index.php" class="nav-link">Home</a>

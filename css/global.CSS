@@ -164,6 +164,8 @@ title :visited {
   background-color: transparent;
   border: 3px solid var(--red);
   background-color: #141414;
+  background: url("/image/cornered-stairs.svg") center center no-repeat fixed;
+  background-size: cover;
 }
 
 .change {
@@ -405,40 +407,84 @@ a.hero img {
 /* Account_page */
 .account__container {
   position :relative;
-  display: flex;
   flex-direction: row;
-  top: 5em;
+  top: 6em;
   font-size: 1.2em;
   font-weight: bold;
   color: var(--light);
-  margin: 0;
   text-align:start;
+  background: url("/image/back.svg") center center no-repeat fixed;
+  background-size: cover;
+  width: 100%;
+  height: calc(100% - 6em);
+  filter: grayscale(10%);
 }
 
 .sub__container {
   display: flex;
+  justify-content: center;
+  
 }
 
 .account__nav {
-  right: 200px; /* Ajustez la marge droite selon vos besoins */
-  flex-basis: 30%;
+  flex-basis: 20.00%;
+}
+
+.account__nav ul {
+  padding-left: 0;
+  margin-right: 30px;
 }
 
 .account__nav li {
-  padding: 1em;
-  border: 3px solid var(--wooburn);
+  padding: 0.5em;
+  border-bottom: 3px solid var(--red);
+  border-right: 3px solid var(--red);
+  border-left: 3px solid var(--red);
+  cursor: pointer;
+}
+
+.account__nav li:first-child {
+  border-top:  solid var(--red);
 }
 
 .account__nav li::selection {
   color: blue;
 }
 .tab__content {
-  margin-right: 2em;
   font-size: 0.8em;
-  padding: 1em;
-  margin-top: 20px;
-  border: 3px solid var(--wooburn);
-  flex-basis: 50%;
+  padding: 2em;
+  margin-top: 19.5px;
+  border: 3px solid var(--red);
+  flex-basis: 50.00%;
+  display: none;
+}
+
+.tab__content:not(.active-tab) {
+  display: block;
+  /* ... autres styles ... */
+}
+
+.tab__content h2 {
+  border-bottom: 3px solid var(--red);
+}
+
+.tab__content input {
+  color: var(--primary) ;
+  background-color: var(--light);
+	border-radius:7px;
+	display:inline-block;
+	cursor:pointer;
+	font-family:Arial;
+	font-size:1em;
+	padding:5px 25px;
+}
+
+.tab__content input:hover {
+	background-color:var(--red);
+  color: var(--light);
+}
+.tab__content input:active {
+	top:1px;
 }
 
 /* Media querie d'un ecran d'ordi */
