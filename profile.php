@@ -18,58 +18,63 @@ $new_password_err = $confirm_password_err = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // Validate new password
-  if (empty(trim($_POST["new_password"]))) {
-    $new_password_err = "Please enter the new password.";
-  } elseif (strlen(trim($_POST["new_password"])) < 6) {
-    $new_password_err = "Password must have at least 6 characters.";
-  } else {
-    $new_password = trim($_POST["new_password"]);
-  }
-
-  // Validate confirm password
-  if (empty(trim($_POST["confirm_password"]))) {
-    $confirm_password_err = "Please confirm the password.";
-  } else {
-    $confirm_password = trim($_POST["confirm_password"]);
-    if (empty($new_password_err) && ($new_password != $confirm_password)) {
-      $confirm_password_err = "Password did not match.";
+  if (isset($_POST["new_password"])) {
+    if (empty(trim($_POST["new_password"]))) {
+      $new_password_err = "Please enter the new password.";
+    } elseif (strlen(trim($_POST["new_password"])) < 6) {
+      $new_password_err = "Password must have at least 6 characters.";
+    } else {
+      $new_password = htmlspecialchars(trim($_POST["new_password"]));
     }
-  }
 
-  // Check input errors before updating the database
-  if (empty($new_password_err) && empty($confirm_password_err)) {
-    // Prepare an update statement
-    $sql = "UPDATE users SET password = ? WHERE id = ?";
-
-    if ($stmt = mysqli_prepare($link, $sql)) {
-      // Bind variables to the prepared statement as parameters
-      mysqli_stmt_bind_param($stmt, "si", $param_password, $param_id);
-
-      // Set parameters
-      $param_password = password_hash($new_password, PASSWORD_DEFAULT);
-      $param_id = $_SESSION["id"];
-
-      // Attempt to execute the prepared statement
-      if (mysqli_stmt_execute($stmt)) {
-        // Password updated successfully. Destroy the session, and redirect to login page
-        session_destroy();
-        header("location: baldflix_login.php");
-        exit();
+    // Validate confirm password
+    if (isset($_POST["confirm_password"])) {
+      if (empty(trim($_POST["confirm_password"]))) {
+        $confirm_password_err = "Please confirm the password.";
       } else {
-        echo "Oops! Something went wrong. Please try again later.";
+        $confirm_password = htmlspecialchars(trim($_POST["confirm_password"]));
+        if (empty($new_password_err) && ($new_password != $confirm_password)) {
+          $confirm_password_err = "Password did not match.";
+        }
       }
-
-      // Close statement
-      mysqli_stmt_close($stmt);
     }
-  } else {
-    echo "Erreur de validation du mot de passe : " . $new_password_err . " " . $confirm_password_err;
+
+    // Check input errors before updating the database
+    if (empty($new_password_err) && empty($confirm_password_err)) {
+      // Prepare an update statement
+      $sql = "UPDATE users SET password = ? WHERE id = ?";
+
+      if ($stmt = mysqli_prepare($link, $sql)) {
+        // Bind variables to the prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, "si", $param_password, $param_id);
+
+        // Set parameters
+        $param_password = password_hash($new_password, PASSWORD_DEFAULT);
+        $param_id = $_SESSION["id"];
+
+        // Attempt to execute the prepared statement
+        if (mysqli_stmt_execute($stmt)) {
+          // Password updated successfully. Destroy the session, and redirect to login page
+          session_destroy();
+          session_regenerate_id();
+          header("location: baldflix_login.php");
+          exit();
+        } else {
+          echo "Oops! Something went wrong. Please try again later.";
+        }
+
+        // Close statement
+        mysqli_stmt_close($stmt);
+      }
+    } else {
+      echo "Erreur de validation du mot de passe : " . $new_password_err . " " . $confirm_password_err;
+    }
   }
 
   // Separate block for account deletion
   if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
     // Validate password for account deletion
-    $password = trim($_POST["password_delete"]); // Assuming you define $password somewhere
+    $password = htmlspecialchars(trim($_POST["password_delete"])); // Assuming you define $password somewhere
 
     // Prepare a select statement to verify the password
     $sql_verify = "SELECT id, username, password FROM users WHERE id = ?";
@@ -105,6 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (mysqli_stmt_execute($delete_stmt)) {
                   // Redirect to the login page or home page after successful deletion
                   session_destroy();
+                  session_regenerate_id();
                   header("location: baldflix_login.php");
                   exit();
                 } else {
@@ -132,9 +138,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
   if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) {
-    $suggestion_firstname = trim($_POST["suggestion_firstname"]);
-    $suggestion_lastname = trim($_POST["suggestion_lastname"]);
-    $suggestion_message = trim($_POST["suggestion_message"]);
+    $suggestion_firstname = htmlspecialchars(trim($_POST["suggestion_firstname"]));
+    $suggestion_lastname = htmlspecialchars(trim($_POST["suggestion_lastname"]));
+    $suggestion_message = htmlspecialchars(trim($_POST["suggestion_message"]));
 
     // Construisez le corps de l'email
     $email_body = "Nom: $suggestion_lastname\n";
