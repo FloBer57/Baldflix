@@ -13,6 +13,8 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--primary);
+  background-size: cover;
+  background-blend-mode:initial;
   color: var(--light);
   font-family: Arial, Helvetica, sans-serif;
   box-sizing: border-box;
@@ -50,7 +52,6 @@ header {
   height: 6em;
   border-bottom: 3px solid var(--red);
 }
-
 header::after {
   content: "";
   /* Élément vide */
@@ -406,28 +407,25 @@ a.hero img {
 
 /* Account_page */
 .account__container {
-  position :relative;
+  position: relative;
   flex-direction: row;
   top: 6em;
   font-size: 1.2em;
   font-weight: bold;
   color: var(--light);
-  text-align:start;
-  background: url("image/back.svg") center center no-repeat fixed; 
-  background-size: cover;
+  text-align: start;
   width: 100%;
-  height: calc(100% - 6em);
   filter: grayscale(10%);
 }
 
 .sub__container {
   display: flex;
   justify-content: center;
-  
+  opacity: 1;
 }
 
 .account__nav {
-  flex-basis: 20.00%;
+  flex-basis: 20%;
 }
 
 .account__nav ul {
@@ -444,7 +442,7 @@ a.hero img {
 }
 
 .account__nav li:first-child {
-  border-top:  solid var(--red);
+  border-top: solid var(--red);
 }
 
 .account__nav li::selection {
@@ -455,10 +453,15 @@ a.hero img {
   padding: 2em;
   margin-top: 19.5px;
   border: 3px solid var(--red);
-  flex-basis: 50.00%;
+  flex-basis: 50%;
   display: none;
 }
 
+.tab__content form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column
+}
 .tab__content:not(.active-tab) {
   display: block;
   /* ... autres styles ... */
@@ -469,22 +472,24 @@ a.hero img {
 }
 
 .tab__content input {
-  color: var(--primary) ;
+  color: var(--primary);
   background-color: var(--light);
-	border-radius:7px;
-	display:inline-block;
-	cursor:pointer;
-	font-family:Arial;
-	font-size:1em;
-	padding:5px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Arial;
+  font-size: 1em;
+  padding: 5px 25px;
+  width: 60%;
+  text-align: center;
 }
 
 .tab__content input:hover {
-	background-color:var(--red);
+  background-color: var(--red);
   color: var(--light);
 }
-.tab__content input:active {
-	top:1px;
+
+textarea {
+  width: 100%;
 }
 
 /* Media querie d'un ecran d'ordi */
@@ -736,10 +741,66 @@ a.hero img {
     margin: 10px 2px;
     margin-right: 50px;
   }
+
+  /* MENU ADMIN */
+
+  .account__container {
+    margin: auto;
+    height: auto;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+    top : 5.5em
+  }
+
+  .sub__container {
+    flex-direction: column;
+    font-size: 20px;
+  }
+
+  .account__nav {
+    padding: auto;
+    width: 100%;
+  }
+
+  .account__nav ul {
+    list-style: none;
+    width: 100%;
+  }
+
+  .account__nav li:not(:first-child) {
+    display: none;
+  }
+
+  .account__nav li:first-child:hover ~ li {
+    display: block;
+  }
+
+  .account__nav ul:hover li {
+    display: block;
+  }
+  .account__nav li {
+    justify-content: center;
+    cursor: pointer; /* Ajoutez un curseur pointer pour indiquer que l'élément est cliquable */
+  }
+
+  .tab__content {
+    font-size: 0.8em;
+  }
+  .tab__content input {
+   text-align: center;
+   width: 100%;
+   padding: 0;
+  }
+  textarea {
+    width: 100%;
+    
+  }
+
+  
 }
 
 @media screen and (max-width: 450px) {
-
   #watched,
   #serie,
   #films,
@@ -848,5 +909,65 @@ a.hero img {
     margin-top: 0;
     margin: 10px 2px;
     margin-right: 50px;
+  }
+
+ /* MENU ADMIN */ 
+  .account__container {
+    margin: auto;
+    height: auto;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+    margin-right: 2px;
+    margin-left: 2px;
+    top: 4.5em;
+  }
+
+  .sub__container {
+    flex-direction: column;
+    font-size: 18px;
+  }
+
+  .sub__container h2 {
+    font-size: 20px;
+  }
+
+  .account__nav {
+    padding: auto;
+    width: 100%;
+  }
+
+  .account__nav ul {
+    list-style: none;
+    width: 100%;
+  }
+
+  .account__nav li:not(:first-child) {
+    display: none;
+  }
+
+  .account__nav li:first-child:hover ~ li {
+    display: block;
+  }
+
+  .account__nav ul:hover li {
+    display: block;
+  }
+  .account__nav li {
+    justify-content: center;
+    cursor: pointer; /* Ajoutez un curseur pointer pour indiquer que l'élément est cliquable */
+  }
+
+  .tab__content {
+    font-size: 0.8em;
+  }
+  .tab__content input {
+   text-align: center;
+   width: 100%;
+   padding: 0;
+  }
+  textarea {
+    width: 100%;
+    
   }
 }
