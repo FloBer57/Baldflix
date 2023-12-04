@@ -144,13 +144,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) 
 
   // Construisez le corps de l'email
   $email_body = "Nom: $suggestion_lastname\n";
-  $email_body .= "Prénom: $suggestion_firstname\n";
+  $email_body .= "Prenom: $suggestion_firstname\n";
   $email_body .= "Message:\n$suggestion_message";
 
   // Envoie de l'email
   $to = "contact@florentbernar.fr";
   $subject = "Nouvelle suggestion de $suggestion_firstname $suggestion_lastname";
-  $headers = "From: $suggestion_firstname $suggestion_lastname <noreply@votresite.com>";
+  $headers = "From: $suggestion_firstname $suggestion_lastname <noreply@baldflix.florentbernar.fr>";
 
   // Utilisez la fonction mail() pour envoyer l'email
   if (mail($to, $subject, $email_body, $headers)) {
@@ -177,7 +177,7 @@ mysqli_close($link);
 
 </html>
 
-<body>
+<body class="background">
   <?php
 
   require_once "includes/header.php";
@@ -189,10 +189,10 @@ mysqli_close($link);
       <div class="sub__container">
         <nav class="account__nav" >
           <ul>
-            <li data-tab="profile-tab-content" onclick="showTab('profile-tab-content')">Mon profil</li>
-            <li data-tab="password-tab-content" onclick="showTab('password-tab-content')">Mot de passe et Sécurité</li>
-            <li data-tab="delete-tab-content" onclick="showTab('delete-tab-content')">Supprimer le compte</li>
-            <li data-tab="suggest-tab-content" onclick="showTab('suggest-tab-content')">Une suggestion?</li>
+            <li class="test" data-tab="profile-tab-content" onclick="showTab('profile-tab-content')">Mon profil</li>
+            <li class="test" data-tab="password-tab-content" onclick="showTab('password-tab-content')">Mot de passe et Sécurité</li>
+            <li class="test" data-tab="delete-tab-content" onclick="showTab('delete-tab-content')">Supprimer le compte</li>
+            <li class="test" data-tab="suggest-tab-content" onclick="showTab('suggest-tab-content')">Une suggestion?</li>
           </ul>
         </nav>
 

@@ -25,10 +25,11 @@ li {
   list-style: none;
 }
 
+
 .background {
   width: 100%;
   height: 100%;
-  /* Chemin relatif vers votre fichier SVG */
+  background: url("/image/back.svg") center center no-repeat fixed;
   background-size: cover;
   background-repeat: repeat;
 }
@@ -433,6 +434,14 @@ a.hero img {
   margin-right: 30px;
 }
 
+.account__nav li:hover {
+  background-color: var(--red);
+ }
+
+.activation {
+  background-color: var(--red);
+ }
+
 .account__nav li {
   padding: 0.5em;
   border-bottom: 3px solid var(--red);
@@ -446,12 +455,12 @@ a.hero img {
 }
 
 .account__nav li::selection {
-  color: blue;
+  color: #7a0309;
 }
 .tab__content {
   font-size: 0.8em;
   padding: 2em;
-  margin-top: 19.5px;
+  margin-top: 19px;
   border: 3px solid var(--red);
   flex-basis: 50%;
   display: none;
@@ -479,7 +488,7 @@ a.hero img {
   font-family: Arial;
   font-size: 1em;
   padding: 5px 25px;
-  width: 60%;
+  width: auto;
   text-align: center;
 }
 
@@ -750,22 +759,23 @@ textarea {
     justify-content: center;
     display: flex;
     text-align: center;
-    top : 5.5em
+    top : 5.5em;
   }
 
   .sub__container {
     flex-direction: column;
     font-size: 20px;
+    min-width: 100%;
   }
 
   .account__nav {
-    padding: auto;
-    width: 100%;
+    margin-right: 2em;
+    margin-left: 2em;
   }
 
   .account__nav ul {
     list-style: none;
-    width: 100%;
+    min-width: 100%;
   }
 
   .account__nav li:not(:first-child) {
@@ -786,11 +796,14 @@ textarea {
 
   .tab__content {
     font-size: 0.8em;
+    display: none;
+    margin-right: 2em;
+    margin-left: 2em;
   }
   .tab__content input {
    text-align: center;
-   width: 100%;
    padding: 0;
+   
   }
   textarea {
     width: 100%;
@@ -912,62 +925,60 @@ textarea {
   }
 
  /* MENU ADMIN */ 
-  .account__container {
-    margin: auto;
-    height: auto;
-    justify-content: center;
-    display: flex;
-    text-align: center;
-    margin-right: 2px;
-    margin-left: 2px;
-    top: 4.5em;
-  }
+ .account__container {
+  margin: auto;
+  height: auto;
+  justify-content: center;
+  display: flex;
+  text-align: center;
+  top : 4.5em;
+}
 
-  .sub__container {
-    flex-direction: column;
-    font-size: 18px;
-  }
+.sub__container {
+  flex-direction: column;
+  font-size: 20px;
+  min-width: 100%;
+}
 
-  .sub__container h2 {
-    font-size: 20px;
-  }
+.account__nav {
+  margin-right: 2em;
+  margin-left: 2em;
+}
 
-  .account__nav {
-    padding: auto;
-    width: 100%;
-  }
+.account__nav ul {
+  list-style: none;
+  min-width: 100%;
+}
 
-  .account__nav ul {
-    list-style: none;
-    width: 100%;
-  }
+.account__nav li:not(:first-child) {
+  display: none;
+}
 
-  .account__nav li:not(:first-child) {
-    display: none;
-  }
+.account__nav li:first-child:hover ~ li {
+  display: block;
+}
 
-  .account__nav li:first-child:hover ~ li {
-    display: block;
-  }
+.account__nav ul:hover li {
+  display: block;
+}
+.account__nav li {
+  justify-content: center;
+  cursor: pointer; /* Ajoutez un curseur pointer pour indiquer que l'élément est cliquable */
+}
 
-  .account__nav ul:hover li {
-    display: block;
-  }
-  .account__nav li {
-    justify-content: center;
-    cursor: pointer; /* Ajoutez un curseur pointer pour indiquer que l'élément est cliquable */
-  }
-
-  .tab__content {
-    font-size: 0.8em;
-  }
-  .tab__content input {
-   text-align: center;
-   width: 100%;
-   padding: 0;
-  }
-  textarea {
-    width: 100%;
-    
-  }
+.tab__content {
+  font-size: 0.8em;
+  display: none;
+  margin-right: 2em;
+  margin-left: 2em;
+}
+.tab__content input {
+ text-align: center;
+ padding: 0;
+ 
+}
+textarea {
+  width: 100%;
+  
+}
 }

@@ -14,3 +14,13 @@ function showTab(tabId) {
     console.error('L\'élément avec l\'ID ' + tabId + ' n\'existe pas.');
   }
 }
+
+// Ajouter un écouteur d'événements "click" à chaque onglet
+document.querySelectorAll('.tab__header').forEach(function(tabHeader) {
+  tabHeader.addEventListener('click', function() {
+    // Récupérer l'ID de l'onglet à afficher
+    var tabId = this.getAttribute('data-tab-id');
+    // Appeler la fonction showTab avec l'ID de l'onglet
+    showTab(tabId);
+  });
+});
