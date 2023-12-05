@@ -120,7 +120,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
           if ($result) {
             echo "<table>";
-            echo "<tr><th>Nom d'utilisateur</th><th class='small-screen'>Email</th><th>Statut</th><th>Action</th><th>MDP</th><th>Supprimez</th></tr>";
+            echo "<tr><th>Nom</th><th class='small-screen'>Email</th><th>Statut</th><th>Action</th><th>MDP</th><th>Supprimer</th></tr>";
             while ($row = mysqli_fetch_assoc($result)) {
               echo "<tr>";
               echo "<td>" . htmlspecialchars($row['username']) . "</td>";
@@ -151,10 +151,11 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               // Lien pour supprimer l'utilisateur
               echo "<td>
-              <a href='#' onclick='confirmDelete(\"?action=delete&id={$row['id']}&csrf_token={$_SESSION["csrf_token"]}\")'>
-                <img src='image/delete.png' alt='Supprimer' title='Supprimer'>
+              <a href='#' class='delete-link' data-id='{$row['id']}' data-csrf='{$_SESSION["csrf_token"]}'>
+                <img src='/image/delete.svg' alt='Supprimer' title='Supprimer' class='delete-icon'>
               </a>
             </td>";
+      
 
 
 

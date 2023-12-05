@@ -22,7 +22,6 @@ li {
   list-style: none;
 }
 
-
 .background {
   background: url("/image/back.svg") center center no-repeat fixed;
   background-size: cover;
@@ -355,7 +354,6 @@ a.hero img {
   max-width: 100%;
 }
 
-
 .box-div {
   margin: 8px;
 }
@@ -374,13 +372,14 @@ a.hero img {
 
 /* Slick */
 
-.slick-prev, .slick-next {
+.slick-prev,
+.slick-next {
   padding: 0;
 }
 
 .slick-slider {
   padding-right: 0;
-  padding-left: 0
+  padding-left: 0;
 }
 /* FOOTER */
 
@@ -448,11 +447,11 @@ a.hero img {
 
 .account__nav li:hover {
   background-color: var(--red);
- }
+}
 
 .activation {
   background-color: var(--red);
- }
+}
 
 .account__nav li {
   padding: 0.5em;
@@ -464,6 +463,7 @@ a.hero img {
 
 .account__nav li:first-child {
   border-top: solid var(--red);
+  margin-top: 10px;
 }
 
 .account__nav li::selection {
@@ -481,7 +481,7 @@ a.hero img {
 .tab__content form {
   display: flex;
   justify-content: center;
-  flex-direction: column
+  flex-direction: column;
 }
 .tab__content:not(.active-tab) {
   display: block;
@@ -489,6 +489,7 @@ a.hero img {
 }
 
 .tab__content h2 {
+  margin-top: 3px;
   border-bottom: 3px solid var(--red);
 }
 
@@ -532,24 +533,61 @@ textarea {
 .admin__content table tr td a img {
   max-width: 2.4em;
   fill: var(--red);
-
 }
 
 .admin__content input {
-  padding: inherit;
+  padding: 2px;
   width: 100%;
+  text-align: center;
+}
+.delete-icon {
+  fill: red; /* Nouvelle couleur de remplissage */
+}
+
+select {
+  text-align: center;
 }
 
 @media screen and (min-width: 600px) and (max-width: 800px) {
-
   .admin__nav {
     text-align: center;
     margin: auto;
-    width: 80%;
+    width: 100%;
   }
 
   .admin__container {
-display: block;
+    display: block;
+    padding: 0.9em;
+  }
+
+  .admin__content {
+    margin-right: 1em !important;
+    margin-left: 1em !important;
+    padding: 1em !important;
+  }
+  table {
+    font-size: 1em;
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 600px) {
+  .admin__nav {
+    text-align: center;
+    margin: auto;
+    width: 100%;
+  }
+
+  .admin__container {
+    display: block;
+  }
+
+  .admin__content {
+    margin-right: 0em !important;
+    margin-left: 0em !important;
+    padding: 0em !important;
+  }
+  table {
+    font-size: 0.8em !important;
   }
 }
 /* Media querie d'un ecran d'ordi */
@@ -810,7 +848,7 @@ display: block;
     justify-content: center;
     display: flex;
     text-align: center;
-    top : 5.5em;
+    top: 5.5em;
   }
 
   .sub__container {
@@ -852,18 +890,16 @@ display: block;
     margin-left: 2em;
   }
   .tab__content input {
-   text-align: center;
-   padding: 0;
-   
+    text-align: center;
+    padding: 0;
   }
   textarea {
     width: 100%;
-    
   }
-/* ICI POUR L'ADMIN PAGE */
-.small-screen {
-  display: none;
-}
+  /* ICI POUR L'ADMIN PAGE */
+  .small-screen {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 450px) {
@@ -977,65 +1013,63 @@ display: block;
     margin-right: 50px;
   }
 
- /* MENU ADMIN */ 
- .account__container {
-  margin: auto;
-  height: auto;
-  justify-content: center;
-  display: flex;
-  text-align: center;
-  top : 4.5em;
-}
+  /* MENU ADMIN */
+  .account__container {
+    margin: auto;
+    height: auto;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+    top: 4.5em;
+  }
 
-.sub__container {
-  flex-direction: column;
-  font-size: 20px;
-  min-width: 100%;
-}
+  .sub__container {
+    flex-direction: column;
+    font-size: 20px;
+    min-width: 100%;
+  }
 
-.account__nav {
-  margin-right: 2em;
-  margin-left: 2em;
-}
+  .account__nav {
+    margin-right: 2em;
+    margin-left: 2em;
+  }
 
-.account__nav ul {
-  list-style: none;
-  min-width: 100%;
-}
+  .account__nav ul {
+    list-style: none;
+    min-width: 100%;
+  }
 
-.account__nav li:not(:first-child) {
-  display: none;
-}
+  .account__nav li:not(:first-child) {
+    display: none;
+  }
 
-.account__nav li:first-child:hover ~ li {
-  display: block;
-}
+  .account__nav li:first-child:hover ~ li {
+    display: block;
+  }
 
-.account__nav ul:hover li {
-  display: block;
-}
-.account__nav li {
-  justify-content: center;
-  cursor: pointer; /* Ajoutez un curseur pointer pour indiquer que l'élément est cliquable */
-}
+  .account__nav ul:hover li {
+    display: block;
+  }
+  .account__nav li {
+    justify-content: center;
+    cursor: pointer; /* Ajoutez un curseur pointer pour indiquer que l'élément est cliquable */
+  }
 
-.tab__content {
-  font-size: 0.8em;
-  display: none;
-  margin-right: 2em;
-  margin-left: 2em;
-}
-.tab__content input {
- text-align: center;
- padding: 0;
- 
-}
-textarea {
-  width: 100%;
-  
-}
-/* ICI POUR L'ADMIN PAGE */
-.small-screen {
-  display: none;
-}
+  .tab__content {
+    font-size: 0.8em;
+    display: none;
+    margin-right: 2em;
+    margin-left: 2em;
+  }
+  .tab__content input {
+    text-align: center;
+    padding: 0;
+  }
+  textarea {
+    width: 100%;
+  }
+  /* ICI POUR L'ADMIN PAGE */
+  .small-screen {
+    display: none;
+  }
 }
