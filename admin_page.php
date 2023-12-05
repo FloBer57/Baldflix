@@ -2,7 +2,7 @@
 session_start();
 
 // Vérifier si l'utilisateur est connecté, sinon le rediriger vers la page de connexion
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: baldflix_login.php");
   exit;
 }
@@ -11,15 +11,15 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 require_once "config.php";
 
 // Vérifier si l'utilisateur connecté est un administrateur
-if ($_SESSION["statut"] != "admin") {
+if($_SESSION["statut"] != "admin") {
   header("location: profile.php");
   exit;
 }
 
 // Fonction pour modifier le mot de passe et le statut
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
+if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
   // Protection CSRF
-  if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
+  if(!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
     die("Token CSRF invalide.");
   }
 
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
   $new_statut = $_POST["new_statut"];
 
   // Valider le nouveau statut
-  if (!in_array($new_statut, ['utilisateur', 'admin'])) {
+  if(!in_array($new_statut, ['utilisateur', 'admin'])) {
     die("Choix de statut invalide.");
   }
 
@@ -40,32 +40,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
   mysqli_stmt_close($update_stmt);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
-  // ... (votre code existant)
-  // Générer un nouveau mot de passe sécurisé
-  $new_password = generateRandomPassword();
+if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
+  function generateRandomPassword($length = 12) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $password = '';
+    $charactersLength = strlen($characters);
 
-  // Hacher le nouveau mot de passe
+    for($i = 0; $i < $length; $i++) {
+      $password .= $characters[rand(0, $charactersLength - 1)];
+    }
+
+    return $password;
+  }
+
+  $new_password = generateRandomPassword();
   $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+  // Ajoutez une déclaration préparée pour la réinitialisation du mot de passe
+  $reset_password_sql = "UPDATE users SET password = ? WHERE id = ?";
+  $reset_password_stmt = mysqli_prepare($link, $reset_password_sql);
+  mysqli_stmt_bind_param($reset_password_stmt, "ss", $hashed_password, $user_id);
+  mysqli_stmt_execute($reset_password_stmt);
+  mysqli_stmt_close($reset_password_stmt);
+
+
   // Envoyer un e-mail avec le nouveau mot de passe
   $to = $user_email;
   $subject = 'Réinitialisation du mot de passe';
-  $message = 'Votre nouveau mot de passe : ' . $new_password;
-  $headers = 'From: your-email@example.com' . "\r\n" .
-    'Reply-To: your-email@example.com' . "\r\n" .
-    'X-Mailer: PHP/' . phpversion();
+  $message = 'Votre nouveau mot de passe : '.$new_password;
+  $headers = 'From: your-email@example.com'."\r\n".
+    'Reply-To: your-email@example.com'."\r\n".
+    'X-Mailer: PHP/'.phpversion();
 
   // Utilisation de la fonction mail() pour envoyer l'e-mail
   mail($to, $subject, $message, $headers);
 
   // Rediriger vers la même page après la réinitialisation
-  header("Location: " . $_SERVER['PHP_SELF']);
+  header("Location: ".$_SERVER['PHP_SELF']);
   exit;
 }
 // Fonction pour supprimer un utilisateur
-if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["id"])) {
+if(isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["id"])) {
   // Protection CSRF
-  if (!isset($_GET["csrf_token"]) || $_GET["csrf_token"] !== $_SESSION["csrf_token"]) {
+  if(!isset($_GET["csrf_token"]) || $_GET["csrf_token"] !== $_SESSION["csrf_token"]) {
     die("Token CSRF invalide.");
   }
 
@@ -78,8 +95,8 @@ if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["id"]))
   mysqli_stmt_execute($delete_stmt);
   mysqli_stmt_close($delete_stmt);
 
-  // Rediriger vers la même page après la suppression
-  header("Location: " . $_SERVER['PHP_SELF']);
+  // Répondre avec un statut JSON
+  header("Location: ".$_SERVER['PHP_SELF']);
   exit;
 }
 
@@ -118,14 +135,14 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           $sql = "SELECT id, username, email, statut FROM users";
           $result = mysqli_query($link, $sql);
 
-          if ($result) {
+          if($result) {
             echo "<table>";
             echo "<tr><th>Nom</th><th class='small-screen'>Email</th><th>Statut</th><th>Action</th><th>MDP</th><th>Supprimer</th></tr>";
-            while ($row = mysqli_fetch_assoc($result)) {
+            while($row = mysqli_fetch_assoc($result)) {
               echo "<tr>";
-              echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-              echo "<td class='small-screen'>" . htmlspecialchars($row['email']) . "</td>";
-              echo "<td>" . htmlspecialchars($row['statut']) . "</td>";
+              echo "<td>".htmlspecialchars($row['username'])."</td>";
+              echo "<td class='small-screen'>".htmlspecialchars($row['email'])."</td>";
+              echo "<td>".htmlspecialchars($row['statut'])."</td>";
 
               // Formulaire pour modifier le statut
               echo "<td>
@@ -133,8 +150,8 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                         <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
                         <input type='hidden' name='user_id' value='{$row['id']}'>
                         <select name='new_statut'>
-                            <option value='utilisateur' " . ($row['statut'] == 'utilisateur' ? 'selected' : '') . ">Utilisateur</option>
-                            <option value='admin' " . ($row['statut'] == 'admin' ? 'selected' : '') . ">Admin</option>
+                            <option value='utilisateur' ".($row['statut'] == 'utilisateur' ? 'selected' : '').">Utilisateur</option>
+                            <option value='admin' ".($row['statut'] == 'admin' ? 'selected' : '').">Admin</option>
                         </select>
                         <input type='submit' name='modify' value='Modifier'>
                       </form>
@@ -142,20 +159,19 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               // Formulaire pour réinitialiser le mot de passe
               echo "<td>
-                      <form method='post' action=''>
-                        <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
-                        <input type='hidden' name='user_id' value='{$row['id']}'>
-                        <input type='submit' name='reset_password' value='Réinitialiser'>
-                      </form>
-                    </td>";
+              <form method='post' action=''>
+                <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
+                <input type='hidden' name='user_id' value='{$row['id']}'>
+                <input type='submit' name='reset_password' value='Réinitialiser'>
+              </form>
+            </td>";
 
               // Lien pour supprimer l'utilisateur
               echo "<td>
-              <a href='#' class='delete-link' data-id='{$row['id']}' data-csrf='{$_SESSION["csrf_token"]}'>
-                <img src='/image/delete.svg' alt='Supprimer' title='Supprimer' class='delete-icon'>
+              <a href='#' onclick='confirmDelete(\"?action=delete&id={$row['id']}&csrf_token={$_SESSION["csrf_token"]}\")'>
+                <img src='image/delete.svg' alt='Supprimer' title='Supprimer'>
               </a>
             </td>";
-      
 
 
 
@@ -163,12 +179,12 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             }
             echo "</table>";
           } else {
-            echo "Erreur de requête : " . mysqli_error($link);
+            echo "Erreur de requête : ".mysqli_error($link);
           }
           ?>
         </div>
       </div>
-      <script src="js/account.js"></script>
+      <script src="/js/account.js"></script>
     </div>
   </main>
 </body>
