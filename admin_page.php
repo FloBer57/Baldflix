@@ -41,6 +41,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
+  // Récupérer les données du formulaire
+  $user_id = $_POST["user_id"];
+
   function generateRandomPassword($length = 12) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $password = '';
@@ -63,9 +66,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
   mysqli_stmt_execute($reset_password_stmt);
   mysqli_stmt_close($reset_password_stmt);
 
-
   // Envoyer un e-mail avec le nouveau mot de passe
-  $to = $user_email;
+  $to = $user_email;  // Assurez-vous que $user_email est défini quelque part
   $subject = 'Réinitialisation du mot de passe';
   $message = 'Votre nouveau mot de passe : '.$new_password;
   $headers = 'From: your-email@example.com'."\r\n".
