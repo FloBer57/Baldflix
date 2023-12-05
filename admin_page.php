@@ -66,16 +66,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
   mysqli_stmt_execute($reset_password_stmt);
   mysqli_stmt_close($reset_password_stmt);
 
-  // Envoyer un e-mail avec le nouveau mot de passe
-  $to = $user_email;  // Assurez-vous que $user_email est défini quelque part
-  $subject = 'Réinitialisation du mot de passe';
-  $message = 'Votre nouveau mot de passe : '.$new_password;
-  $headers = 'From: your-email@example.com'."\r\n".
-    'Reply-To: your-email@example.com'."\r\n".
-    'X-Mailer: PHP/'.phpversion();
+  // Récupérer l'adresse e-mail de l'utilisateur depuis la base de données
+  $user_email_query = "SELECT email FROM users WHERE id = ?";
+  $user_email_stmt = mysqli_prepare($link, $user_email_query);
+  mysqli_stmt_bind_param($user_email_stmt, "i", $user_id);
+  mysqli_stmt_execute($user_email_stmt);
+  mysqli_stmt_bind_result($user_email_stmt, $user_email);
 
-  // Utilisation de la fonction mail() pour envoyer l'e-mail
-  mail($to, $subject, $message, $headers);
+  // Vérifier s'il y a une ligne de résultat
+  if(mysqli_stmt_fetch($user_email_stmt)) {
+    // Utiliser l'adresse e-mail récupérée pour envoyer l'e-mail
+    $to = $user_email;
+    $subject = 'Reinitialisation du mot de passe';
+    $message = 'Bonjour! Votre nouveau mot de passe est : '.$new_password;
+    $headers = 'From: baldflix.florentbernar@noreply.fr'."\r\n".
+      'Reply-To: baldflix.florentbernar@noreply.fr'."\r\n".
+      'X-Mailer: PHP/'.phpversion();
+
+    // Utilisation de la fonction mail() pour envoyer l'e-mail
+    mail($to, $subject, $message, $headers);
+
+    // Fermer la déclaration préparée
+    mysqli_stmt_close($user_email_stmt);
+  } else {
+    // Gérer le cas où l'adresse e-mail n'est pas trouvée
+    echo "Erreur: Adresse e-mail non trouvée pour l'utilisateur.";
+  }
 
   // Rediriger vers la même page après la réinitialisation
   header("Location: ".$_SERVER['PHP_SELF']);
@@ -117,7 +133,12 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 </head>
 
 <body class="background">
-  <?php require_once "includes/header.php"; ?>
+  <?php require_once "includes/header.php";
+  echo "To: " . $to . "<br>";
+  echo "Subject: " . $subject . "<br>";
+  echo "Message: " . $message . "<br>";
+  echo "Headers: " . $headers . "<br>";
+    ?>
 
   <main>
     <div class="account__container">
