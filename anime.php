@@ -16,78 +16,12 @@
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 </head>
 
-<body class="background">
-  <header class="header">
+<body>
+  <?php
 
-    <div class="title">
-      <h1><a href="index.html">BaldFlix</a></h1>
-    </div>
+  require_once "includes/header.php";
 
-    <nav class="main-nav" role="navigation">
-      <div class="menu">
-        <ul class="menu-list">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="serie.html">Séries</a></li>
-          <li><a href="films.html">Films</a></li>
-          <li><a href="anime.html">Anime</a></li>
-          <li><a href="spectacles.html">Spectacles</a></li>
-          <li><a href="bald.html">Bald</a></li>
-        </ul>
-      </div>
-    </nav>
-
-    <div class="container">
-      <nav class="navbar">
-        <div class="hamburger-menu">
-          <div class="line line-1"></div>
-          <div class="line line-2"></div>
-          <div class="line line-3"></div>
-        </div>
-        <ul class="nav-list">
-          <li class="nav-item nav-hero">
-            <a href="#" class="hero" id="herro"><img src="image/hero.png" alt=""></a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link connect">Connexion</a>
-          </li>
-          <li class="nav-item">
-            <a href="index.html" class="nav-link">Home</a>
-          </li>
-          <li class="nav-item">
-            <a href="serie.html" class="nav-link">Séries</a>
-          </li>
-          <li class="nav-item">
-            <a href="films.html" class="nav-link">Films</a>
-          </li>
-          <li class="nav-item">
-            <a href="anime.html" class="nav-link">Anime</a>
-          </li>
-          <li class="nav-item">
-            <a href="spectacles.html" class="nav-link">Spectacles</a>
-          </li>
-          <li class="nav-item">
-            <a href="bald.html" class="nav-link">Bald</a>
-          </li>
-        </ul>
-      </nav>
-      <script src="js/burger.js"></script>
-    </div>
-
-    </div>
-    </nav>
-
-    <div class="search_nav">
-      <input type="text" id="search" placeholder="Rechercher...">
-      <button class="search-button" onclick="searchFunction()">Rechercher</button>
-    </div>
-    <script src="js/diseapear.js"></script>
-
-    <div class="search_phone">
-      <a href="#"><img src="image/loupe.png" alt=""></a>
-    </div>
-    <script src="js/appear.js"></script>
-
-  </header>
+  ?>
 
   <section class="main-container">
     <div class="container" id="home">
@@ -156,24 +90,12 @@
   </section>
 
   <!-- ##FOOTER## -->
-</body>
-<footer>
-  <div class="footer">
-    <div class="row">
-      <ul>
-        <li><a href="#" title="Lien vers la page d'infos contact">Contact</a></li>
-        <li><a href="#" title="Lien pour apporter une suggestion?">Une suggestion?</a></li>
-        <li><a href="#" title="Lien vers les paramètres de Newletters">Newsletter</a></li>
-        <li><a href="#" title="Honk">Duck</a></li>
-        <li><a href="#" title="Lien pour me soutenir">Me soutenir</a></li>
-      </ul>
-    </div>
+  <?php
 
-    <div class="row">
-      <p>Copyright © 2023 Tardice - All rights reserved || Designed By Tardice</p>
-    </div>
-  </div>
-</footer>
+  require_once "includes/footer.php";
+
+  ?>
+</body>
 
 
 </html>

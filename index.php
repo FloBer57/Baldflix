@@ -1,7 +1,7 @@
 <?php
-session_start(); 
+session_start();
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: baldflix_login.php");
   exit;
 }
@@ -28,11 +28,11 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
 <body class="back">
 
-<?php
+  <?php
 
-require_once "includes/header.php";
+  require_once "includes/header.php";
 
-?>
+  ?>
 
   <section class="trailer">
     <div class="present-vid" id="video">
@@ -174,12 +174,14 @@ require_once "includes/header.php";
   <script src="js/carrousel_3.js"></script>
   <script src="js/carrousel_4.js"></script>
   <script src="js/carrousel_5.js"></script>
+  <!-- ##FOOTER## -->
+  <?php
+
+  require_once "includes/footer.php";
+
+  ?>
 </body>
 
-<?php
 
-require_once "includes/footer.php";
-
-?>
 
 </html>

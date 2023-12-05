@@ -1,6 +1,18 @@
 <?php
 // Include config file
-require_once "config.php";
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+  }
+  
+  // Inclure le fichier de configuration
+  require_once "config.php";
+  
+  // Vérifier si l'utilisateur connecté est un administrateur
+  if ($_SESSION["statut"] != "admin") {
+    header("location: profile.php");
+    exit;
+  }
 
 // Define variables and initialize with empty values
 $username = $password = $confirm_password = $email = ""; // Ajouter la variable $email
