@@ -3,8 +3,8 @@
 require_once "config.php";
 
 // Define variables and initialize with empty values
-$username = $password = $confirm_password = "";
-$username_err = $password_err = $confirm_password_err = "";
+$username = $password = $confirm_password = $email = ""; // Ajouter la variable $email
+$username_err = $password_err = $confirm_password_err = $email_err = ""; // Ajouter la variable $email_err
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Attempt to execute the prepared statement
             if (mysqli_stmt_execute($stmt)) {
-                /* store result */
+                // store result
                 mysqli_stmt_store_result($stmt);
 
                 if (mysqli_stmt_num_rows($stmt) == 1) {
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $username = trim($_POST["username"]);
                 }
             } else {
-                echo "JEAAAANNEE, AU SECOURS!! Il y à eu un problème!";
+                echo "Il y a eu un problème lors de la validation du nom d'utilisateur.";
             }
 
             // Close statement
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["password"]))) {
         $password_err = "Rentrez un mot de passe.";
     } elseif (strlen(trim($_POST["password"])) < 10) {
-        $password_err = "Le mot de passe doit être de minimum 10 caractères.";
+        $password_err = "Le mot de passe doit être d'au moins 10 caractères.";
     } else {
         $password = trim($_POST["password"]);
     }
@@ -65,35 +65,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $statut = "";
     $statut_err = "";
-
-    // ...
-
     // Validate statut
-
     if (empty(trim($_POST["statut"]))) {
         $statut_err = "Veuillez choisir un statut.";
     } else {
         $statut = trim($_POST["statut"]);
     }
 
-    // Check input errors before inserting in database
+    $email = "";
+    $param_email = $email;
+    if (empty(trim($_POST["email"]))) {
+        $email_err = "Veuillez entrer votre adresse email.";
+    } elseif (!filter_var(trim($_POST["email"]), FILTER_VALIDATE_EMAIL)) {
+        $email_err = "Veuillez entrer une adresse email valide.";
+    } else {
+        $email = trim($_POST["email"]);
+    }
+
+    // Check input errors before inserting into the database
     if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($statut_err)) {
 
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password, statut) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO users (username, password, statut, email) VALUES (?, ?, ?, ?)";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_statut);
+            mysqli_stmt_bind_param($stmt, "ssss", $param_username, $param_password, $param_statut, $param_email);
 
             // Set parameters
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT);
             $param_statut = $statut;
+            $param_email = $email; // Ajout de cette ligne pour définir le paramètre email
 
             // Attempt to execute the prepared statement
             if (mysqli_stmt_execute($stmt)) {
-                // Redirect to login page
+                // Redirect to the login page
                 header("location: baldflix_login.php");
                 exit(); // Assurez-vous de terminer le script après la redirection
             } else {
@@ -104,43 +111,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_close($stmt);
         }
     }
-    if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($statut_err)) {
-        // ...
-
-        // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password, statut) VALUES (?, ?, ?)";
-
-        if ($stmt = mysqli_prepare($link, $sql)) {
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_statut);
-
-            // Set parameters
-            $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT);
-            $param_statut = $statut;
-
-            // Attempt to execute the prepared statement
-            if (mysqli_stmt_execute($stmt)) {
-                // Redirect to login page
-                header("location: baldflix_login.php");
-            } else {
-                echo "Il y a eu un problème lors de l'inscription.";
-            }
-
-            // Close statement
-            mysqli_stmt_close($stmt);
-        }
-
-        // ...
-    }
-
-    // Close connection
-    mysqli_close($link);
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
+
 
 <head>
     <meta charset="UTF-8">
@@ -184,12 +160,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php echo $password_err; ?>
                     </span>
                     <br><br>
-                    <label for="password">Mot de passe* :</label>
-                    <input type="password" placeholder="Mot de passe" id="password" name="confirm_password" required
+                    <label for="confirm_password">Confirmez le mot de passe* :</label>
+                    <input type="password" placeholder="Confirmez le mot de passe" id="confirm_password"
+                        name="confirm_password" required
                         class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>"
                         value="<?php echo $confirm_password; ?>">
                     <span class="invalid-feedback">
                         <?php echo $confirm_password_err; ?>
+                    </span>
+                    <br><br>
+                    <label for="email">Email* :</label>
+                    <input type="email" placeholder="Votre adresse email" id="email" name="email" required
+                        class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>"
+                        value="<?php echo $email; ?>">
+                    <span class="invalid-feedback">
+                        <?php echo $email_err; ?>
                     </span>
                     <br><br>
                     <label for="statut">Statut :</label>
@@ -197,6 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="utilisateur">Utilisateur</option>
                         <option value="admin">Administrateur</option>
                     </select>
+
                     <input class="input" type="submit" value="Connexion">
                 </form>
             </div>

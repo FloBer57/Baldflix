@@ -1,16 +1,16 @@
 <?php
 session_start();
 
-// Check if the user is logged in, otherwise redirect to login page
+// Vérifier si l'utilisateur est connecté, sinon le rediriger vers la page de connexion
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: baldflix_login.php");
   exit;
 }
 
-// Include config file
+// Inclure le fichier de configuration
 require_once "config.php";
 
-// Check if the logged-in user is an admin
+// Vérifier si l'utilisateur connecté est un administrateur
 if ($_SESSION["statut"] != "admin") {
   header("location: profile.php");
   exit;
@@ -25,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
 
   // Récupérer les données du formulaire
   $user_id = $_POST["user_id"];
-  $new_password = $_POST["new_password"];
   $new_statut = $_POST["new_statut"];
 
   // Valider le nouveau statut
@@ -33,14 +32,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
     die("Choix de statut invalide.");
   }
 
-  // Mettre à jour le mot de passe et le statut dans la base de données
-  $update_sql = "UPDATE users SET password = ?, statut = ? WHERE id = ?";
+  // Mettre à jour le statut dans la base de données
+  $update_sql = "UPDATE users SET statut = ? WHERE id = ?";
   $update_stmt = mysqli_prepare($link, $update_sql);
-  mysqli_stmt_bind_param($update_stmt, "ssi", password_hash($new_password, PASSWORD_DEFAULT), $new_statut, $user_id);
+  mysqli_stmt_bind_param($update_stmt, "si", $new_statut, $user_id);
   mysqli_stmt_execute($update_stmt);
   mysqli_stmt_close($update_stmt);
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
+  // ... (votre code existant)
+  // Générer un nouveau mot de passe sécurisé
+  $new_password = generateRandomPassword();
+
+  // Hacher le nouveau mot de passe
+  $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+  // Envoyer un e-mail avec le nouveau mot de passe
+  $to = $user_email;
+  $subject = 'Réinitialisation du mot de passe';
+  $message = 'Votre nouveau mot de passe : ' . $new_password;
+  $headers = 'From: your-email@example.com' . "\r\n" .
+    'Reply-To: your-email@example.com' . "\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+
+  // Utilisation de la fonction mail() pour envoyer l'e-mail
+  mail($to, $subject, $message, $headers);
+
+  // Rediriger vers la même page après la réinitialisation
+  header("Location: " . $_SERVER['PHP_SELF']);
+  exit;
+}
 // Fonction pour supprimer un utilisateur
 if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["id"])) {
   // Protection CSRF
@@ -81,43 +102,62 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
   <main>
     <div class="account__container">
-      <div class="sub__container">
+      <div class="sub__container admin__container">
         <nav class="account__nav">
-          <ul>
+          <ul class="admin__nav">
             <li class="test" data-tab="admin-user-tab-content" onclick="showTab('admin-user-tab-content')">
               Administration des utilisateurs</li>
             <li class="test" data-tab="video-tab-content" onclick="showTab('video-tab-content')">Administration des
               vidéos</li>
           </ul>
         </nav>
-        <div id="admin-user-tab-content" class="tab__content">
+        <div id="admin-user-tab-content" class="tab__content admin__content">
           <h2>Administration des utilisateurs</h2>
           <?php
           // Requête SQL pour récupérer tous les utilisateurs
-          $sql = "SELECT id, username, statut FROM users";
+          $sql = "SELECT id, username, email, statut FROM users";
           $result = mysqli_query($link, $sql);
 
           if ($result) {
             echo "<table>";
-            echo "<tr><th>Nom d'utilisateur</th><th>Statut</th><th>Action</th></tr>";
+            echo "<tr><th>Nom d'utilisateur</th><th class='small-screen'>Email</th><th>Statut</th><th>Action</th><th>MDP</th><th>Supprimez</th></tr>";
             while ($row = mysqli_fetch_assoc($result)) {
               echo "<tr>";
               echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+              echo "<td class='small-screen'>" . htmlspecialchars($row['email']) . "</td>";
               echo "<td>" . htmlspecialchars($row['statut']) . "</td>";
+
+              // Formulaire pour modifier le statut
               echo "<td>
-            <form method='post' action=''>
-                <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
-                <input type='hidden' name='user_id' value='{$row['id']}'>
-                <label for='new_statut'>Nouveau statut :</label>
-                <select name='new_statut'>
-                    <option value='utilisateur' " . ($row['statut'] == 'utilisateur' ? 'selected' : '') . ">Utilisateur</option>
-                    <option value='admin' " . ($row['statut'] == 'admin' ? 'selected' : '') . ">Admin</option>
-                </select>
-                <input type='submit' name='modify' value='Modifier'>
-            </form>
-            |
-            <a href='?action=delete&id={$row['id']}&csrf_token={$_SESSION["csrf_token"]}'>Supprimer</a>
-        </td>";
+                      <form method='post' action=''>
+                        <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
+                        <input type='hidden' name='user_id' value='{$row['id']}'>
+                        <select name='new_statut'>
+                            <option value='utilisateur' " . ($row['statut'] == 'utilisateur' ? 'selected' : '') . ">Utilisateur</option>
+                            <option value='admin' " . ($row['statut'] == 'admin' ? 'selected' : '') . ">Admin</option>
+                        </select>
+                        <input type='submit' name='modify' value='Modifier'>
+                      </form>
+                    </td>";
+
+              // Formulaire pour réinitialiser le mot de passe
+              echo "<td>
+                      <form method='post' action=''>
+                        <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
+                        <input type='hidden' name='user_id' value='{$row['id']}'>
+                        <input type='submit' name='reset_password' value='Réinitialiser'>
+                      </form>
+                    </td>";
+
+              // Lien pour supprimer l'utilisateur
+              echo "<td>
+              <a href='#' onclick='confirmDelete(\"?action=delete&id={$row['id']}&csrf_token={$_SESSION["csrf_token"]}\")'>
+                <img src='image/delete.png' alt='Supprimer' title='Supprimer'>
+              </a>
+            </td>";
+
+
+
               echo "</tr>";
             }
             echo "</table>";

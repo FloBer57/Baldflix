@@ -24,3 +24,9 @@ document.querySelectorAll('.tab__header').forEach(function(tabHeader) {
     showTab(tabId);
   });
 });
+
+function confirmDelete(link) {
+  if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur?")) {
+    window.location.href = link;
+  }
+}

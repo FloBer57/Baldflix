@@ -523,6 +523,35 @@ textarea {
   align-items: center;
 }
 
+.admin__content table tr td {
+  text-align: center;
+  font-size: 1em;
+  font-weight: 300;
+}
+
+.admin__content table tr td a img {
+  max-width: 2.4em;
+  fill: var(--red);
+
+}
+
+.admin__content input {
+  padding: inherit;
+  width: 100%;
+}
+
+@media screen and (min-width: 600px) and (max-width: 800px) {
+
+  .admin__nav {
+    text-align: center;
+    margin: auto;
+    width: 80%;
+  }
+
+  .admin__container {
+display: block;
+  }
+}
 /* Media querie d'un ecran d'ordi */
 
 @media screen and (min-width: 1400px) {
@@ -831,8 +860,10 @@ textarea {
     width: 100%;
     
   }
-
-  
+/* ICI POUR L'ADMIN PAGE */
+.small-screen {
+  display: none;
+}
 }
 
 @media screen and (max-width: 450px) {
@@ -1002,5 +1033,9 @@ textarea {
 textarea {
   width: 100%;
   
+}
+/* ICI POUR L'ADMIN PAGE */
+.small-screen {
+  display: none;
 }
 }
