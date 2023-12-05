@@ -7,6 +7,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   exit;
 }
 
+echo "Statut actuel : " . $_SESSION["statut"];
+
 // Include config file
 require_once "config.php";
 
@@ -178,6 +180,7 @@ mysqli_close($link);
 </html>
 
 <body class="background">
+
   <?php
 
   require_once "includes/header.php";
@@ -187,12 +190,15 @@ mysqli_close($link);
   <main>
     <div class="account__container">
       <div class="sub__container">
-        <nav class="account__nav" >
+        <nav class="account__nav">
           <ul>
             <li class="test" data-tab="profile-tab-content" onclick="showTab('profile-tab-content')">Mon profil</li>
-            <li class="test" data-tab="password-tab-content" onclick="showTab('password-tab-content')">Mot de passe et Sécurité</li>
-            <li class="test" data-tab="delete-tab-content" onclick="showTab('delete-tab-content')">Supprimer le compte</li>
-            <li class="test" data-tab="suggest-tab-content" onclick="showTab('suggest-tab-content')">Une suggestion?</li>
+            <li class="test" data-tab="password-tab-content" onclick="showTab('password-tab-content')">Mot de passe et
+              Sécurité</li>
+            <li class="test" data-tab="delete-tab-content" onclick="showTab('delete-tab-content')">Supprimer le compte
+            </li>
+            <li class="test" data-tab="suggest-tab-content" onclick="showTab('suggest-tab-content')">Une suggestion?
+            </li>
           </ul>
         </nav>
 

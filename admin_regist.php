@@ -63,31 +63,75 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    $statut = "";
+    $statut_err = "";
+
+    // ...
+
+    // Validate statut
+
+    if (empty(trim($_POST["statut"]))) {
+        $statut_err = "Veuillez choisir un statut.";
+    } else {
+        $statut = trim($_POST["statut"]);
+    }
+
     // Check input errors before inserting in database
-    if (empty($username_err) && empty($password_err) && empty($confirm_password_err)) {
+    if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($statut_err)) {
 
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        $sql = "INSERT INTO users (username, password, statut) VALUES (?, ?, ?)";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
+            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_statut);
 
             // Set parameters
             $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+            $param_password = password_hash($password, PASSWORD_DEFAULT);
+            $param_statut = $statut;
+
+            // Attempt to execute the prepared statement
+            if (mysqli_stmt_execute($stmt)) {
+                // Redirect to login page
+                header("location: baldflix_login.php");
+                exit(); // Assurez-vous de terminer le script après la redirection
+            } else {
+                echo "Il y a eu un problème lors de l'inscription : " . mysqli_error($link);
+            }
+
+            // Close statement
+            mysqli_stmt_close($stmt);
+        }
+    }
+    if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($statut_err)) {
+        // ...
+
+        // Prepare an insert statement
+        $sql = "INSERT INTO users (username, password, statut) VALUES (?, ?, ?)";
+
+        if ($stmt = mysqli_prepare($link, $sql)) {
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_statut);
+
+            // Set parameters
+            $param_username = $username;
+            $param_password = password_hash($password, PASSWORD_DEFAULT);
+            $param_statut = $statut;
 
             // Attempt to execute the prepared statement
             if (mysqli_stmt_execute($stmt)) {
                 // Redirect to login page
                 header("location: baldflix_login.php");
             } else {
-                echo "JEAAAANNEE, AU SECOURS!! Il y à eu un problème!";
+                echo "Il y a eu un problème lors de l'inscription.";
             }
 
             // Close statement
             mysqli_stmt_close($stmt);
         }
+
+        // ...
     }
 
     // Close connection
@@ -148,6 +192,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php echo $confirm_password_err; ?>
                     </span>
                     <br><br>
+                    <label for="statut">Statut :</label>
+                    <select name="statut" required class="form-control">
+                        <option value="utilisateur">Utilisateur</option>
+                        <option value="admin">Administrateur</option>
+                    </select>
                     <input class="input" type="submit" value="Connexion">
                 </form>
             </div>

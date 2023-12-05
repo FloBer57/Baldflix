@@ -1,89 +1,99 @@
 <?php
 // Initialize the session
 session_start();
- 
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
   header("location: index.php");
   exit;
 }
- 
+
+
 // Include config file
 require_once "config.php";
- 
+
 // Define variables and initialize with empty values
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
- 
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Check if username is empty
-    if(empty(trim($_POST["username"]))){
-        $username_err = "Veuillez rentrer votre nom d'utilisateur";
-    } else{
-        $username = trim($_POST["username"]);
-    }
-    
-    // Check if password is empty
-    if(empty(trim($_POST["password"]))){
-        $password_err = "Veuillez rentrer votre mot de passe";
-    } else{
-        $password = trim($_POST["password"]);
-    }
-    
-    // Validate credentials
-    if(empty($username_err) && empty($password_err)){
-        // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_username);
-            
-            // Set parameters
-            $param_username = $username;
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Store result
-                mysqli_stmt_store_result($stmt);
-                
-                // Check if username exists, if yes then verify password
-                if(mysqli_stmt_num_rows($stmt) == 1){                    
-                    // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
-                    if(mysqli_stmt_fetch($stmt)){
-                        if(password_verify($password, $hashed_password)){
-                            // Password is correct, so start a new session
-                            session_start();
-                            
-                            // Store data in session variables
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;                            
-                            
-                            // Redirect user to welcome page
-                            header("location: index.php");
-                        } else{
-                            // Password is not valid, display a generic error message
-                            $login_err = "Nom d'utilisateur ou mot de passe invalide.";
-                        }
-                    }
-                } else{
-                    // Username doesn't exist, display a generic error message
-                    $login_err = "Nom d'utilisateur ou mot de passe invalide.";
-                }
-            } else{
-                echo "Jeannne! Oh secour! Il y a eu un problème.";
-            }
 
-            // Close statement
-            mysqli_stmt_close($stmt);
+// Processing form data when form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+  // Check if username is empty
+  if (empty(trim($_POST["username"]))) {
+    $username_err = "Veuillez rentrer votre nom d'utilisateur";
+  } else {
+    $username = trim($_POST["username"]);
+  }
+
+  // Check if password is empty
+  if (empty(trim($_POST["password"]))) {
+    $password_err = "Veuillez rentrer votre mot de passe";
+  } else {
+    $password = trim($_POST["password"]);
+  }
+
+  // Validate credentials
+  if (empty($username_err) && empty($password_err)) {
+    // Prepare a select statement
+    $sql = "SELECT id, username, password FROM users WHERE username = ?";
+
+    if ($stmt = mysqli_prepare($link, $sql)) {
+      // Bind variables to the prepared statement as parameters
+      mysqli_stmt_bind_param($stmt, "s", $param_username);
+
+      // Set parameters
+      $param_username = $username;
+
+      // Attempt to execute the prepared statement
+      if (mysqli_stmt_execute($stmt)) {
+        // Store result
+        mysqli_stmt_store_result($stmt);
+
+        // Check if username exists, if yes then verify password
+        if (mysqli_stmt_num_rows($stmt) == 1) {
+          // Bind result variables
+          mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+          if (mysqli_stmt_fetch($stmt)) {
+            if (password_verify($password, $hashed_password)) {
+              // Password is correct, so start a new session
+              session_start();
+
+              // Store data in session variables
+              $_SESSION["loggedin"] = true;
+              $_SESSION["id"] = $id;
+              $_SESSION["username"] = $username;
+              // Fetch and store the user's status
+
+              $sql_status = "SELECT statut FROM users WHERE id = ?";
+              $stmt_status = mysqli_prepare($link, $sql_status);
+              mysqli_stmt_bind_param($stmt_status, "i", $id);
+              mysqli_stmt_execute($stmt_status);
+              mysqli_stmt_bind_result($stmt_status, $user_statut);
+              mysqli_stmt_fetch($stmt_status);
+
+              // Redirect user to welcome page
+              $_SESSION["statut"] = $user_statut;
+              header("location: index.php");
+            } else {
+              // Password is not valid, display a generic error message
+              $login_err = "Nom d'utilisateur ou mot de passe invalide.";
+            }
+          }
+        } else {
+          // Username doesn't exist, display a generic error message
+          $login_err = "Nom d'utilisateur ou mot de passe invalide.";
         }
+      } else {
+        echo "Jeannne! Oh secour! Il y a eu un problème.";
+      }
+
+      // Close statement
+      mysqli_stmt_close($stmt);
     }
-    
-    // Close connection
-    mysqli_close($link);
+  }
+
+  // Close connection
+  mysqli_close($link);
 }
 ?>
 
@@ -109,20 +119,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   <div class="main__container">
     <div class="container">
       <div class="container__form">
-      <?php 
-        if(!empty($login_err)){
-            echo '<div class="alert alert-danger">' . $login_err . '</div>';
-        }        
+        <?php
+        if (!empty($login_err)) {
+          echo '<div class="alert alert-danger">' . $login_err . '</div>';
+        }
         ?>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
           <label for="username" class="username">Nom d'utilisateur*</label>
-          <input type="text" placeholder="Nom d'utilisateur" id="username" name="username" required class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
-          <span class="invalid-feedback"><?php echo $username_err; ?></span>
+          <input type="text" placeholder="Nom d'utilisateur" id="username" name="username" required
+            class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"
+            value="<?php echo $username; ?>">
+          <span class="invalid-feedback">
+            <?php echo $username_err; ?>
+          </span>
           <br><br>
 
           <label for="password">Mot de passe* :</label>
-          <input type="password" placeholder="Mot de passe" id="password" name="password" required class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
-                <span class="invalid-feedback"><?php echo $password_err; ?></span>
+          <input type="password" placeholder="Mot de passe" id="password" name="password" required
+            class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
+          <span class="invalid-feedback">
+            <?php echo $password_err; ?>
+          </span>
           <br><br>
 
           <input class="input" id="inepute" type="submit" value="Connexion">

@@ -26,7 +26,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
 </head>
 
-<body class="background">
+<body class="back">
 
 <?php
 
