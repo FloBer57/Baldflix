@@ -28,13 +28,13 @@ li {
   background-repeat: repeat;
 }
 
+img {
+  width: 100%;
+}
+
 .back {
   background-color: var(--primary);
   background-size: cover;
-}
-
-img {
-  max-width: 100%;
 }
 
 /* HEADER */
@@ -514,6 +514,20 @@ textarea {
   width: 100%;
 }
 
+.choose_picture {
+  max-width: 100px;
+  min-width: 100px;
+  border-radius: 200px;
+  display: block;
+  margin: auto;
+}
+
+.text_modify {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
 /* Admin_page */
 
 .admin__content table {
@@ -732,9 +746,9 @@ select {
   .search_phone {
     display: block;
     position: fixed;
-    top: 1.8em;
+    top: 2em;
     right: 6em;
-    width: 2.6em;
+    width: 2.6em !important;
     z-index: 3;
   }
   /* footer */
@@ -813,9 +827,9 @@ select {
   .search_phone {
     display: block;
     position: fixed;
-    top: 1.8em;
+    top: 2em;
     right: 6em;
-    width: 2.6em;
+    width: 2.6em !important;
     z-index: 3;
   }
 
@@ -918,6 +932,7 @@ select {
   }
 
   .title {
+    margin-top: 0.5em;
     margin-left: 0.7em;
   }
 
@@ -988,7 +1003,7 @@ select {
     position: fixed;
     top: 1.55em;
     right: 4.5em;
-    width: 2.6em;
+    width: 2.6em !important; 
     z-index: 3;
   }
 
