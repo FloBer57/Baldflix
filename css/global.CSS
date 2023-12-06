@@ -18,6 +18,10 @@ body {
   line-height: 1.4;
 }
 
+.error_page {
+  background-color: var(--primary)!important;
+}
+
 li {
   list-style: none;
 }
@@ -310,6 +314,12 @@ a.hero img {
   touch-action: none;
 }
 
+/* ERROR 404 */
+
+.error_acceuil {
+  left: 74%;
+}
+
 /* MAIN CONTAINER */
 
 #watched,
@@ -384,7 +394,6 @@ a.hero img {
 /* FOOTER */
 
 .footer {
-  background: linear-gradient(to top, var(--wooburn), transparent);
   height: 7em;
   text-align: center;
 }
@@ -633,6 +642,13 @@ select {
     font-size: 3em;
   }
 
+  /* ERROR 404 */
+
+.error_acceuil {
+  top: 70%;
+  font-size: 3em;
+  left: 74%;
+}
   /* header */
   .main-nav div ul {
     display: none;
@@ -665,6 +681,10 @@ select {
     transform: translate(-23%, -60%);
     /* Centrez horizontalement et verticalement */
     font-size: 2.5em;
+  }
+
+  .error_acceuil {
+    left: 68%;
   }
 
   /* header */
@@ -701,6 +721,11 @@ select {
     left: 22%;
     transform: translate(-23%, -60%);
     font-size: 2.2em;
+  }
+
+  .error_acceuil {
+    font-size: 2.2em;
+    left: 62%;
   }
 
   /* header */
@@ -784,6 +809,9 @@ select {
     font-size: 1.5em;
   }
 
+.error_acceuil{
+  left: 65%;
+}  
   /* header */
 
   .navbar {
@@ -946,6 +974,9 @@ select {
     font-size: 1.3em;
   }
 
+.error_acceuil {
+  left: 62%;
+}
   .trailer {
     margin-top: -1em;
   }
