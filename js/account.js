@@ -35,7 +35,7 @@ var btnOpenIconModal = document.getElementById("openIconModal");
 var iconModal = document.getElementById("iconModal");
 var btnCloseIconModal = document.getElementById("closeModal");
 var iconContainer = document.getElementById("iconContainer");
-var selectedIcon = null;
+var selectedIcon = null; // Déclaration ici
 
 btnOpenIconModal.onclick = function () {
   iconModal.style.display = "block";
@@ -45,25 +45,38 @@ btnCloseIconModal.onclick = function () {
   iconModal.style.display = "none";
 }
 
-iconContainer.addEventListener("click", function (event) {
-  var clickedIcon = event.target;
+document.addEventListener("DOMContentLoaded", function () {
+  // Retirez cette ligne pour éviter la redéclaration
+  // var selectedIcon = null;
 
-  if (clickedIcon.classList.contains("icon-preview")) {
-    if (selectedIcon) {
-      selectedIcon.classList.remove("selected");
-    }
+  // Sélectionnez toutes les icônes et ajoutez un écouteur de clic
+  var iconImages = document.querySelectorAll('.icon-preview');
+  iconImages.forEach(function (icon) {
+    icon.addEventListener('click', function () {
+      // Déselectionnez l'icône précédemment sélectionnée (si elle existe)
+      if (selectedIcon) {
+        selectedIcon.classList.remove('selected-icon');
+      }
 
-    selectedIcon = clickedIcon;
-    selectedIcon.classList.add("selected");
-  }
+      // Mettez à jour l'icône sélectionnée
+      selectedIcon = icon;
+      selectedIcon.classList.add('selected-icon');
+
+      // Affichez la confirmation ou effectuez d'autres actions nécessaires
+      console.log("Icône sélectionnée :", selectedIcon.getAttribute("data-icon"));
+    });
+  });
 });
 
-var btnConfirmIconSelection = document.getElementById("confirmIconSelection");
-
-btnConfirmIconSelection.onclick = function () {
+function updateProfileIcon() {
   if (selectedIcon) {
     var selectedIconPath = selectedIcon.getAttribute("data-icon");
-    console.log("Icône sélectionnée :", selectedIconPath);
+
+    // Mettre à jour l'image de profil de l'utilisateur
+    var userProfileImage = document.getElementById("userProfileImage");
+    userProfileImage.src = "image/users_icon/" + selectedIconPath;
+
+    // Fermer la modale
     iconModal.style.display = "none";
   } else {
     alert("Veuillez sélectionner une icône avant de confirmer.");
