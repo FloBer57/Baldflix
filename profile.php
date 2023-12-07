@@ -12,6 +12,21 @@ echo "Statut actuel : ".$_SESSION["statut"];
 // Include config file
 require_once "config.php";
 
+$profileQuery = "SELECT profile_picture FROM users WHERE id = ?";
+$profileStmt = mysqli_prepare($link, $profileQuery);
+
+if ($profileStmt) {
+  mysqli_stmt_bind_param($profileStmt, "i", $_SESSION["id"]);
+  if (mysqli_stmt_execute($profileStmt)) {
+    mysqli_stmt_bind_result($profileStmt, $profile_picture);
+    if (mysqli_stmt_fetch($profileStmt)) {
+      // Assign the profile picture URL to the session variable
+      $_SESSION["profile_picture"] = $profile_picture;
+    }
+  }
+  mysqli_stmt_close($profileStmt);
+}
+
 // Define variables and initialize with empty values
 $new_password = $confirm_password = "";
 $new_password_err = $confirm_password_err = "";
