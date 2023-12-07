@@ -19,7 +19,7 @@ body {
 }
 
 .error_page {
-  background-color: var(--primary)!important;
+  background-color: var(--primary) !important;
 }
 
 li {
@@ -570,8 +570,88 @@ textarea {
 
 select {
   text-align: center;
-  width:60% ;
+  width: 60%;
   margin: auto;
+}
+
+/* MODALE */
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--primary);
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 5px;
+  text-align: center;
+  opacity: 0.9;
+  margin-left: 5%;
+  margin-right: 5%;
+  box-shadow: 0px 0px 20px #f3f3f391;
+}
+
+.modal-content h2 {
+  margin: 0.5em;
+  border-bottom: 3px solid var(--light);
+}
+.close {
+  position: absolute;
+  top: 0px;
+  right: 60px;
+  font-size: 2.8em;
+  cursor: pointer;
+}
+
+.icon-preview {
+  /* Styles pour les icônes dans la modale */
+  width: 100px; /* Ajustez la taille selon vos besoins */
+  height: 100px; /* Ajustez la taille selon vos besoins */
+  margin: 5px;
+  cursor: pointer;
+}
+
+.button_modal {
+  width: 55%;
+  margin: 0.5em;
+  color: var(--primary);
+  background-color: var(--light);
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Arial;
+  font-size: 1em;
+  padding: 2px 2px;
+  width: auto;
+  text-align: center;
+  margin-top: 0.5em;
+}
+.icon-preview.selected {
+  border: 2px solid #3498db;
+}
+
+@media screen and (min-width: 0px) and (max-width: 500px) {
+
+  .modal-content h2 {
+    font-size: 1.2em;
+    margin: 0.5em;
+    border-bottom: 3px solid var(--light);
+  }
+  .close {
+    position: absolute;
+    top: 0px;
+    right: 40px;
+    font-size: 2.8em;
+    cursor: pointer;
+  }
 }
 
 @media screen and (min-width: 600px) and (max-width: 800px) {
@@ -647,11 +727,11 @@ select {
 
   /* ERROR 404 */
 
-.error_acceuil {
-  top: 70%;
-  font-size: 3em;
-  left: 74%;
-}
+  .error_acceuil {
+    top: 70%;
+    font-size: 3em;
+    left: 74%;
+  }
   /* header */
   .main-nav div ul {
     display: none;
@@ -812,9 +892,9 @@ select {
     font-size: 1.5em;
   }
 
-.error_acceuil{
-  left: 65%;
-}  
+  .error_acceuil {
+    left: 65%;
+  }
   /* header */
 
   .navbar {
@@ -977,9 +1057,9 @@ select {
     font-size: 1.3em;
   }
 
-.error_acceuil {
-  left: 62%;
-}
+  .error_acceuil {
+    left: 62%;
+  }
   .trailer {
     margin-top: -1em;
   }
@@ -1037,7 +1117,7 @@ select {
     position: fixed;
     top: 1.55em;
     right: 4.5em;
-    width: 2.6em !important; 
+    width: 2.6em !important;
     z-index: 3;
   }
 

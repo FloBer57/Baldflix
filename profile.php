@@ -24,28 +24,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
 
   // Construire le chemin complet vers l'image
   $imageDirectory = 'image/users_icon/';
+  $selectedImagePath = $imageDirectory . $selectedImage;
   $fullImagePath = $imageDirectory . $selectedImage;
+
+  // Mettre à jour la session avec le nouveau chemin de l'image
+  $_SESSION["profile_picture"] = $fullImagePath;
 
   // Mettre à jour la base de données avec le nouveau chemin d'image
   $updateSql = "UPDATE users SET profile_picture = ? WHERE id = ?";
   $updateStmt = mysqli_prepare($link, $updateSql);
 
   if ($updateStmt) {
-    // Binder les variables à la déclaration préparée en tant que paramètres
-    mysqli_stmt_bind_param($updateStmt, "si", $fullImagePath, $_SESSION["id"]);
+      // Binder les variables à la déclaration préparée en tant que paramètres
+      mysqli_stmt_bind_param($updateStmt, "si", $fullImagePath, $_SESSION["id"]);
 
-    if (mysqli_stmt_execute($updateStmt)) {
-      // Mise à jour réussie, mettre à jour la variable de session
-      $_SESSION["profile_picture"] = $fullImagePath;
+      if (mysqli_stmt_execute($updateStmt)) {
+          // Mise à jour réussie, vous pouvez ajouter un message de succès ici si nécessaire
+      } else {
+          echo "Oops! Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
+      }
 
-      // Vous pouvez ajouter un message de succès ici si nécessaire
-      // Par exemple : echo "La photo de profil a été mise à jour avec succès!";
-    } else {
-      echo "Oops! Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
-    }
-
-    // Fermer la déclaration
-    mysqli_stmt_close($updateStmt);
+      // Fermer la déclaration
+      mysqli_stmt_close($updateStmt);
   }
 }
 
@@ -253,6 +253,27 @@ mysqli_close($link);
             </select>
             <input type="submit" name="submitImage" value="Modifier ma photo de profil">
           </form>
+
+          <!-- Bouton pour ouvrir la modale -->
+          <button id="openIconModal">Choisir une icône</button>
+        </div>
+
+        <!-- Modale pour choisir une icône -->
+        <div id="iconModal" class="modal">
+          <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Choisir une icône</h2>
+            <div id="iconContainer">
+              <!-- Ajoutez des icônes ici -->
+              <?php
+              foreach ($images as $image) {
+                $imageName = basename($image);
+                echo "<img class=\"icon-preview\" src=\"$image\" data-icon=\"$imageName\">";
+              }
+              ?>
+            </div>
+            <button class="button_modal" id="confirmIconSelection">Confirmer la sélection</button>
+          </div>
         </div>
 
         <div id="password-tab-content" class="tab__content active-tab">

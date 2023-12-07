@@ -30,3 +30,42 @@ function confirmDelete(link) {
     window.location.href = link;
   }
 }
+
+var btnOpenIconModal = document.getElementById("openIconModal");
+var iconModal = document.getElementById("iconModal");
+var btnCloseIconModal = document.getElementById("closeModal");
+var iconContainer = document.getElementById("iconContainer");
+var selectedIcon = null;
+
+btnOpenIconModal.onclick = function () {
+  iconModal.style.display = "block";
+}
+
+btnCloseIconModal.onclick = function () {
+  iconModal.style.display = "none";
+}
+
+iconContainer.addEventListener("click", function (event) {
+  var clickedIcon = event.target;
+
+  if (clickedIcon.classList.contains("icon-preview")) {
+    if (selectedIcon) {
+      selectedIcon.classList.remove("selected");
+    }
+
+    selectedIcon = clickedIcon;
+    selectedIcon.classList.add("selected");
+  }
+});
+
+var btnConfirmIconSelection = document.getElementById("confirmIconSelection");
+
+btnConfirmIconSelection.onclick = function () {
+  if (selectedIcon) {
+    var selectedIconPath = selectedIcon.getAttribute("data-icon");
+    console.log("Icône sélectionnée :", selectedIconPath);
+    iconModal.style.display = "none";
+  } else {
+    alert("Veuillez sélectionner une icône avant de confirmer.");
+  }
+}
