@@ -525,8 +525,8 @@ textarea {
 }
 
 .choose_picture {
-  max-width: 100px;
-  min-width: 100px;
+  max-width: 200px;
+  min-width: 200px;
   border-radius: 200px;
   display: block;
   margin: auto;
@@ -570,6 +570,8 @@ textarea {
 
 select {
   text-align: center;
+  width:60% ;
+  margin: auto;
 }
 
 @media screen and (min-width: 600px) and (max-width: 800px) {

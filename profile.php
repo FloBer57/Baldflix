@@ -216,7 +216,7 @@ mysqli_close($link);
   require_once "includes/header.php";
 
   ?>
-echo "Profile Picture after login: " . $_SESSION["profile_picture"];
+
   <main>
     <div class="account__container">
       <div class="sub__container">
