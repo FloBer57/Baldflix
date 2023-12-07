@@ -1,4 +1,3 @@
-
 <header class="header">
 
   <div class="title">
@@ -28,7 +27,12 @@
       <ul class="nav-list">
         <li class="nav-item nav-hero">
           <a href="#" class="hero" id="herro">
-            <img id="profilePicture" src="<?php echo $_SESSION['profile_picture']; ?>" alt="Photo de profil">
+            <?php if (isset($_SESSION['profile_picture'])): ?>
+              <img id="profilePicture" src="<?php echo $_SESSION['profile_picture']; ?>" alt="Photo de profil">
+            <?php else: ?>
+              <!-- Mettez ici une image par défaut si l'utilisateur n'a pas de photo de profil -->
+              <img id="profilePicture" src="image/users_icon/default.png" alt="Photo de profil par défaut">
+            <?php endif; ?>
           </a>
         </li>
         <li class="nav-item">

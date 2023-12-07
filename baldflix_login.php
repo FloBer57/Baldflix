@@ -1,6 +1,11 @@
 <?php
 // Initialize the session
-session_start();
+session_start([
+    'cookie_lifetime' => 86400, // Durée de vie du cookie en secondes (par exemple, 1 jour)
+    'cookie_secure' => true,    // Transférer le cookie uniquement via HTTPS
+    'cookie_httponly' => true,  // Empêcher l'accès au cookie via JavaScript
+    'use_strict_mode' => true,  // Renforcer les contraintes de sécurité
+]);
 
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
   header("location: index.php");
@@ -14,6 +19,20 @@ require_once "config.php";
 // Define variables and initialize with empty values
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
+
+function getProfileData($userId)
+{
+  global $link;
+
+  $sql = "SELECT statut, profile_picture FROM users WHERE id = ?";
+  $stmt = mysqli_prepare($link, $sql);
+  mysqli_stmt_bind_param($stmt, "i", $userId);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_bind_result($stmt, $user_statut, $profile_picture);
+  mysqli_stmt_fetch($stmt);
+
+  return ['statut' => $user_statut, 'profile_picture' => $profile_picture];
+}
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -62,17 +81,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               $_SESSION["loggedin"] = true;
               $_SESSION["id"] = $id;
               $_SESSION["username"] = $username;
-              // Fetch and store the user's status
 
-              $sql_status = "SELECT statut FROM users WHERE id = ?";
-              $stmt_status = mysqli_prepare($link, $sql_status);
-              mysqli_stmt_bind_param($stmt_status, "i", $id);
-              mysqli_stmt_execute($stmt_status);
-              mysqli_stmt_bind_result($stmt_status, $user_statut);
-              mysqli_stmt_fetch($stmt_status);
+              // Fetch and store the user's status and profile picture
+              $profileData = getProfileData($id);
+              $_SESSION["statut"] = $profileData['statut'];
+              $_SESSION["profile_picture"] = $profileData['profile_picture'];
 
               // Redirect user to welcome page
-              $_SESSION["statut"] = $user_statut;
               header("location: index.php");
             } else {
               // Password is not valid, display a generic error message

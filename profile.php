@@ -2,30 +2,15 @@
 session_start();
 
 // Check if the user is logged in, otherwise redirect to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: baldflix_login.php");
   exit;
 }
 
-echo "Statut actuel : ".$_SESSION["statut"];
+echo "Statut actuel : " . $_SESSION["statut"];
 
 // Include config file
 require_once "config.php";
-
-$profileQuery = "SELECT profile_picture FROM users WHERE id = ?";
-$profileStmt = mysqli_prepare($link, $profileQuery);
-
-if ($profileStmt) {
-  mysqli_stmt_bind_param($profileStmt, "i", $_SESSION["id"]);
-  if (mysqli_stmt_execute($profileStmt)) {
-    mysqli_stmt_bind_result($profileStmt, $profile_picture);
-    if (mysqli_stmt_fetch($profileStmt)) {
-      // Assign the profile picture URL to the session variable
-      $_SESSION["profile_picture"] = $profile_picture;
-    }
-  }
-  mysqli_stmt_close($profileStmt);
-}
 
 // Define variables and initialize with empty values
 $new_password = $confirm_password = "";
@@ -33,27 +18,28 @@ $new_password_err = $confirm_password_err = "";
 
 // Processing form data when form is submitted
 
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
   // Récupérer la valeur sélectionnée dans le menu déroulant
   $selectedImage = $_POST["profilImage"];
 
   // Construire le chemin complet vers l'image
   $imageDirectory = 'image/users_icon/';
-  $fullImagePath = $imageDirectory.$selectedImage;
+  $fullImagePath = $imageDirectory . $selectedImage;
 
   // Mettre à jour la base de données avec le nouveau chemin d'image
   $updateSql = "UPDATE users SET profile_picture = ? WHERE id = ?";
   $updateStmt = mysqli_prepare($link, $updateSql);
 
-  if($updateStmt) {
+  if ($updateStmt) {
     // Binder les variables à la déclaration préparée en tant que paramètres
     mysqli_stmt_bind_param($updateStmt, "si", $fullImagePath, $_SESSION["id"]);
 
-    if(mysqli_stmt_execute($updateStmt)) {
+    if (mysqli_stmt_execute($updateStmt)) {
       // Mise à jour réussie, mettre à jour la variable de session
       $_SESSION["profile_picture"] = $fullImagePath;
 
       // Vous pouvez ajouter un message de succès ici si nécessaire
+      // Par exemple : echo "La photo de profil a été mise à jour avec succès!";
     } else {
       echo "Oops! Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
     }
@@ -64,33 +50,33 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
 }
 
 // Validate new password
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new_password"])) {
-  if(empty(trim($_POST["new_password"]))) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new_password"])) {
+  if (empty(trim($_POST["new_password"]))) {
     $new_password_err = "Please enter the new password.";
-  } elseif(strlen(trim($_POST["new_password"])) < 6) {
+  } elseif (strlen(trim($_POST["new_password"])) < 6) {
     $new_password_err = "Password must have at least 6 characters.";
   } else {
     $new_password = trim($_POST["new_password"]);
   }
 
   // Validate confirm password
-  if(isset($_POST["confirm_password"])) {
-    if(empty(trim($_POST["confirm_password"]))) {
+  if (isset($_POST["confirm_password"])) {
+    if (empty(trim($_POST["confirm_password"]))) {
       $confirm_password_err = "Please confirm the password.";
     } else {
       $confirm_password = htmlspecialchars(trim($_POST["confirm_password"]));
-      if(empty($new_password_err) && ($new_password != $confirm_password)) {
+      if (empty($new_password_err) && ($new_password != $confirm_password)) {
         $confirm_password_err = "Password did not match.";
       }
     }
   }
 
   // Check input errors before updating the database
-  if(empty($new_password_err) && empty($confirm_password_err)) {
+  if (empty($new_password_err) && empty($confirm_password_err)) {
     // Prepare an update statement
     $sql = "UPDATE users SET password = ? WHERE id = ?";
 
-    if($stmt = mysqli_prepare($link, $sql)) {
+    if ($stmt = mysqli_prepare($link, $sql)) {
       // Bind variables to the prepared statement as parameters
       mysqli_stmt_bind_param($stmt, "si", $param_password, $param_id);
 
@@ -99,7 +85,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new_password"])) {
       $param_id = $_SESSION["id"];
 
       // Attempt to execute the prepared statement
-      if(mysqli_stmt_execute($stmt)) {
+      if (mysqli_stmt_execute($stmt)) {
         // Password updated successfully. Destroy the session, and redirect to login page
         session_destroy();
         session_regenerate_id();
@@ -113,19 +99,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new_password"])) {
       mysqli_stmt_close($stmt);
     }
   } else {
-    echo "Erreur de validation du mot de passe : ".$new_password_err." ".$confirm_password_err;
+    echo "Erreur de validation du mot de passe : " . $new_password_err . " " . $confirm_password_err;
   }
 }
 
 // Separate block for account deletion
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
   // Validate password for account deletion
   $password = trim($_POST["password_delete"]); // Assuming you define $password somewhere
 
   // Prepare a select statement to verify the password
   $sql_verify = "SELECT id, username, password FROM users WHERE id = ?";
 
-  if($stmt_verify = mysqli_prepare($link, $sql_verify)) {
+  if ($stmt_verify = mysqli_prepare($link, $sql_verify)) {
     // Bind variables to the prepared statement as parameters
     mysqli_stmt_bind_param($stmt_verify, "i", $param_id_verify);
 
@@ -133,19 +119,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
     $param_id_verify = $_SESSION["id"];
 
     // Attempt to execute the prepared statement
-    if(mysqli_stmt_execute($stmt_verify)) {
+    if (mysqli_stmt_execute($stmt_verify)) {
       // Store result
       mysqli_stmt_store_result($stmt_verify);
 
       // Check if the username exists and verify the password
-      if(mysqli_stmt_num_rows($stmt_verify) == 1) {
+      if (mysqli_stmt_num_rows($stmt_verify) == 1) {
         // Bind result variables
         mysqli_stmt_bind_result($stmt_verify, $id_verify, $username_verify, $hashed_password_verify);
-        if(mysqli_stmt_fetch($stmt_verify)) {
-          if(password_verify($password, $hashed_password_verify)) {
+        if (mysqli_stmt_fetch($stmt_verify)) {
+          if (password_verify($password, $hashed_password_verify)) {
             // Password is correct, delete the account
             $delete_sql = "DELETE FROM users WHERE id = ?";
-            if($delete_stmt = mysqli_prepare($link, $delete_sql)) {
+            if ($delete_stmt = mysqli_prepare($link, $delete_sql)) {
               // Bind variable to the prepared statement as a parameter
               mysqli_stmt_bind_param($delete_stmt, "i", $id_delete);
 
@@ -153,14 +139,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
               $id_delete = $_SESSION["id"];
 
               // Attempt to execute the prepared statement
-              if(mysqli_stmt_execute($delete_stmt)) {
+              if (mysqli_stmt_execute($delete_stmt)) {
                 // Redirect to the login page or home page after successful deletion
                 session_destroy();
                 session_regenerate_id();
                 header("location: baldflix_login.php");
                 exit();
               } else {
-                echo "Erreur MySQL lors de la suppression du compte : ".mysqli_error($link);
+                echo "Erreur MySQL lors de la suppression du compte : " . mysqli_error($link);
               }
 
               // Close statement
@@ -183,7 +169,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
     mysqli_stmt_close($stmt_verify);
   }
 }
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) {
   $suggestion_firstname = htmlspecialchars(trim($_POST["suggestion_firstname"]));
   $suggestion_lastname = htmlspecialchars(trim($_POST["suggestion_lastname"]));
   $suggestion_message = htmlspecialchars(trim($_POST["suggestion_message"]));
@@ -199,7 +185,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) {
   $headers = "From: $suggestion_firstname $suggestion_lastname <noreply@baldflix.florentbernar.fr>";
 
   // Utilisez la fonction mail() pour envoyer l'email
-  if(mail($to, $subject, $email_body, $headers)) {
+  if (mail($to, $subject, $email_body, $headers)) {
     echo "Votre suggestion a été envoyée avec succès!";
   } else {
     echo "Erreur lors de l'envoi de la suggestion. Veuillez réessayer plus tard.";
@@ -230,7 +216,7 @@ mysqli_close($link);
   require_once "includes/header.php";
 
   ?>
-
+echo "Profile Picture after login: " . $_SESSION["profile_picture"];
   <main>
     <div class="account__container">
       <div class="sub__container">
@@ -248,7 +234,7 @@ mysqli_close($link);
 
         <div id="profile-tab-content" class="tab__content">
           <h2>Modifier la photo de profil</h2>
-          <?php if(isset($_SESSION["profile_picture"])): ?>
+          <?php if (isset($_SESSION["profile_picture"])): ?>
             <p class="text_modify">Actuellement : </p>
             <img class="choose_picture" src="<?php echo $_SESSION["profile_picture"]; ?>" alt="Photo actuelle">
           <?php endif; ?>
@@ -257,9 +243,9 @@ mysqli_close($link);
             <select name="profilImage" id="profilImage">
               <?php
               $imagesDirectory = 'image/users_icon/';
-              $images = glob($imagesDirectory.'*.{jpg,jpeg,png,gif}', GLOB_BRACE);
+              $images = glob($imagesDirectory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
 
-              foreach($images as $image) {
+              foreach ($images as $image) {
                 $imageName = basename($image);
                 echo "<option value=\"$imageName\">$imageName</option>";
               }
