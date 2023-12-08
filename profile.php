@@ -12,9 +12,7 @@ echo "Statut actuel : " . $_SESSION["statut"];
 // Include config file
 require_once "config.php";
 
-// Define variables and initialize with empty values
-$new_password = $confirm_password = "";
-$new_password_err = $confirm_password_err = "";
+
 
 // Processing form data when form is submitted
 
@@ -49,6 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
   }
 }
 
+$new_password = $confirm_password = "";
+$new_password_err = $confirm_password_err = "";
+$password_err = "" ;
 // Validate new password
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new_password"])) {
   if (empty(trim($_POST["new_password"]))) {
