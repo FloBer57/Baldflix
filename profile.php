@@ -170,6 +170,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
     mysqli_stmt_close($stmt_verify);
   }
 }
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) {
   $suggestion_firstname = htmlspecialchars(trim($_POST["suggestion_firstname"]));
   $suggestion_lastname = htmlspecialchars(trim($_POST["suggestion_lastname"]));
@@ -203,8 +204,10 @@ mysqli_close($link);
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mon compte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow, noimageindex">
+  <link rel="shortcut icon" href="image/favicon/bald_favicon" type="image/x-icon" />
+  <title>Profil</title>
   <link href="css/global.CSS" rel="stylesheet" />
 </head>
 
@@ -264,7 +267,7 @@ mysqli_close($link);
           <div class="modal-content">
             <span id="closeModal" class="close">&times;</span>
             <h2>Choisir une icône</h2>
-            <div id="iconContainer">
+            <div class="icon_container" id="iconContainer">
               <!-- Ajoutez des icônes ici -->
               <?php
               foreach ($images as $image) {

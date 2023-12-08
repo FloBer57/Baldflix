@@ -31,6 +31,13 @@ function confirmDelete(link) {
   }
 }
 
+document.getElementById('duckLink').addEventListener('click', function(event) {
+  event.preventDefault(); // Empêche la navigation par défaut du lien
+
+  var audio = new Audio('chemin/vers/mysound.mp3');
+  audio.play();
+});
+
 var btnOpenIconModal = document.getElementById("openIconModal");
 var iconModal = document.getElementById("iconModal");
 var btnCloseIconModal = document.getElementById("closeModal");

@@ -53,7 +53,7 @@ header {
   margin-bottom: 0px;
   z-index: 2;
   top: 0;
-  height: 6em;
+  height: 5em;
   border-bottom: 3px solid var(--red);
 }
 header::after {
@@ -75,6 +75,7 @@ header::after {
   margin-left: 1.5em;
   display: flex;
   position: sticky;
+  margin-bottom: 0.2em;
 }
 
 .title a {
@@ -118,7 +119,6 @@ title :visited {
   padding: 7px 10px;
   left: calc(100% - 6em);
   transform: translateX(-100%);
-  top: 1.6em;
 }
 
 #search {
@@ -158,7 +158,7 @@ title :visited {
 .navbar {
   width: 350px;
   position: fixed;
-  top: 6em;
+  top: 5em;
   right: -370px;
   display: flex;
   justify-content: center;
@@ -166,9 +166,7 @@ title :visited {
   border-bottom-left-radius: 0%;
   transition: right 0.5s cubic-bezier(1, 0, 0, 1);
   z-index: 0;
-  background-color: transparent;
   border: 3px solid var(--red);
-  background-color: #141414;
   background: url("/image/cornered-stairs.svg") center center no-repeat fixed;
   background-size: cover;
 }
@@ -182,7 +180,7 @@ title :visited {
   height: 35px;
   background-color: var(--primary);
   position: fixed;
-  top: 2.2em;
+  top: 1.4em;
   right: 2em;
   cursor: pointer;
   display: flex;
@@ -303,11 +301,10 @@ a.hero img {
 }
 
 .preview {
-  margin-top: 6em;
+  margin-top: 5em;
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - 20.5em);
   object-fit: cover;
   pointer-events: none;
   z-index: 0;
@@ -352,6 +349,7 @@ a.hero img {
 
 .main-container {
   padding: 2em;
+  padding-bottom: 0;
 }
 
 /* box  A SOCCUPER */
@@ -395,7 +393,6 @@ a.hero img {
 /* FOOTER */
 
 .footer {
-  height: 7em;
   text-align: center;
 }
 
@@ -416,9 +413,14 @@ a.hero img {
   color: var(--red);
 }
 
+.footer .row ul {
+  padding: 0;
+  padding-top: 0.5em;
+  border-top: 5px solid var(--red);
+}
+
 .footer .row ul li {
   display: inline-block;
-  margin-top: 1.8em;
   font-weight: 600;
 }
 
@@ -594,20 +596,30 @@ select {
   border: 1px solid #888;
   border-radius: 5px;
   text-align: center;
-  opacity: 0.9;
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 3%;
+  margin-right: 3%;
   box-shadow: 0px 0px 20px #f3f3f391;
+  overflow: auto;
+  max-width: 100%;
+  max-height: 100%;
+  border: groove;
 }
 
+.icon_container{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
 .modal-content h2 {
-  margin: 0.5em;
-  border-bottom: 3px solid var(--light);
+  margin: 0;
 }
 .close {
   position: absolute;
-  top: 0px;
-  right: 60px;
+  top: -0.2em;
+  right: 45px;
   font-size: 2.8em;
   cursor: pointer;
 }
@@ -648,7 +660,7 @@ select {
   .close {
     position: absolute;
     top: 0px;
-    right: 40px;
+    right: 30px;
     font-size: 2.8em;
     cursor: pointer;
   }
@@ -854,7 +866,7 @@ select {
   .search_phone {
     display: block;
     position: fixed;
-    top: 2em;
+    top: 1.2em;
     right: 6em;
     width: 2.6em !important;
     z-index: 3;
@@ -938,7 +950,7 @@ select {
   .search_phone {
     display: block;
     position: fixed;
-    top: 2em;
+    top: 1.2em;
     right: 6em;
     width: 2.6em !important;
     z-index: 3;
@@ -949,6 +961,10 @@ select {
   .footer {
     background: none;
     margin-top: -2em;
+  }
+
+  .footer .row ul {
+    padding-left: 40px
   }
 
   .footer .row {
@@ -1043,7 +1059,7 @@ select {
   }
 
   .title {
-    margin-top: 0.5em;
+    margin-top: 0.2em;
     margin-left: 0.7em;
   }
 
@@ -1060,15 +1076,13 @@ select {
   .error_acceuil {
     left: 62%;
   }
-  .trailer {
-    margin-top: -1em;
-  }
+
   header {
     height: 5em;
   }
 
   .hamburger-menu {
-    margin-top: -7px;
+    margin-top: 0.2em;
     right: 20px;
   }
   /* header */
@@ -1115,7 +1129,7 @@ select {
   .search_phone {
     display: block;
     position: fixed;
-    top: 1.55em;
+    top: 1.35em;
     right: 4.5em;
     width: 2.6em !important;
     z-index: 3;
@@ -1132,6 +1146,10 @@ select {
     font-size: 0.8em;
   }
 
+  .footer .row ul {
+    padding-left: 40px
+  }
+  
   .footer .row ul li {
     background-color: #7a0309;
     border-radius: 50px;
@@ -1201,4 +1219,11 @@ select {
   .small-screen {
     display: none;
   }
+
+  /* MODALE */
+
+  .modal-content {
+    padding: 0;
+  }
+
 }

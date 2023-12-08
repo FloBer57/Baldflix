@@ -15,13 +15,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noimageindex">
+  <link rel="shortcut icon" href="image/favicon/bald_favicon" type="image/x-icon" />
   <!-- noindex, nofollown, noimageindex servent à faire en sorte que rien de ma page HTML ne sois indexé par les navigateurs de recherche.-->
   <title>BaldFlix</title>
   <link href="css/global.CSS" rel="stylesheet" />
-  <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon" />
-  <!-- Add the slick-theme.css if you want default styling -->
+
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-  <!-- Add the slick-theme.css if you want default styling -->
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 
 </head>

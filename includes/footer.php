@@ -7,7 +7,7 @@
           <li><a href="#" title="Lien vers la page d'infos contact">Contact</a></li>
           <li><a href="#" title="Lien pour apporter une suggestion?">Une suggestion?</a></li>
           <li><a href="#" title="Lien vers les paramètres de Newletters">Newsletter</a></li>
-          <li><a href="#" title="Honk">Duck</a></li>
+          <li><a href="#" id="duckLink" title="Honk">Duck</a></li>
           <li><a href="#" title="Lien pour me soutenir">Me soutenir</a></li>
         </ul>
       </div>
