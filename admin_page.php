@@ -2,7 +2,7 @@
 session_start();
 
 // Vérifier si l'utilisateur est connecté, sinon le rediriger vers la page de connexion
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: baldflix_login.php");
   exit;
 }
@@ -11,15 +11,15 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 require_once "config.php";
 
 // Vérifier si l'utilisateur connecté est un administrateur
-if($_SESSION["statut"] != "admin") {
+if ($_SESSION["statut"] != "admin") {
   header("location: profile.php");
   exit;
 }
 
 // Fonction pour modifier le mot de passe et le statut
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
   // Protection CSRF
-  if(!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
+  if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
     die("Token CSRF invalide.");
   }
 
@@ -28,7 +28,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
   $new_statut = $_POST["new_statut"];
 
   // Valider le nouveau statut
-  if(!in_array($new_statut, ['utilisateur', 'admin'])) {
+  if (!in_array($new_statut, ['utilisateur', 'admin'])) {
     die("Choix de statut invalide.");
   }
 
@@ -40,16 +40,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
   mysqli_stmt_close($update_stmt);
 }
 
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
   // Récupérer les données du formulaire
   $user_id = $_POST["user_id"];
 
-  function generateRandomPassword($length = 12) {
+  function generateRandomPassword($length = 12)
+  {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $password = '';
     $charactersLength = strlen($characters);
 
-    for($i = 0; $i < $length; $i++) {
+    for ($i = 0; $i < $length; $i++) {
       $password .= $characters[rand(0, $charactersLength - 1)];
     }
 
@@ -74,14 +75,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
   mysqli_stmt_bind_result($user_email_stmt, $user_email);
 
   // Vérifier s'il y a une ligne de résultat
-  if(mysqli_stmt_fetch($user_email_stmt)) {
+  if (mysqli_stmt_fetch($user_email_stmt)) {
     // Utiliser l'adresse e-mail récupérée pour envoyer l'e-mail
     $to = $user_email;
     $subject = 'Reinitialisation du mot de passe';
-    $message = 'Bonjour! Votre nouveau mot de passe est : '.$new_password;
-    $headers = 'From: baldflix.florentbernar@noreply.fr'."\r\n".
-      'Reply-To: baldflix.florentbernar@noreply.fr'."\r\n".
-      'X-Mailer: PHP/'.phpversion();
+    $message = 'Bonjour! Votre nouveau mot de passe est : ' . $new_password;
+    $headers = 'From: baldflix.florentbernar@noreply.fr' . "\r\n" .
+      'Reply-To: baldflix.florentbernar@noreply.fr' . "\r\n" .
+      'X-Mailer: PHP/' . phpversion();
 
     // Utilisation de la fonction mail() pour envoyer l'e-mail
     mail($to, $subject, $message, $headers);
@@ -94,13 +95,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
   }
 
   // Rediriger vers la même page après la réinitialisation
-  header("Location: ".$_SERVER['PHP_SELF']);
+  header("Location: " . $_SERVER['PHP_SELF']);
   exit;
 }
 // Fonction pour supprimer un utilisateur
-if(isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["id"])) {
+if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["id"])) {
   // Protection CSRF
-  if(!isset($_GET["csrf_token"]) || $_GET["csrf_token"] !== $_SESSION["csrf_token"]) {
+  if (!isset($_GET["csrf_token"]) || $_GET["csrf_token"] !== $_SESSION["csrf_token"]) {
     die("Token CSRF invalide.");
   }
 
@@ -114,7 +115,7 @@ if(isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["id"])) 
   mysqli_stmt_close($delete_stmt);
 
   // Répondre avec un statut JSON
-  header("Location: ".$_SERVER['PHP_SELF']);
+  header("Location: " . $_SERVER['PHP_SELF']);
   exit;
 }
 
@@ -134,11 +135,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
 <body class="background">
   <?php require_once "includes/header.php";
-  echo "To: " . $to . "<br>";
-  echo "Subject: " . $subject . "<br>";
-  echo "Message: " . $message . "<br>";
-  echo "Headers: " . $headers . "<br>";
-    ?>
+  ?>
 
   <main>
     <div class="account__container">
@@ -158,14 +155,14 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           $sql = "SELECT id, username, email, statut FROM users";
           $result = mysqli_query($link, $sql);
 
-          if($result) {
+          if ($result) {
             echo "<table>";
             echo "<tr><th>Nom</th><th class='small-screen'>Email</th><th>Statut</th><th>Action</th><th>MDP</th><th>Supprimer</th></tr>";
-            while($row = mysqli_fetch_assoc($result)) {
+            while ($row = mysqli_fetch_assoc($result)) {
               echo "<tr>";
-              echo "<td>".htmlspecialchars($row['username'])."</td>";
-              echo "<td class='small-screen'>".htmlspecialchars($row['email'])."</td>";
-              echo "<td>".htmlspecialchars($row['statut'])."</td>";
+              echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+              echo "<td class='small-screen'>" . htmlspecialchars($row['email']) . "</td>";
+              echo "<td>" . htmlspecialchars($row['statut']) . "</td>";
 
               // Formulaire pour modifier le statut
               echo "<td>
@@ -173,8 +170,8 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                         <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
                         <input type='hidden' name='user_id' value='{$row['id']}'>
                         <select name='new_statut'>
-                            <option value='utilisateur' ".($row['statut'] == 'utilisateur' ? 'selected' : '').">Utilisateur</option>
-                            <option value='admin' ".($row['statut'] == 'admin' ? 'selected' : '').">Admin</option>
+                            <option value='utilisateur' " . ($row['statut'] == 'utilisateur' ? 'selected' : '') . ">Utilisateur</option>
+                            <option value='admin' " . ($row['statut'] == 'admin' ? 'selected' : '') . ">Admin</option>
                         </select>
                         <input type='submit' name='modify' value='Modifier'>
                       </form>
@@ -202,7 +199,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             }
             echo "</table>";
           } else {
-            echo "Erreur de requête : ".mysqli_error($link);
+            echo "Erreur de requête : " . mysqli_error($link);
           }
           ?>
         </div>

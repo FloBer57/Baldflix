@@ -505,7 +505,7 @@ a.hero img {
   border-bottom: 3px solid var(--red);
 }
 
-.tab__content input {
+.tab__content input,button#openIconModal {
   color: var(--primary);
   background-color: var(--light);
   border-radius: 5px;
@@ -517,7 +517,7 @@ a.hero img {
   text-align: center;
 }
 
-.tab__content input:hover {
+button#openIconModal, .tab__content input:hover {
   background-color: var(--red);
   color: var(--light);
 }
@@ -590,6 +590,9 @@ select {
   justify-content: center;
 }
 
+.modal_radio {
+  display: none;
+}
 .modal-content {
   background-color: var(--primary);
   padding: 20px;
@@ -598,7 +601,6 @@ select {
   text-align: center;
   margin-left: 3%;
   margin-right: 3%;
-  box-shadow: 0px 0px 20px #f3f3f391;
   overflow: auto;
   max-width: 100%;
   max-height: 100%;
@@ -625,9 +627,9 @@ select {
 }
 
 .icon-preview {
-  /* Styles pour les icônes dans la modale */
-  width: 100px; /* Ajustez la taille selon vos besoins */
-  height: 100px; /* Ajustez la taille selon vos besoins */
+
+  width: 100px; 
+  height: 100px; 
   margin: 5px;
   cursor: pointer;
 }
@@ -646,24 +648,11 @@ select {
   text-align: center;
   margin-top: 0.5em;
 }
-.icon-preview.selected {
-  border: 2px solid #3498db;
-}
-
-@media screen and (min-width: 0px) and (max-width: 500px) {
-
-  .modal-content h2 {
-    font-size: 1.2em;
-    margin: 0.5em;
-    border-bottom: 3px solid var(--light);
-  }
-  .close {
-    position: absolute;
-    top: 0px;
-    right: 30px;
-    font-size: 2.8em;
-    cursor: pointer;
-  }
+.icon-label.selected {
+  border-radius: 100px;
+  display: inline-block;
+  margin: 0;
+  border: 1.2px solid #fff;
 }
 
 @media screen and (min-width: 600px) and (max-width: 800px) {

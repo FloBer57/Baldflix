@@ -31,12 +31,6 @@ function confirmDelete(link) {
   }
 }
 
-document.getElementById('duckLink').addEventListener('click', function(event) {
-  event.preventDefault(); // Empêche la navigation par défaut du lien
-
-  var audio = new Audio('chemin/vers/mysound.mp3');
-  audio.play();
-});
 
 var btnOpenIconModal = document.getElementById("openIconModal");
 var iconModal = document.getElementById("iconModal");
@@ -52,40 +46,3 @@ btnCloseIconModal.onclick = function () {
   iconModal.style.display = "none";
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Retirez cette ligne pour éviter la redéclaration
-  // var selectedIcon = null;
-
-  // Sélectionnez toutes les icônes et ajoutez un écouteur de clic
-  var iconImages = document.querySelectorAll('.icon-preview');
-  iconImages.forEach(function (icon) {
-    icon.addEventListener('click', function () {
-      // Déselectionnez l'icône précédemment sélectionnée (si elle existe)
-      if (selectedIcon) {
-        selectedIcon.classList.remove('selected-icon');
-      }
-
-      // Mettez à jour l'icône sélectionnée
-      selectedIcon = icon;
-      selectedIcon.classList.add('selected-icon');
-
-      // Affichez la confirmation ou effectuez d'autres actions nécessaires
-      console.log("Icône sélectionnée :", selectedIcon.getAttribute("data-icon"));
-    });
-  });
-});
-
-function updateProfileIcon() {
-  if (selectedIcon) {
-    var selectedIconPath = selectedIcon.getAttribute("data-icon");
-
-    // Mettre à jour l'image de profil de l'utilisateur
-    var userProfileImage = document.getElementById("userProfileImage");
-    userProfileImage.src = "image/users_icon/" + selectedIconPath;
-
-    // Fermer la modale
-    iconModal.style.display = "none";
-  } else {
-    alert("Veuillez sélectionner une icône avant de confirmer.");
-  }
-}

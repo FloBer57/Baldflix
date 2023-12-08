@@ -7,18 +7,11 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   exit;
 }
 
-echo "Statut actuel : " . $_SESSION["statut"];
-
-// Include config file
 require_once "config.php";
-
-
-
-// Processing form data when form is submitted
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
   // Récupérer la valeur sélectionnée dans le menu déroulant
-  $selectedImage = $_POST["profilImage"];
+  $selectedImage = $_POST["selectedIcon"];
 
   // Construire le chemin complet vers l'image
   $imageDirectory = 'image/users_icon/';
@@ -33,23 +26,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
   $updateStmt = mysqli_prepare($link, $updateSql);
 
   if ($updateStmt) {
-      // Binder les variables à la déclaration préparée en tant que paramètres
-      mysqli_stmt_bind_param($updateStmt, "si", $fullImagePath, $_SESSION["id"]);
+    // Binder les variables à la déclaration préparée en tant que paramètres
+    mysqli_stmt_bind_param($updateStmt, "si", $fullImagePath, $_SESSION["id"]);
 
-      if (mysqli_stmt_execute($updateStmt)) {
-          // Mise à jour réussie, vous pouvez ajouter un message de succès ici si nécessaire
-      } else {
-          echo "Oops! Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
-      }
+    if (mysqli_stmt_execute($updateStmt)) {
+      // Mise à jour réussie, vous pouvez ajouter un message de succès ici si nécessaire
+    } else {
+      echo "Oops! Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
+    }
 
-      // Fermer la déclaration
-      mysqli_stmt_close($updateStmt);
+    // Fermer la déclaration
+    mysqli_stmt_close($updateStmt);
   }
 }
 
 $new_password = $confirm_password = "";
 $new_password_err = $confirm_password_err = "";
-$password_err = "" ;
+$password_err = "";
 // Validate new password
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new_password"])) {
   if (empty(trim($_POST["new_password"]))) {
@@ -242,41 +235,33 @@ mysqli_close($link);
             <p class="text_modify">Actuellement : </p>
             <img class="choose_picture" src="<?php echo $_SESSION["profile_picture"]; ?>" alt="Photo actuelle">
           <?php endif; ?>
-          <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <label class="text_modify" for="profilImage">Choisir une photo de profil :</label>
-            <select name="profilImage" id="profilImage">
-              <?php
-              $imagesDirectory = 'image/users_icon/';
-              $images = glob($imagesDirectory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
-
-              foreach ($images as $image) {
-                $imageName = basename($image);
-                echo "<option value=\"$imageName\">$imageName</option>";
-              }
-              ?>
-            </select>
-            <input type="submit" name="submitImage" value="Modifier ma photo de profil">
-          </form>
 
           <!-- Bouton pour ouvrir la modale -->
           <button id="openIconModal">Choisir une icône</button>
         </div>
 
-        <!-- Modale pour choisir une icône -->
         <div id="iconModal" class="modal">
           <div class="modal-content">
             <span id="closeModal" class="close">&times;</span>
             <h2>Choisir une icône</h2>
-            <div class="icon_container" id="iconContainer">
-              <!-- Ajoutez des icônes ici -->
-              <?php
-              foreach ($images as $image) {
-                $imageName = basename($image);
-                echo "<img class=\"icon-preview\" src=\"$image\" data-icon=\"$imageName\">";
-              }
-              ?>
-            </div>
-            <button class="button_modal" id="confirmIconSelection">Confirmer la sélection</button>
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+              <div id="iconContainer">
+                <?php
+                $imagesDirectory = 'image/users_icon/';
+                $images = glob($imagesDirectory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
+                foreach ($images as $image) {
+                  $imageName = basename($image);
+                  echo "
+                        <label class=\"icon-label\">
+                            <input type=\"radio\" class=\"modal_radio\" name=\"selectedIcon\" value=\"$imageName\">
+                            <img class=\"icon-preview\" src=\"$image\" data-icon=\"$imageName\">
+                        </label>
+                    ";
+                }
+                ?>
+              </div>
+              <button class="button_modal" type="submit" name="submitImage">Confirmer la sélection</button>
+            </form>
           </div>
         </div>
 
