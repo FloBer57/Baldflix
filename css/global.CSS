@@ -16,6 +16,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   box-sizing: border-box;
   line-height: 1.4;
+  height: 100%;
 }
 
 .error_page {
@@ -27,7 +28,7 @@ li {
 }
 
 .background {
-  background: url("/image/back.svg") center center no-repeat fixed;
+  background: url("../image/back.svg") center center no-repeat fixed;
   background-size: cover;
   background-repeat: repeat;
 }
@@ -517,7 +518,7 @@ a.hero img {
   text-align: center;
 }
 
-button#openIconModal, .tab__content input:hover {
+button#openIconModal:hover, .tab__content input:hover {
   background-color: var(--red);
   color: var(--light);
 }
@@ -617,6 +618,8 @@ select {
 }
 .modal-content h2 {
   margin: 0;
+  position: relative;
+  z-index: 2;
 }
 .close {
   position: absolute;
@@ -630,10 +633,18 @@ select {
 
   width: 100px; 
   height: 100px; 
-  margin: 5px;
+  margin: 3px;
   cursor: pointer;
 }
 
+img.icon-preview.icon-selected {
+  border-radius: 100px;
+  display: inline-flex;
+  margin: 3px;
+  border: 6px solid var(--light);
+  width: 92px;
+  height: 92px;
+}
 .button_modal {
   width: 55%;
   margin: 0.5em;
@@ -647,12 +658,20 @@ select {
   width: auto;
   text-align: center;
   margin-top: 0.5em;
+  position: relative;
+  z-index: 2; /* Plus élevé que les icônes */
 }
-.icon-label.selected {
-  border-radius: 100px;
-  display: inline-block;
-  margin: 0;
-  border: 1.2px solid #fff;
+
+div#iconContainer {
+  max-height: 300px;
+  overflow: auto;
+  position: relative;
+  z-index: 1;
+}
+
+#iconContainer {
+  position: relative;
+  z-index: 1; 
 }
 
 @media screen and (min-width: 600px) and (max-width: 800px) {

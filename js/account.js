@@ -46,3 +46,20 @@ btnCloseIconModal.onclick = function () {
   iconModal.style.display = "none";
 }
 
+document.querySelectorAll('.modal_radio').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+      // Retirer la classe de toutes les images
+      document.querySelectorAll('.icon-preview').forEach(function(img) {
+          img.classList.remove('icon-selected');
+      });
+
+      // Trouver l'image dans le label parent et ajouter la classe
+      var labelParent = this.closest('.icon-label');
+      if (labelParent) {
+          var img = labelParent.querySelector('.icon-preview');
+          if (img) {
+              img.classList.add('icon-selected');
+          }
+      }
+  });
+});
