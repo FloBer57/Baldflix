@@ -1,18 +1,18 @@
 <header class="header">
 
   <div class="title">
-    <h1><a href="index.php">BaldFlix</a></h1>
+    <h1><a href="../index.php">BaldFlix</a></h1>
   </div>
 
   <nav class="main-nav" role="navigation">
     <div class="menu">
       <ul class="menu-list">
-        <li><a href="index.php">Home</a></li>
-        <li><a href="serie.html">Séries</a></li>
-        <li><a href="films.html">Films</a></li>
-        <li><a href="anime.html">Anime</a></li>
-        <li><a href="spectacles.html">Spectacles</a></li>
-        <li><a href="bald.html">Bald</a></li>
+        <li><a href="../index.php">Home</a></li>
+        <li><a href="../php/serie.php">Séries</a></li>
+        <li><a href="../films.html">Films</a></li>
+        <li><a href="../anime.php">Anime</a></li>
+        <li><a href="../spectacles.html">Spectacles</a></li>
+        <li><a href="../bald.html">Bald</a></li>
       </ul>
     </div>
   </nav>
@@ -36,19 +36,19 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="profile.php" class="nav-link connect">Mon compte</a>
+          <a href="../php/profile.php" class="nav-link connect">Mon compte</a>
         </li>
         <li class="nav-item">
-          <a href="index.php" class="nav-link">Home</a>
+          <a href="../index.php" class="nav-link">Home</a>
         </li>
         <li class="nav-item">
-          <a href="serie.html" class="nav-link">Séries</a>
+          <a href="../php/serie.php" class="nav-link">Séries</a>
         </li>
         <li class="nav-item">
           <a href="films.html" class="nav-link">Films</a>
         </li>
         <li class="nav-item">
-          <a href="anime.html" class="nav-link">Anime</a>
+          <a href="anime.php" class="nav-link">Anime</a>
         </li>
         <li class="nav-item">
           <a href="spectacles.html" class="nav-link">Spectacles</a>
@@ -57,11 +57,10 @@
           <a href="bald.html" class="nav-link">Bald</a>
         </li>
         <li class="nav-item">
-          <a href="logout.php" class="nav-link">Déconnexion</a>
+          <a href="../php/logout.php" class="nav-link">Déconnexion</a>
         </li>
       </ul>
     </nav>
-    <script src="js/burger.js"></script>
   </div>
 
   </div>
@@ -73,7 +72,7 @@
   </div>
 
   <div class="search_phone" role="search">
-    <a href="#"><img src="image/loupe.png" alt=""></a>
+    <a href="#"><img src="../image/icon/loupe.png" alt=""></a>
   </div>
 
 </header>

@@ -13,10 +13,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
   // Récupérer la valeur sélectionnée dans le menu déroulant
   $selectedImage = $_POST["selectedIcon"];
 
+  // Chemin par défaut de l'image si aucun choix n'est fait
+  $defaultImagePath = '../image/users_icon/default.png'; // Assurez-vous que ce chemin est correct
+
   // Construire le chemin complet vers l'image
-  $imageDirectory = 'image/users_icon/';
+  $imageDirectory = '../image/users_icon/';
   $selectedImagePath = $imageDirectory . $selectedImage;
-  $fullImagePath = $imageDirectory . $selectedImage;
+
+  // Si aucune image n'est sélectionnée, utilisez l'image par défaut
+  $fullImagePath = !empty($selectedImage) ? $selectedImagePath : $defaultImagePath;
 
   // Mettre à jour la session avec le nouveau chemin de l'image
   $_SESSION["profile_picture"] = $fullImagePath;
@@ -199,9 +204,9 @@ mysqli_close($link);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noimageindex">
-  <link rel="shortcut icon" href="image/favicon/bald_favicon" type="image/x-icon" />
+  <link rel="shortcut icon" href="../image/favicon/bald_favicon.ico" type="image/x-icon" />
   <title>Profil</title>
-  <link href="css/global.CSS" rel="stylesheet" />
+  <link href="../css/global.CSS" rel="stylesheet" />
 </head>
 
 </html>
@@ -210,7 +215,7 @@ mysqli_close($link);
 
   <?php
 
-  require_once "includes/header.php";
+  require_once "../includes/header.php";
 
   ?>
 
@@ -242,12 +247,12 @@ mysqli_close($link);
 
         <div id="iconModal" class="modal">
           <div class="modal-content">
-            <span id="closeModal" class="close"><img src="image/icon/close.svg" alt="Close"></span>
+            <span id="closeModal" class="close"><img src="../image/icon/close.svg" alt="Close"></span>
             <h2>Choisir une icône</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
               <div id="iconContainer">
                 <?php
-                $imagesDirectory = 'image/users_icon/';
+                $imagesDirectory = '../image/users_icon/';
                 $images = glob($imagesDirectory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
                 foreach ($images as $image) {
                   $imageName = basename($image);
@@ -339,7 +344,8 @@ mysqli_close($link);
           </form>
         </div>
       </div>
-      <script src="js/account.js"></script>
+      <script src="../js/account.js"></script>
+      <script src="../js/burger.js"></script>
     </div>
   </main>
 </body>

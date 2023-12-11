@@ -128,13 +128,15 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mon compte</title>
-  <link href="/css/global.CSS" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow, noimageindex">
+  <title>Administration</title>
+  <link rel="shortcut icon" href="../image/favicon/bald_favicon.ico" type="image/x-icon" />
+  <link href="../css/global.CSS" rel="stylesheet" />
 </head>
 
 <body class="background bodyburger">
-  <?php require_once "includes/header.php";
+  <?php require_once "../includes/header.php";
   ?>
 
   <main>
@@ -204,7 +206,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           ?>
         </div>
       </div>
-      <script src="/js/account.js"></script>
+      <script src="../js/account.js"></script>
     </div>
   </main>
 </body>

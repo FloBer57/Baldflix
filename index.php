@@ -2,7 +2,7 @@
 session_start();
 
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-  header("location: baldflix_login.php");
+  header("location: php/baldflix_login.php");
   exit;
 }
 
@@ -15,11 +15,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noimageindex">
-  <link rel="shortcut icon" href="image/favicon/bald_favicon" type="image/x-icon" />
+  <link rel="shortcut icon" href="image/favicon/bald_favicon.ico" type="image/x-icon" />
   <!-- noindex, nofollown, noimageindex servent à faire en sorte que rien de ma page HTML ne sois indexé par les navigateurs de recherche.-->
   <title>BaldFlix</title>
   <link href="css/global.CSS" rel="stylesheet" />
-
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 
@@ -174,7 +173,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   <script src="js/carrousel_3.js"></script>
   <script src="js/carrousel_4.js"></script>
   <script src="js/carrousel_5.js"></script>
-  <!-- ##FOOTER## -->
+  <script src="js/burger.js"></script>
+
   <?php
 
   require_once "includes/footer.php";
