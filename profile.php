@@ -206,7 +206,7 @@ mysqli_close($link);
 
 </html>
 
-<body class="background">
+<body class="background bodyburger">
 
   <?php
 
@@ -219,12 +219,12 @@ mysqli_close($link);
       <div class="sub__container">
         <nav class="account__nav">
           <ul>
-            <li class="test" data-tab="profile-tab-content" onclick="showTab('profile-tab-content')">Mon profil</li>
-            <li class="test" data-tab="password-tab-content" onclick="showTab('password-tab-content')">Mot de passe et
+            <li data-tab="profile-tab-content" onclick="showTab('profile-tab-content')">Mon profil</li>
+            <li data-tab="password-tab-content" onclick="showTab('password-tab-content')">Mot de passe et
               Sécurité</li>
-            <li class="test" data-tab="delete-tab-content" onclick="showTab('delete-tab-content')">Supprimer le compte
+            <li data-tab="delete-tab-content" onclick="showTab('delete-tab-content')">Supprimer le compte
             </li>
-            <li class="test" data-tab="suggest-tab-content" onclick="showTab('suggest-tab-content')">Une suggestion?
+            <li data-tab="suggest-tab-content" onclick="showTab('suggest-tab-content')">Une suggestion?
             </li>
           </ul>
         </nav>

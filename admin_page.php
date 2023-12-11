@@ -133,7 +133,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
   <link href="/css/global.CSS" rel="stylesheet" />
 </head>
 
-<body class="background">
+<body class="background bodyburger">
   <?php require_once "includes/header.php";
   ?>
 

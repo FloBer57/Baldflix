@@ -25,7 +25,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 </head>
 
-<body class="back">
+<body class="back bodyburger" >
 
   <?php
 

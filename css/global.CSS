@@ -10,6 +10,7 @@
 html,
 body {
   width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   color: var(--light);
@@ -462,7 +463,8 @@ a.hero img {
   background-color: var(--red);
 }
 
-.activation {
+
+.active-onglet {
   background-color: var(--red);
 }
 
@@ -472,6 +474,7 @@ a.hero img {
   border-right: 3px solid var(--red);
   border-left: 3px solid var(--red);
   cursor: pointer;
+  background-color: var(--primary)
 }
 
 .account__nav li:first-child {
@@ -489,6 +492,7 @@ a.hero img {
   border: 3px solid var(--red);
   flex-basis: 50%;
   display: none;
+  background-color: var(--primary);
 }
 
 .tab__content form {
@@ -581,12 +585,9 @@ select {
 
 .modal {
   display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: fixed;;
+  top: 1em;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
   align-items: center;
   justify-content: center;
 }
@@ -596,7 +597,7 @@ select {
 }
 .modal-content {
   background-color: var(--primary);
-  padding: 20px;
+  padding: 10px;
   border: 1px solid #888;
   border-radius: 5px;
   text-align: center;
@@ -633,17 +634,17 @@ select {
 
   width: 100px; 
   height: 100px; 
-  margin: 3px;
+  margin: 1px;
   cursor: pointer;
 }
 
 img.icon-preview.icon-selected {
   border-radius: 100px;
   display: inline-flex;
-  margin: 3px;
+  margin: 1px;
   border: 6px solid var(--light);
-  width: 92px;
-  height: 92px;
+  width: 88px;
+  height: 88px;
 }
 .button_modal {
   width: 55%;
@@ -663,7 +664,7 @@ img.icon-preview.icon-selected {
 }
 
 div#iconContainer {
-  max-height: 300px;
+  max-height: 30em;
   overflow: auto;
   position: relative;
   z-index: 1;
@@ -776,6 +777,9 @@ div#iconContainer {
     margin-top: -1em;
   }
 
+  .lock {
+    overflow: hidden;
+  }
   .text-video {
     top: 70%;
     /* Position verticale au milieu */
