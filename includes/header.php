@@ -38,9 +38,14 @@
         <li class="nav-item">
           <a href="../php/profile.php" class="nav-link connect">Mon compte</a>
         </li>
-        <li class="nav-item">
-          <a href="../index.php" class="nav-link">Home</a>
-        </li>
+        <?php 
+        if ($_SESSION['statut'] == "admin") {
+          echo '<li class="nav-item"><a href="../php/admin_page.php" class="nav-link">Administration</a></li>';
+        } else {
+          echo '<li class="nav-item"><a href="../index.php" class="nav-link">Home</a></li>';
+        }
+
+        ?>
         <li class="nav-item">
           <a href="../php/serie.php" class="nav-link">Séries</a>
         </li>

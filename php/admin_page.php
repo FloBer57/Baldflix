@@ -154,48 +154,45 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           <h2>Administration des utilisateurs</h2>
           <?php
           // Requête SQL pour récupérer tous les utilisateurs
-          $sql = "SELECT id, username, email, statut FROM users";
+          $sql = "SELECT id, username, statut FROM users";
           $result = mysqli_query($link, $sql);
 
           if ($result) {
             echo "<table>";
-            echo "<tr><th>Nom</th><th class='small-screen'>Email</th><th>Statut</th><th>Action</th><th>MDP</th><th>Supprimer</th></tr>";
+            echo "<tr><th>Nom</th><th>Statut</th><th>Action</th><th>MDP</th><th>Supprimer</th></tr>";
             while ($row = mysqli_fetch_assoc($result)) {
               echo "<tr>";
               echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-              echo "<td class='small-screen'>" . htmlspecialchars($row['email']) . "</td>";
               echo "<td>" . htmlspecialchars($row['statut']) . "</td>";
 
               // Formulaire pour modifier le statut
               echo "<td>
-                      <form method='post' action=''>
-                        <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
-                        <input type='hidden' name='user_id' value='{$row['id']}'>
-                        <select name='new_statut'>
-                            <option value='utilisateur' " . ($row['statut'] == 'utilisateur' ? 'selected' : '') . ">Utilisateur</option>
-                            <option value='admin' " . ($row['statut'] == 'admin' ? 'selected' : '') . ">Admin</option>
-                        </select>
-                        <input type='submit' name='modify' value='Modifier'>
-                      </form>
-                    </td>";
-
-              // Formulaire pour réinitialiser le mot de passe
-              echo "<td>
               <form method='post' action=''>
                 <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
                 <input type='hidden' name='user_id' value='{$row['id']}'>
-                <input type='submit' name='reset_password' value='Réinitialiser'>
+                <select name='new_statut'>
+                    <option value='utilisateur' " . ($row['statut'] == 'utilisateur' ? 'selected' : '') . ">Utilisateur</option>
+                    <option value='admin' " . ($row['statut'] == 'admin' ? 'selected' : '') . ">Admin</option>
+                </select>
+                <input type='submit' name='modify' value='Modifier'>
               </form>
             </td>";
 
+              // Formulaire pour réinitialiser le mot de passe
+              echo "<td>
+        <form method='post' action=''>
+          <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
+          <input type='hidden' name='user_id' value='{$row['id']}'>
+          <input type='submit' name='reset_password' value='Réinitialiser'>
+        </form>
+      </td>";
+
               // Lien pour supprimer l'utilisateur
               echo "<td>
-              <a href='#' onclick='confirmDelete(\"?action=delete&id={$row['id']}&csrf_token={$_SESSION["csrf_token"]}\")'>
-                <img src='../image/delete.svg' alt='Supprimer' title='Supprimer'>
-              </a>
-            </td>";
-
-
+        <a href='#' onclick='confirmDelete(\"?action=delete&id={$row['id']}&csrf_token={$_SESSION["csrf_token"]}\")'>
+          <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
+        </a>
+      </td>";
 
               echo "</tr>";
             }
@@ -207,6 +204,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         </div>
       </div>
       <script src="../js/account.js"></script>
+      <script src="../js/burger.js"></script>
     </div>
   </main>
 </body>
