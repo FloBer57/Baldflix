@@ -75,3 +75,15 @@ document.querySelectorAll('.modal_radio').forEach(function(radio) {
       }
   });
 });
+
+const modal = document.getElementById('openIconModal'); // Votre modale
+const body = document.body; // L'élément body
+
+modal.addEventListener('click', () => {
+    body.classList.add('body-no-scroll');
+});
+
+const closeModal = document.getElementById('closeModal');
+closeModal.addEventListener('click', () => {
+    body.classList.remove('body-no-scroll');
+});

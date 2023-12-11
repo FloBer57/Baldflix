@@ -242,7 +242,7 @@ mysqli_close($link);
 
         <div id="iconModal" class="modal">
           <div class="modal-content">
-            <span id="closeModal" class="close">&times;</span>
+            <span id="closeModal" class="close"><img src="image/close.svg" alt="Close"></span>
             <h2>Choisir une icône</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
               <div id="iconContainer">
@@ -340,7 +340,6 @@ mysqli_close($link);
         </div>
       </div>
       <script src="js/account.js"></script>
-    </div>
     </div>
   </main>
 </body>

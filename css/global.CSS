@@ -213,13 +213,12 @@ title :visited {
 .nav-list {
   display: inline-block;
   align-items: center;
-  background-color: transparent;
   margin-right: 1.5em;
 }
 
 .nav-item {
   list-style: none;
-  margin: 2em;
+  margin: 1em;
 }
 
 .nav-link {
@@ -435,7 +434,7 @@ a.hero img {
 .account__container {
   position: relative;
   flex-direction: row;
-  top: 6em;
+  top: 4.5em;
   font-size: 1.2em;
   font-weight: bold;
   color: var(--light);
@@ -585,8 +584,10 @@ select {
 
 .modal {
   display: none;
-  position: fixed;;
-  top: 1em;
+  position: fixed;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -40%);
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -663,8 +664,12 @@ img.icon-preview.icon-selected {
   z-index: 2; /* Plus élevé que les icônes */
 }
 
+.body-no-scroll {
+  overflow: hidden;
+}
+
 div#iconContainer {
-  max-height: 30em;
+  max-height: 380px;
   overflow: auto;
   position: relative;
   z-index: 1;
@@ -704,6 +709,9 @@ div#iconContainer {
     width: 100%;
   }
 
+  .modal {
+    top : 42%
+  }
   .admin__container {
     display: block;
   }
@@ -946,7 +954,7 @@ div#iconContainer {
   }
 
   .nav-list {
-    font-size: 25px;
+    font-size: 1.5em;
     margin-bottom: 500px;
   }
 
@@ -1001,7 +1009,6 @@ div#iconContainer {
     justify-content: center;
     display: flex;
     text-align: center;
-    top: 5.5em;
   }
 
   .sub__container {
@@ -1179,7 +1186,6 @@ div#iconContainer {
     justify-content: center;
     display: flex;
     text-align: center;
-    top: 4.5em;
   }
 
   .sub__container {
@@ -1234,6 +1240,9 @@ div#iconContainer {
 
   /* MODALE */
 
+  .modal {
+    top: 38%;
+  }
   .modal-content {
     padding: 0;
   }
