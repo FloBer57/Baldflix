@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Charger le fichier audio
       var audioSource = audioContext.createBufferSource();
       var request = new XMLHttpRequest();
-      request.open("GET", "audio/honk.mp3", true);
+      request.open("GET", "../audio/honk.mp3", true);
       request.responseType = "arraybuffer";
   
       request.onload = function () {

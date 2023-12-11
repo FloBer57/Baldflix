@@ -29,7 +29,7 @@ li {
 }
 
 .background {
-  background: url("../image/back.svg") center center no-repeat fixed;
+  background: url("../image/background/main_background.svg") center center no-repeat fixed;
   background-size: cover;
   background-repeat: repeat;
 }
@@ -169,7 +169,7 @@ title :visited {
   transition: right 0.5s cubic-bezier(1, 0, 0, 1);
   z-index: 0;
   border: 3px solid var(--red);
-  background: url("/image/cornered-stairs.svg") center center no-repeat fixed;
+  background: url("../image/background/nav_background.svg") center center no-repeat fixed;
   background-size: cover;
 }
 
@@ -625,10 +625,9 @@ select {
 }
 .close {
   position: absolute;
-  top: -0.2em;
-  right: 45px;
-  font-size: 2.8em;
+  right: 5%;
   cursor: pointer;
+  width: 35px;
 }
 
 .icon-preview {

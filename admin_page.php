@@ -189,7 +189,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               // Lien pour supprimer l'utilisateur
               echo "<td>
               <a href='#' onclick='confirmDelete(\"?action=delete&id={$row['id']}&csrf_token={$_SESSION["csrf_token"]}\")'>
-                <img src='image/delete.svg' alt='Supprimer' title='Supprimer'>
+                <img src='../image/delete.svg' alt='Supprimer' title='Supprimer'>
               </a>
             </td>";
 
