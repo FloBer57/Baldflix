@@ -465,6 +465,7 @@ a.hero img {
 
 .active-onglet {
   background-color: var(--red);
+  color: var(--red);
 }
 
 .account__nav li {

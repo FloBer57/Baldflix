@@ -8,7 +8,7 @@ session_start([
 ]);
 
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-  header("location: index.php");
+  header("location: ../index.php");
   exit;
 }
 
@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               $_SESSION["profile_picture"] = $profileData['profile_picture'];
 
               // Redirect user to welcome page
-              header("location: index.php");
+              header("location: ../index.php");
             } else {
               // Password is not valid, display a generic error message
               $login_err = "Nom d'utilisateur ou mot de passe invalide.";
@@ -117,17 +117,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robot" content="noindex">
-  <meta name="robot" content="nofollow">
-  <meta name="robot" content="noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow, noimageindex">
+  <link rel="shortcut icon" href="../image/favicon/bald_favicon.ico" type="image/x-icon" />
   <title>Baldflix_login</title>
-  <link href="/css/login.CSS" rel="stylesheet" />
-  <link rel="shortcut icon" href="/baldflix/image/5151698.ico" type="image/x-icon" />
-  <!-- Add the slick-theme.css if you want default styling -->
-  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-  <!-- Add the slick-theme.css if you want default styling -->
-  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+  <link href="../css/login.CSS" rel="stylesheet" />
+  
 </head>
 
 <body class="background">
