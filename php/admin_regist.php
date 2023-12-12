@@ -11,7 +11,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 require_once "config.php";
 
 // Vérifier si l'utilisateur connecté est un administrateur
-if($_SESSION["statut"] != "admin") {
+if($_SESSION["id_role"] != 2) {
   header("location: profile.php");
   exit;
 }
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username_err = "Le nom d'utilisateur ne peux contenir que des lettres, chiffre et l'underscore.";
     } else {
         // Prepare a select statement
-        $sql = "SELECT id FROM users WHERE username = ?";
+        $sql = "SELECT id FROM user WHERE username = ?";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
@@ -76,13 +76,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    $statut = "";
-    $statut_err = "";
+    $role = "";
+    $role_err = "";
     // Validate statut
-    if (empty(trim($_POST["statut"]))) {
-        $statut_err = "Veuillez choisir un statut.";
+    if (empty(trim($_POST["id_role"]))) {
+        $role_err = "Veuillez choisir un role.";
     } else {
-        $statut = trim($_POST["statut"]);
+        $role = trim($_POST["id_role"]);
     }
 
     $email = "";
@@ -96,19 +96,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Check input errors before inserting into the database
-    if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($statut_err)) {
+    if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($role_err)) {
 
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password, statut, email) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO user (username, password, id_role, email) VALUES (?, ?, ?, ?)";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ssss", $param_username, $param_password, $param_statut, $param_email);
+            mysqli_stmt_bind_param($stmt, "ssss", $param_username, $param_password, $param_role, $param_email);
 
             // Set parameters
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT);
-            $param_statut = $statut;
+            $param_role = $role;
             $param_email = $email; // Ajout de cette ligne pour définir le paramètre email
 
             // Attempt to execute the prepared statement
@@ -184,10 +184,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php echo $email_err; ?>
                     </span>
                     <br><br>
-                    <label for="statut">Statut :</label>
-                    <select name="statut" required class="form-control">
-                        <option value="utilisateur">Utilisateur</option>
-                        <option value="admin">Administrateur</option>
+                    <label for="id_role">Role :</label>
+                    <select name="id_role" required class="form-control">
+                        <option value="1">Utilisateur</option>
+                        <option value="2">Administrateur</option>
                     </select>
 
                     <input class="input" type="submit" value="Connexion">

@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
     // Continuer seulement s'il n'y a pas d'erreur
     if (empty($password_err)) {
         // Préparer une requête pour vérifier le mot de passe de l'utilisateur
-        $sql_verify = "SELECT password FROM users WHERE id = ?";
+        $sql_verify = "SELECT password FROM user WHERE id = ?";
 
         if ($stmt_verify = mysqli_prepare($link, $sql_verify)) {
             mysqli_stmt_bind_param($stmt_verify, "i", $param_id_verify);
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
                     if (mysqli_stmt_fetch($stmt_verify)) {
                         if (password_verify($password, $hashed_password_verify)) {
                             // Le mot de passe est correct, supprimer le compte
-                            $delete_sql = "DELETE FROM users WHERE id = ?";
+                            $delete_sql = "DELETE FROM user WHERE id = ?";
 
                             if ($delete_stmt = mysqli_prepare($link, $delete_sql)) {
                                 mysqli_stmt_bind_param($delete_stmt, "i", $param_id_delete);

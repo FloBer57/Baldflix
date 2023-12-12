@@ -24,14 +24,14 @@ function getProfileData($userId)
 {
   global $link;
 
-  $sql = "SELECT statut, profile_picture FROM users WHERE id = ?";
+  $sql = "SELECT id_role, profile_picture FROM user WHERE id = ?";
   $stmt = mysqli_prepare($link, $sql);
   mysqli_stmt_bind_param($stmt, "i", $userId);
   mysqli_stmt_execute($stmt);
-  mysqli_stmt_bind_result($stmt, $user_statut, $profile_picture);
+  mysqli_stmt_bind_result($stmt, $user_role, $profile_picture);
   mysqli_stmt_fetch($stmt);
 
-  return ['statut' => $user_statut, 'profile_picture' => $profile_picture];
+  return ['id_role' => $user_role, 'profile_picture' => $profile_picture];
 }
 
 // Processing form data when form is submitted
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Validate credentials
   if (empty($username_err) && empty($password_err)) {
     // Prepare a select statement
-    $sql = "SELECT id, username, password FROM users WHERE username = ?";
+    $sql = "SELECT id, username, password FROM user WHERE username = ?";
 
     if ($stmt = mysqli_prepare($link, $sql)) {
       // Bind variables to the prepared statement as parameters
@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
               // Fetch and store the user's status and profile picture
               $profileData = getProfileData($id);
-              $_SESSION["statut"] = $profileData['statut'];
+              $_SESSION["id_role"] = $profileData['id_role'];
               $_SESSION["profile_picture"] = $profileData['profile_picture'];
 
               // Redirect user to welcome page

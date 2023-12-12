@@ -39,7 +39,7 @@
           <a href="../php/profile.php" class="nav-link connect">Mon compte</a>
         </li>
         <?php 
-        if ($_SESSION['statut'] == "admin") {
+        if ($_SESSION['id_role'] == 2) {
           echo '<li class="nav-item"><a href="../php/admin_page.php" class="nav-link">Administration</a></li>';
         } else {
           echo '<li class="nav-item"><a href="../index.php" class="nav-link">Home</a></li>';

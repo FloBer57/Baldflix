@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
   $_SESSION["profile_picture"] = $fullImagePath;
 
   // Mettre à jour la base de données avec le nouveau chemin d'image
-  $updateSql = "UPDATE users SET profile_picture = ? WHERE id = ?";
+  $updateSql = "UPDATE user SET profile_picture = ? WHERE id = ?";
   $updateStmt = mysqli_prepare($link, $updateSql);
 
   if ($updateStmt) {
