@@ -617,6 +617,7 @@ select {
   right: 5%;
   cursor: pointer;
   width: 35px;
+  z-index: 3;
 }
 
 .icon-preview {
@@ -1064,6 +1065,9 @@ div#iconContainer {
     font-size: 1.3em;
   }
 
+  .preview{
+    margin-top: 60px;
+  }
   .error_acceuil {
     left: 62%;
   }
@@ -1157,7 +1161,6 @@ div#iconContainer {
   /* MENU ADMIN */
   .account__container {
     text-align: center;
-    top: 60px;
   }
 
   .sub__container {

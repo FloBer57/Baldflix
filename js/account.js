@@ -46,7 +46,7 @@ function confirmDelete(link) {
 
 var btnOpenIconModal = document.getElementById("openIconModal");
 var iconModal = document.getElementById("iconModal");
-var btnCloseIconModal = document.getElementById("closeModal");
+var btnCloseIconModal = document.getElementsByClassName(".closeModal");
 var iconContainer = document.getElementById("iconContainer");
 var selectedIcon = null; // Déclaration ici
 
