@@ -478,7 +478,7 @@ a.hero img {
 }
 
 .account__nav li::selection {
-  color: #7a0309;
+  color: var(--wooburn);
 }
 .tab__content {
   font-size: 0.8em;
@@ -566,9 +566,6 @@ textarea {
   width: 100%;
   text-align: center;
 }
-.delete-icon {
-  fill: red; /* Nouvelle couleur de remplissage */
-}
 
 select {
   text-align: center;
@@ -590,7 +587,7 @@ select {
 .modal-content {
   background-color: var(--primary);
   padding: 10px;
-  border: 1px solid #888;
+  border: 1px solid var(--gray);
   border-radius: 5px;
   text-align: center;
   margin-left: 3%;
@@ -970,7 +967,7 @@ div#iconContainer {
   }
 
   .footer .row ul li {
-    background-color: #7a0309;
+    background-color: var(--wooburn);
     border-radius: 50px;
     display: flex;
     justify-content: center;

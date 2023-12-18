@@ -648,7 +648,7 @@ ul .slick-dot {
   }
 
   .footer .row ul li {
-    background-color: #7a0309;
+    background-color: var(--wooburn);
     border-radius: 50px;
     display: flex;
     justify-content: center;
@@ -776,7 +776,7 @@ ul .slick-dot {
   }
 
   .footer .row ul li {
-    background-color: #7a0309;
+    background-color: var(--wooburn);
     border-radius: 50px;
     display: flex;
     justify-content: center;

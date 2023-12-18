@@ -18,14 +18,14 @@ if ($_SESSION["id_role"] != 2) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (isset($_POST["reset_password"])) {
-      include_once "admin_reset_password.php";
+    include_once "admin_reset_password.php";
   } elseif (isset($_POST["modify"])) {
-      include_once "admin_reset_password.php";
+    include_once "admin_role.php";
   }
   // Vous pouvez ajouter d'autres conditions ici si nécessaire
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
   if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["id"])) {
-      include_once "admin_delete.php";
+    include_once "admin_delete.php";
   }
   // Ajoutez d'autres conditions GET ici si nécessaire
 }
@@ -112,8 +112,41 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           }
           ?>
         </div>
-        <div id="admin-user-tab-content" class="tab__content admin__content">
+        <div id="admin-video-tab-content" class="tab__content admin__content active-tab">
           <h2>Administration des vidéos</h2>
+          <form method="post" enctype="multipart/form-data">
+            <h3>Informations de la Vidéo</h3>
+            <!-- Titre de la vidéo -->
+            <label for="title">Titre:</label>
+            <input type="text" id="title" name="title"><br><br>
+
+            <!-- Trailer -->
+            <label for="trailer">Trailer (URL):</label>
+            <input type="text" id="trailer" name="trailer"><br><br>
+
+            <!-- Image -->
+            <label for="image">Image:</label>
+            <input type="file" id="image" name="image"><br><br>
+
+            <!-- Synopsis -->
+            <label for="synopsis">Synopsis:</label>
+            <textarea id="synopsis" name="synopsis"></textarea><br><br>
+
+            <!-- Vidéo -->
+            <label for="video">Vidéo:</label>
+            <input type="file" id="video" name="video"><br><br>
+
+            <!-- Gestion des séries (si nécessaire) -->
+            <label for="series">Série:</label>
+            <input type="checkbox" id="series" name="series">
+            <label for="season">Saison:</label>
+            <input type="number" id="season" name="season">
+            <label for="episode">Épisode:</label>
+            <input type="number" id="episode" name="episode"><br><br>
+
+            <!-- Bouton de soumission -->
+            <input type="submit" value="Sauvegarder">
+          </form>
         </div>
       </div>
       <script src="../js/account.js"></script>
