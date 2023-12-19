@@ -115,42 +115,52 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         <div id="admin-video-tab-content" class="tab__content admin__content active-tab">
           <h2>Administration des vidéos</h2>
           <form method="post" enctype="multipart/form-data">
-            <h3>Informations de la Vidéo</h3>
-            <!-- Titre de la vidéo -->
+            <!-- Catégorie -->
+            <label for="category">Catégorie:</label>
+            <select id="category" name="category" onchange="toggleFields()">
+              <option value="anime">Anime/Série/Emission TV</option>
+              <option value="film">Film</option>
+            </select><br><br>
+
+            <!-- Champs communs -->
             <label for="title">Titre:</label>
             <input type="text" id="title" name="title"><br><br>
-
-            <!-- Trailer -->
             <label for="trailer">Trailer (URL):</label>
             <input type="text" id="trailer" name="trailer"><br><br>
-
-            <!-- Image -->
-            <label for="image">Image:</label>
-            <input type="file" id="image" name="image"><br><br>
-
-            <!-- Synopsis -->
             <label for="synopsis">Synopsis:</label>
             <textarea id="synopsis" name="synopsis"></textarea><br><br>
+            <label for="image">Image de présentation:</label>
+            <input type="file" id="image" name="image"><br><br>
 
-            <!-- Vidéo -->
-            <label for="video">Vidéo:</label>
-            <input type="file" id="video" name="video"><br><br>
+            <!-- Champs spécifiques à Anime/Série/Emission TV -->
+            <div id="series-fields" style="display:none;">
+              <label for="season">Saison:</label>
+              <input type="number" id="season" name="season">
+              <label for="episode">Épisode:</label>
+              <input type="number" id="episode" name="episode"><br><br>
+            </div>
 
-            <!-- Gestion des séries (si nécessaire) -->
-            <label for="series">Série:</label>
-            <input type="checkbox" id="series" name="series">
-            <label for="season">Saison:</label>
-            <input type="number" id="season" name="season">
-            <label for="episode">Épisode:</label>
-            <input type="number" id="episode" name="episode"><br><br>
+            <!-- Champs spécifiques au Film -->
+            <div id="film-fields" style="display:none;">
+              <label for="video">Vidéo:</label>
+              <input type="file" id="video" name="video"><br><br>
+            </div>
 
             <!-- Bouton de soumission -->
             <input type="submit" value="Sauvegarder">
           </form>
         </div>
+        <script>
+function toggleFields() {
+    var category = document.getElementById('category').value;
+    document.getElementById('series-fields').style.display = (category == 'anime') ? 'block' : 'none';
+    document.getElementById('film-fields').style.display = (category == 'film') ? 'block' : 'none';
+}
+window.onload = toggleFields; // Pour initialiser les champs lors du chargement de la page
+</script>
+        <script src="../js/account.js"></script>
+        <script src="../js/burger.js"></script>
       </div>
-      <script src="../js/account.js"></script>
-      <script src="../js/burger.js"></script>
     </div>
   </main>
 </body>
