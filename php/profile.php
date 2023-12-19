@@ -11,13 +11,13 @@ require_once "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (isset($_POST["submitImage"])) {
-      include_once "change_pdp.php";
+    include_once "change_pdp.php";
   } elseif (isset($_POST["new_password"])) {
-      include_once "change_password.php";
+    include_once "change_password.php";
   } elseif (isset($_POST["delete_account"])) {
-      include_once "delete_account.php";
+    include_once "delete_account.php";
   } elseif (isset($_POST["submit_suggestion"])) {
-      include_once "suggestion.php";
+    include_once "suggestion.php";
   }
 }
 // Close connection
@@ -35,6 +35,9 @@ mysqli_close($link);
   <link rel="shortcut icon" href="../image/favicon/bald_favicon.ico" type="image/x-icon" />
   <title>Profil</title>
   <link href="../css/global.CSS" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&display=swap" rel="stylesheet">
 </head>
 
 </html>

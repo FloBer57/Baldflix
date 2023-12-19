@@ -43,6 +43,9 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
   <title>Administration</title>
   <link rel="shortcut icon" href="../image/favicon/bald_favicon.ico" type="image/x-icon" />
   <link href="../css/global.CSS" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&display=swap" rel="stylesheet">
 </head>
 
 <body class="background bodyburger">
@@ -81,7 +84,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                 <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
                 <input type='hidden' name='user_id' value='{$row['id']}'>
                 <select name='new_role'>
-                    <option value='1' " . ($row['id_role'] == '1' ? 'selected' : '') . ">Utilisateur</option>
+                    <option value='1' " . ($row['id_role'] == '1' ? 'selected' : '') . ">User</option>
                     <option value='2' " . ($row['id_role'] == '2' ? 'selected' : '') . ">Admin</option>
                 </select>
                 <input type='submit' name='modify' value='Modifier'>
@@ -151,13 +154,13 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           </form>
         </div>
         <script>
-function toggleFields() {
-    var category = document.getElementById('category').value;
-    document.getElementById('series-fields').style.display = (category == 'anime') ? 'block' : 'none';
-    document.getElementById('film-fields').style.display = (category == 'film') ? 'block' : 'none';
-}
-window.onload = toggleFields; // Pour initialiser les champs lors du chargement de la page
-</script>
+          function toggleFields() {
+            var category = document.getElementById('category').value;
+            document.getElementById('series-fields').style.display = (category == 'anime') ? 'block' : 'none';
+            document.getElementById('film-fields').style.display = (category == 'film') ? 'block' : 'none';
+          }
+          window.onload = toggleFields; // Pour initialiser les champs lors du chargement de la page
+        </script>
         <script src="../js/account.js"></script>
         <script src="../js/burger.js"></script>
       </div>

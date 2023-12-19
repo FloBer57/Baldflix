@@ -7,7 +7,6 @@
   <nav class="main-nav" role="navigation">
     <div class="menu">
       <ul class="menu-list">
-        <li><a href="../index.php">Home</a></li>
         <li><a href="../php/serie.php">Séries</a></li>
         <li><a href="../films.html">Films</a></li>
         <li><a href="../anime.php">Anime</a></li>
@@ -42,7 +41,7 @@
         if ($_SESSION['id_role'] == 2) {
           echo '<li class="nav-item"><a href="../php/admin_page.php" class="nav-link">Administration</a></li>';
         } else {
-          echo '<li class="nav-item"><a href="../index.php" class="nav-link">Home</a></li>';
+          echo '<li class="nav-item"><a href="../index.php" class="nav-link">Acceuil</a></li>';
         }
 
         ?>

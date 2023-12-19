@@ -87,3 +87,4 @@ const closeModal = document.getElementById('closeModal');
 closeModal.addEventListener('click', () => {
     body.classList.remove('body-no-scroll');
 });
+
