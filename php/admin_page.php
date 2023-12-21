@@ -11,7 +11,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 require_once "config.php";
 
 // Vérifier si l'utilisateur connecté est un administrateur
-if ($_SESSION["id_role"] != 2) {
+if ($_SESSION["user_role_id"] != 2) {
   header("location: profile.php");
   exit;
 }
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   // Vous pouvez ajouter d'autres conditions ici si nécessaire
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
-  if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["id"])) {
+  if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["user_id"])) {
     include_once "admin_delete.php";
   }
   // Ajoutez d'autres conditions GET ici si nécessaire
@@ -67,7 +67,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           <h2>Administration des utilisateurs</h2>
           <?php
           // Requête SQL pour récupérer tous les utilisateurs
-          $sql = "SELECT id, username, id_role FROM user";
+          $sql = "SELECT user_id, username, user_role_id FROM user";
           $result = mysqli_query($link, $sql);
 
           if ($result) {
@@ -76,16 +76,16 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             while ($row = mysqli_fetch_assoc($result)) {
               echo "<tr>";
               echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-              echo "<td>" . htmlspecialchars($row['id_role']) . "</td>";
+              echo "<td>" . htmlspecialchars($row['user_role_id']) . "</td>";
 
               // Formulaire pour modifier le statut
               echo "<td>
               <form method='post' action=''>
                 <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
-                <input type='hidden' name='user_id' value='{$row['id']}'>
+                <input type='hidden' name='user_id' value='{$row['user_id']}'>
                 <select name='new_role'>
-                    <option value='1' " . ($row['id_role'] == '1' ? 'selected' : '') . ">User</option>
-                    <option value='2' " . ($row['id_role'] == '2' ? 'selected' : '') . ">Admin</option>
+                    <option value='1' " . ($row['user_role_id'] == '1' ? 'selected' : '') . ">User</option>
+                    <option value='2' " . ($row['user_role_id'] == '2' ? 'selected' : '') . ">Admin</option>
                 </select>
                 <input type='submit' name='modify' value='Modifier'>
               </form>
@@ -95,14 +95,14 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               echo "<td>
         <form method='post' action=''>
           <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
-          <input type='hidden' name='user_id' value='{$row['id']}'>
+          <input type='hidden' name='user_id' value='{$row['user_id']}'>
           <input type='submit' name='reset_password' value='Réinitialiser'>
         </form>
       </td>";
 
               // Lien pour supprimer l'utilisateur
               echo "<td>
-        <a href='#' onclick='confirmDelete(\"?action=delete&id={$row['id']}&csrf_token={$_SESSION["csrf_token"]}\")'>
+        <a href='#' onclick='confirmDelete(\"?action=delete&user_id={$row['user_id']}&csrf_token={$_SESSION["csrf_token"]}\")'>
           <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
         </a>
       </td>";

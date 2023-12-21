@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
     }
 
     // Mettre à jour le statut dans la base de données
-    $update_sql = "UPDATE user SET id_role = ? WHERE id = ?";
+    $update_sql = "UPDATE user SET user_role_id = ? WHERE user_id = ?";
     $update_stmt = mysqli_prepare($link, $update_sql);
     mysqli_stmt_bind_param($update_stmt, "si", $new_role, $user_id);
     mysqli_stmt_execute($update_stmt);

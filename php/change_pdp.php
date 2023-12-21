@@ -28,12 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submitImage"])) {
   $_SESSION["profile_picture"] = $fullImagePath;
 
   // Mettre à jour la base de données avec le nouveau chemin d'image
-  $updateSql = "UPDATE user SET profile_picture = ? WHERE id = ?";
+  $updateSql = "UPDATE user SET profile_picture = ? WHERE user_id = ?";
   $updateStmt = mysqli_prepare($link, $updateSql);
 
   if ($updateStmt) {
     // Binder les variables à la déclaration préparée en tant que paramètres
-    mysqli_stmt_bind_param($updateStmt, "si", $fullImagePath, $_SESSION["id"]);
+    mysqli_stmt_bind_param($updateStmt, "si", $fullImagePath, $_SESSION["user_id"]);
 
     if (mysqli_stmt_execute($updateStmt)) {
       // Mise à jour réussie, vous pouvez ajouter un message de succès ici si nécessaire

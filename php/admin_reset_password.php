@@ -23,14 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["reset_password"])) {
     $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
     // Ajoutez une déclaration préparée pour la réinitialisation du mot de passe
-    $reset_password_sql = "UPDATE user SET password = ? WHERE id = ?";
+    $reset_password_sql = "UPDATE user SET password = ? WHERE user_id = ?";
     $reset_password_stmt = mysqli_prepare($link, $reset_password_sql);
     mysqli_stmt_bind_param($reset_password_stmt, "ss", $hashed_password, $user_id);
     mysqli_stmt_execute($reset_password_stmt);
     mysqli_stmt_close($reset_password_stmt);
 
     // Récupérer l'adresse e-mail de l'utilisateur depuis la base de données
-    $user_email_query = "SELECT email FROM user WHERE id = ?";
+    $user_email_query = "SELECT email FROM user WHERE user_id = ?";
     $user_email_stmt = mysqli_prepare($link, $user_email_query);
     mysqli_stmt_bind_param($user_email_stmt, "i", $user_id);
     mysqli_stmt_execute($user_email_stmt);

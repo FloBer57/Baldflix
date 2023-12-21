@@ -78,7 +78,7 @@ mysqli_close($link);
 
         <div id="iconModal" class="modal">
           <div class="modal-content">
-            <span id="closeModal" class="close"><img src="../image/icon/close.svg" alt="Close"></span>
+            <span class="close"><img id="closeModal" src="../image/icon/close.svg" alt="Close"></span>
             <h2>Choisir une icône</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
               <div id="iconContainer">

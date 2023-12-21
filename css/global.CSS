@@ -110,6 +110,8 @@ title :visited {
   display: flex;
   flex-direction: row;
   font-size: 1.4em;
+  font-family: "Bungee Inline", sans-serif;
+  font-weight: bold;
 }
 
 .main-nav div ul a {
@@ -302,15 +304,16 @@ a.hero img {
   top: 60%;
   left: 15%;
   transform: translate(-23%, -60%);
-  background: linear-gradient(var(--red), transparent);
-  padding: 20px;
+  background: linear-gradient(#9d040bab, #9d040b);
+  padding: 12px;
   color: var(--light);
-  font-size: 4em;
+  font-size: 3em;
   font-weight: bold;
-  border-radius: 30px;
+  border-radius: 100px;
   text-align: center;
   cursor: pointer;
   text-decoration: none;
+  font-family: "Bungee Inline", sans-serif;
 }
 
 .text-video:hover {
@@ -365,7 +368,7 @@ a.hero img {
 }
 
 .box-div {
-  flex-basis: calc(14% - 10px);
+  flex-basis: calc(16.66% - 10px);
   margin-left: 5px;
   margin-right: 5px;
   flex-shrink: 1;
@@ -376,7 +379,8 @@ a.hero img {
   width: 100%;
   height: auto;
   border: 2px solid transparent;
-  border-radius: 30px;
+  margin-bottom: 3px;
+  border-radius: 8px;
   transition: transform 0.4s cubic-bezier(0.9, 0.9, 0.9, 1); /* Transition douce pour le transform */
 }
 
@@ -780,7 +784,7 @@ div#iconContainer {
     top: 70%;
     left: 22%;
     transform: translate(-23%, -60%);
-    font-size: 2.2em;
+    font-size: 1.95em;
   }
 
   .error_acceuil {
@@ -1000,7 +1004,7 @@ div#iconContainer {
     /* Position horizontale au milieu */
     transform: translate(-23%, -60%);
     /* Centrez horizontalement et verticalement */
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 
   .preview {
@@ -1021,6 +1025,7 @@ div#iconContainer {
   .title {
     margin-left: 20px;
     margin-bottom: 0;
+    font-size: 1.3em;
   }
   /* header */
 
@@ -1119,7 +1124,6 @@ div#iconContainer {
     display: none;
     margin-right: 3%;
     margin-left: 3%;
-    margin-top: 0;
   }
   .tab__content input {
     text-align: center;
