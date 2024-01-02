@@ -1004,7 +1004,7 @@ div#iconContainer {
     /* Position horizontale au milieu */
     transform: translate(-23%, -60%);
     /* Centrez horizontalement et verticalement */
-    font-size: 1.2em;
+    font-size: 1.1em;
   }
 
   .preview {
