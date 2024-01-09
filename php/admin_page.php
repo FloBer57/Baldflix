@@ -62,6 +62,10 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             <li data-tab="admin-video-tab-content" onclick="showTab('admin-video-tab-content')">Administration des
               vidéos</li>
           </ul>
+          <ul class="prev">
+            <li data-tab="prev_video"><p>Preview Image</p><a href=""><img src="https://picsum.photos/240/320?random=2" alt=""></a></li>
+            <li data-tab="prev_image"><p>Preview Film</p><a href=""><img src="https://picsum.photos/320/240?random=2" alt=""></a></li>
+          </ul>
         </nav>
         <div id="admin-user-tab-content" class="tab__content admin__content">
           <h2>Administration des utilisateurs</h2>
@@ -117,40 +121,28 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         </div>
         <div id="admin-video-tab-content" class="tab__content admin__content active-tab">
           <h2>Administration des vidéos</h2>
-          <form method="post" enctype="multipart/form-data">
-            <!-- Catégorie -->
-            <label for="category">Catégorie:</label>
-            <select id="category" name="category" onchange="toggleFields()">
-              <option value="anime">Anime/Série/Emission TV</option>
-              <option value="film">Film</option>
-            </select><br><br>
+          <form action="upload_film.php" method="post" enctype="multipart/form-data">
 
-            <!-- Champs communs -->
-            <label for="title">Titre:</label>
-            <input type="text" id="title" name="title"><br><br>
-            <label for="trailer">Trailer (URL):</label>
-            <input type="text" id="trailer" name="trailer"><br><br>
-            <label for="synopsis">Synopsis:</label>
-            <textarea id="synopsis" name="synopsis"></textarea><br><br>
-            <label for="image">Image de présentation:</label>
-            <input type="file" id="image" name="image"><br><br>
+            <label for="film_title">Titre du film:</label>
+            <input type="text" id="film_title" name="film_title" required><br><br>
 
-            <!-- Champs spécifiques à Anime/Série/Emission TV -->
-            <div id="series-fields" style="display:none;">
-              <label for="season">Saison:</label>
-              <input type="number" id="season" name="season">
-              <label for="episode">Épisode:</label>
-              <input type="number" id="episode" name="episode"><br><br>
+            <label for="film_synopsis">Synopsis:</label>
+            <textarea id="film_synopsis" name="film_synopsis" required></textarea><br><br>
+
+            <label for="film_tags">Tags (séparés par des virgules):</label>
+            <input type="text" id="film_tags" name="film_tags"><br><br>
+
+            <label for="video">Fichier vidéo:</label>
+            <input type="file" id="video" name="video" required><br><br>
+            <div id="progressBarContainer" style="display:none;">
+              <label for="uploadProgress">Progression du téléchargement :</label>
+              <progress id="uploadProgress" value="0" max="100"></progress>
             </div>
 
-            <!-- Champs spécifiques au Film -->
-            <div id="film-fields" style="display:none;">
-              <label for="video">Vidéo:</label>
-              <input type="file" id="video" name="video"><br><br>
-            </div>
+            <label for="image">Image de couverture:</label>
+            <input type="file" id="image" name="image" required><br><br>
 
-            <!-- Bouton de soumission -->
-            <input type="submit" value="Sauvegarder">
+            <input type="submit" value="Ajouter la vidéo">
           </form>
         </div>
         <script>
