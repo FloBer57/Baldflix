@@ -95,36 +95,3 @@ const closeModal = document.getElementById('closeModal');
 closeModal.addEventListener('click', () => {
     body.classList.remove('body-no-scroll');
 });
-
-
-document.getElementById('uploadForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-
-  var form = this;
-  var data = new FormData(form);
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'upload_film.php', true);
-
-  xhr.upload.onprogress = function(e) {
-      if (e.lengthComputable) {
-          var percentComplete = (e.loaded / e.total) * 100;
-          document.getElementById('uploadProgress').value = percentComplete;
-          
-          // Activer le bouton quand la progression est à 100%
-          if (percentComplete >= 100) {
-              document.getElementById('submitBtn').disabled = false;
-          }
-      }
-  };
-
-  xhr.onloadstart = function(e) {
-      document.getElementById('progressBarContainer').style.display = 'block';
-  };
-
-  xhr.onloadend = function(e) {
-      document.getElementById('progressBarContainer').style.display = 'none';
-  };
-
-  xhr.send(data);
-});

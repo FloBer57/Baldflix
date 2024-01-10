@@ -604,6 +604,16 @@ progress {
   height: 20px;
 }
 
+label, select {
+  margin-right: 10px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
 /* MODALE */
 
 .modal {

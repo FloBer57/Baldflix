@@ -63,8 +63,12 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               vidéos</li>
           </ul>
           <ul class="prev">
-            <li data-tab="prev_video"><p>Preview Image</p><a href=""><img src="https://picsum.photos/240/320?random=2" alt=""></a></li>
-            <li data-tab="prev_image"><p>Preview Film</p><a href=""><img src="https://picsum.photos/320/240?random=2" alt=""></a></li>
+            <li data-tab="prev_video">
+              <p>Preview Image</p><a href=""><img src="https://picsum.photos/240/320?random=2" alt=""></a>
+            </li>
+            <li data-tab="prev_image">
+              <p>Preview Film</p><a href=""><img src="https://picsum.photos/320/240?random=2" alt=""></a>
+            </li>
           </ul>
         </nav>
         <div id="admin-user-tab-content" class="tab__content admin__content">
@@ -121,7 +125,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         </div>
         <div id="admin-video-tab-content" class="tab__content admin__content active-tab">
           <h2>Administration des vidéos</h2>
-          <form action="upload_film.php" method="post" enctype="multipart/form-data">
+          <form id="uploadForm" action="upload_film.php" method="post" enctype="multipart/form-data">
 
             <label for="film_title">Titre du film:</label>
             <input type="text" id="film_title" name="film_title" required><br><br>
@@ -132,29 +136,138 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             <label for="film_tags">Tags (séparés par des virgules):</label>
             <input type="text" id="film_tags" name="film_tags"><br><br>
 
+            <div class="form-row">
+              <label for="media_type">Catégorie 1 :</label>
+              <select id="film_categories" name="film_categories[]">
+                <option>Veuillez choisir:</option>
+                <option value="film">Film</option>
+                <option value="serie">Série</option>
+                <option value="spectacle">Spectacle</option>
+                <option value="anime">Anime</option>
+                <option value="bald">Bald</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label for="categorie_1">Catégorie 2 :</label>
+              <select id="film_categories" name="film_categories[]">
+                <option>Veuillez choisir:</option>
+                <option value="5">Action</option>
+                <option value="7">Comédies</option>
+                <option value="8">Courts-Métrages</option>
+                <option value="9">Documentaires</option>
+                <option value="10">Drames</option>
+                <option value="12">Fantastique</option>
+                <option value="13">Français</option>
+                <option value="14">Horreur</option>
+                <option value="15">Indépendants</option>
+                <option value="16">International</option>
+                <option value="17">Jeunesse et famille</option>
+                <option value="18">Musique et comédies musicales</option>
+                <option value="19">Noël</option>
+                <option value="20">Policier</option>
+                <option value="21">Primés</option>
+                <option value="22">Romance</option>
+                <option value="23">SF</option>
+                <option value="24">Thriller</option>
+                <option value="25">Audiodescription</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label for="categorie_2">Catégorie 3 :</label>
+              <select id="film_categories" name="film_categories[]">
+                <option>Veuillez choisir:</option>
+                <option value="5">Action</option>
+                <option value="7">Comédies</option>
+                <option value="8">Courts-Métrages</option>
+                <option value="9">Documentaires</option>
+                <option value="10">Drames</option>
+                <option value="12">Fantastique</option>
+                <option value="13">Français</option>
+                <option value="14">Horreur</option>
+                <option value="15">Indépendants</option>
+                <option value="16">International</option>
+                <option value="17">Jeunesse et famille</option>
+                <option value="18">Musique et comédies musicales</option>
+                <option value="19">Noël</option>
+                <option value="20">Policier</option>
+                <option value="21">Primés</option>
+                <option value="22">Romance</option>
+                <option value="23">SF</option>
+                <option value="24">Thriller</option>
+                <option value="25">Audiodescription</option>
+              </select>
+            </div>
+
             <label for="video">Fichier vidéo:</label>
             <input type="file" id="video" name="video" required><br><br>
-            <div id="progressBarContainer" style="display:none;">
-              <label for="uploadProgress">Progression du téléchargement :</label>
-              <progress id="uploadProgress" value="0" max="100"></progress>
-            </div>
 
             <label for="image">Image de couverture:</label>
             <input type="file" id="image" name="image" required><br><br>
 
-            <input type="submit" value="Ajouter la vidéo">
+            <input type="submit" id="btnUpload" value="Ajouter la vidéo">
           </form>
+          <button id="btnRestart" disabled>Recommencer</button>
+          <div id="progressBarContainer" style="display:none;">
+            <label for="uploadProgress">Progression du téléchargement :</label>
+            <progress id="uploadProgress" value="0" max="100"></progress>
+          </div>
+
+          <ul class="prev">
+            <li data-tab="prev_video">
+              <p>Preview Image</p>
+              <img id="prevVideoImg" src="" alt="Preview miniature">
+            </li>
+            <li data-tab="prev_image">
+              <p>Preview Film</p>
+              <img id="prevCoverImg" src="" alt="Preview couverture">
+            </li>
+          </ul>
         </div>
-        <script>
-          function toggleFields() {
-            var category = document.getElementById('category').value;
-            document.getElementById('series-fields').style.display = (category == 'anime') ? 'block' : 'none';
-            document.getElementById('film-fields').style.display = (category == 'film') ? 'block' : 'none';
-          }
-          window.onload = toggleFields; // Pour initialiser les champs lors du chargement de la page
-        </script>
         <script src="../js/account.js"></script>
         <script src="../js/burger.js"></script>
+        <script>
+          document.getElementById('uploadForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.action, true);
+
+            // Afficher la barre de progression
+            document.getElementById('progressBarContainer').style.display = 'block';
+
+            xhr.upload.onprogress = function (e) {
+              if (e.lengthComputable) {
+                var percentComplete = (e.loaded / e.total) * 100;
+                document.getElementById('uploadProgress').value = percentComplete;
+                if (percentComplete === 100) {
+                  document.getElementById('btnRestart').disabled = false;
+                  document.getElementById('btnUpload').disabled = true;
+                }
+              }
+            };
+
+            xhr.onload = function () {
+              if (xhr.status === 200) {
+                // Traiter la réponse ici...
+              } else {
+                alert("Une erreur s'est produite lors du téléchargement.");
+              }
+            };
+
+            xhr.send(formData);
+          });
+
+          document.getElementById('btnRestart').addEventListener('click', function () {
+            // Réinitialiser le formulaire
+            document.getElementById('uploadForm').reset();
+            document.getElementById('uploadProgress').value = 0;
+            document.getElementById('progressBarContainer').style.display = 'none';
+            this.disabled = true;
+            document.getElementById('btnUpload').disabled = false;
+          });
+        </script>
       </div>
     </div>
   </main>
