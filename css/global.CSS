@@ -356,7 +356,7 @@ a.hero img {
   margin-left: 1.5%;
 }
 
-/* box  A SOCCUPER */
+/* box */
 
 .box {
   display: flex;
@@ -380,7 +380,7 @@ a.hero img {
   border: 2px solid transparent;
   margin-bottom: 3px;
   border-radius: 8px;
-  transition: transform 0.4s cubic-bezier(0.9, 0.9, 0.9, 1); /* Transition douce pour le transform */
+  transition: transform 0.4s cubic-bezier(0.9, 0.9, 0.9, 1);
 }
 
 .box-div img:hover {
@@ -760,6 +760,9 @@ div#iconContainer {
     font-size: 0.8em !important;
   }
 }
+
+/* ///////////////////////////////////////////////////////////// */
+
 /* Media querie d'un ecran d'ordi */
 
 @media screen and (min-width: 1400px) {
@@ -937,25 +940,23 @@ div#iconContainer {
     margin-top: -4px;
     margin-bottom: -2px;
   }
+
   /* box */
   .box-div {
     flex-basis: calc(33.33% - 10px);
   }
   .text-video {
     top: 70%;
-    /* Position verticale au milieu */
     left: 20%;
-    /* Position horizontale au milieu */
     transform: translate(-23%, -60%);
-    /* Centrez horizontalement et verticalement */
     font-size: 1.5em;
   }
 
   .error_acceuil {
     left: 65%;
   }
-  /* header */
 
+  /* header */
   .navbar {
     right: -750px;
     width: 100%;
