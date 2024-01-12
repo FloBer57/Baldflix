@@ -201,10 +201,10 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             </div>
 
             <label for="video">Fichier vidéo:</label>
-            <input type="file" id="video" name="video" required><br><br>
+            <input type="file" id="fileInput" name="video" required><br><br>
 
             <label for="image">Image de couverture:</label>
-            <input type="file" id="image" name="image" required><br><br>
+            <input type="file" id="fileInput" name="image" required><br><br>
 
             <input type="submit" id="btnUpload" value="Ajouter la vidéo">
           </form>
@@ -215,13 +215,17 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           </div>
 
           <ul class="prev">
-            <li data-tab="prev_video">
+            <li data-tab="prev_img">
               <p>Preview Image</p>
-              <img id="prevVideoImg" src="" alt="Preview miniature">
+              <img id="previewImage" src="" alt="Preview img">
             </li>
-            <li data-tab="prev_image">
+            <li data-tab="prev_miniature">
+              <p>Preview Miniature</p>
+              <img id="previewMiniature" src="" alt="Preview miniature">
+            </li>
+            <li data-tab="prev_video">
               <p>Preview Film</p>
-              <img id="prevCoverImg" src="" alt="Preview couverture">
+              <img id="previewVideo" src="" alt="Preview film">
             </li>
           </ul>
         </div>
@@ -267,6 +271,34 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             this.disabled = true;
             document.getElementById('btnUpload').disabled = false;
           });
+        </script>
+        <script>
+          document.getElementById('fileInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (!file) {
+              return;
+            }
+
+            const imgPreview = document.getElementById('previewImage');
+            const videoPreview = document.getElementById('previewVideo');
+            const videoSource = document.getElementById('videoSource');
+
+            // Cache les prévisualisations au début
+            imgPreview.hidden = true;
+            videoPreview.hidden = true;
+
+            if (file.type.startsWith('image/')) {
+              imgPreview.hidden = false;
+              videoPreview.hidden = true;
+              imgPreview.src = URL.createObjectURL(file);
+            } else if (file.type.startsWith('video/')) {
+              imgPreview.hidden = true;
+              videoPreview.hidden = false;
+              videoSource.src = URL.createObjectURL(file);
+              videoPreview.load();
+            }
+          });
+
         </script>
       </div>
     </div>

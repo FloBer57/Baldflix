@@ -30,7 +30,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ffmpeg_cmd_duration = "ffmpeg -i $video_target_file 2>&1 | grep 'Duration' | cut -d ' ' -f 4 | sed s/,//";
     $duree = exec($ffmpeg_cmd_duration);
     list($hours, $minutes, $seconds) = explode(":", $duree);
-    $total_seconds = $hours * 3600 + $minutes * 60 + floatval($seconds);
+    $hours = (int) $hours;
+    $minutes = (int) $minutes;
+    $seconds = (int) ($seconds);
+    $total_seconds = $hours * 3600 + $minutes * 60 + $seconds;
+    
 
     $random_time = rand(1, $total_seconds);
 
@@ -47,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $param_titre = $titre;
         $param_synopsis = $synopsis;
-        $param_duree = (int) $total_seconds;
+        $param_duree = $total_seconds;
         $param_tags = $tags;
         $param_ajout = $ajout;
         $param_video = $video_target_file;
@@ -65,12 +69,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             while ($row = mysqli_fetch_assoc($result)) {
                 $valid_categories[] = $row['categorie_id'];
             }
-            if (isset($_POST['film_categories']) && is_array($_POST['film_categories'])) {
-                foreach ($_POST['film_categories'] as $categorie_id) {
-                    if (!in_array($categorie_id, $valid_categories)) {
-                        // Si l'ID de la catégorie n'est pas valide, génère une erreur ou saute cette catégorie
-                        continue;
-                    }
+            $categories = $_POST['film_categories'] ?? []; // Utilisation de l'opérateur de coalescence nulle
+            foreach ($categories as $categorie_id) {
+                if (!in_array($categorie_id, $valid_categories)) {
+                    // Gestion des catégories invalides
+                    continue;
+                }
+            
 
                     // Insertion de la catégorie, si elle est valide
                     $sql_cat = "INSERT INTO film_categorie (filmXcategorie_film_ID, filmXcategorie_categorie_ID) VALUES (?, ?)";
@@ -80,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         mysqli_stmt_close($stmt_cat);
                     }
                 }
-            }
+            
 
             // Renvoyer la réponse en format JSON
             $response = ["success" => true, "message" => "Vidéo ajoutée avec succès"];
@@ -91,6 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         mysqli_stmt_close($stmt);
     }
-}
 
+}
 
