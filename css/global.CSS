@@ -458,7 +458,8 @@ a.hero img {
   height: 100%;
 }
 
-div#admin-video-tab-content {
+div#admin-video-tab-content,
+div#admin-serie-tab-content {
   flex-basis: 70%;
 }
 
@@ -537,10 +538,28 @@ textarea {
 
 .admin__content input {
   padding: 2px;
-  width: 100%;
   text-align: center;
 }
 
+/* Administration films */
+
+.admin_video_first{
+
+  display: flex;
+}
+
+.title_tags {
+  flex-basis: 50%;
+}
+
+.div_synopsis {
+  flex-basis: 50%;
+  display: flex;
+}
+
+input#film_title, input#film_tags {
+  display: flex;
+}
 /* Element prévisualisation vidéo/image */
 
 .prev {
@@ -572,6 +591,15 @@ textarea {
   top: 10px;
 }
 
+.prev li {
+  min-height: 180px;
+}
+
+.prev li img {
+  max-height: 140px;
+  max-width: 100%;
+}
+
 .prev li:first-child {
   min-height: 180px;
 }
@@ -581,14 +609,7 @@ textarea {
   max-width: 100%;
 }
 
-.prev li:last-child {
-  min-height: 180px;
-}
 
-.prev li:last-child img {
-  max-height: 140px;
-  max-width: 100%;
-}
 select {
   text-align: center;
   width: 60%;
@@ -1061,7 +1082,20 @@ div#iconContainer {
   }
   textarea {
     width: 100%;
+    height: 138px;
   }
+
+  .form-cat {
+    display: flex;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-basis: 33%;
+}
+
   /* ICI POUR L'ADMIN PAGE */
   .small-screen {
     display: none;

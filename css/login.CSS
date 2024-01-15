@@ -46,7 +46,6 @@ body {
 
 .container {
   display: flex;
-  box-shadow: 0 0 10px rgba(31, 31, 31, 0.2);
   width: 90%;
 }
 
@@ -148,10 +147,10 @@ input[type="submit"] {
   .container__form {
     padding: 25px;
     order: 2;
-    margin-bottom: 50%;
+    margin-bottom: 15vh;
   }
 
   h1 {
-    margin-top: 50%;
+    margin-top: 15vh;
   }
 }

@@ -3,14 +3,24 @@ session_start();
 require_once "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $titre = $_POST['film_title'];
-    $synopsis = $_POST['film_synopsis'];
-    $tags = $_POST['film_tags'];
+    $titre = filter_input(INPUT_POST, 'film_title', FILTER_SANITIZE_STRING);
+    $synopsis = filter_input(INPUT_POST, 'film_synopsis', FILTER_SANITIZE_STRING);
+    $tags = filter_input(INPUT_POST, 'film_tags', FILTER_SANITIZE_STRING);
 
     $target_dir = "../video/film/";
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0755, true);
     }
+
+    // A DECOMMENTER ET MODIFIER UNE FOIS QUE JE SAURAI QUEL TYPE DE VIDEO JE VEUX!!! 
+
+    #$videoFileType = strtolower(pathinfo($video_target_file, PATHINFO_EXTENSION));
+    #$imageFileType = strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION));
+
+    #if (!in_array($_FILES["video"]["type"], $allowedVideoTypes) || !in_array($_FILES["image"]["type"], $allowedImageTypes)) {
+    #    exit("Type de fichier non autorisé.");
+    #}
+
 
     $safe_title = preg_replace("/[^A-Za-z0-9 ]/", '', $titre);
     $safe_title = str_replace(' ', '_', $safe_title);
@@ -19,28 +29,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!file_exists($film_dir)) {
         mkdir($film_dir, 0755, true);
     }
-
     $video_target_file = $film_dir . basename($_FILES["video"]["name"]);
     $image_target_file = $film_dir . basename($_FILES["image"]["name"]);
+    
 
-    if (!move_uploaded_file($_FILES["video"]["tmp_name"], $video_target_file) || !move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
-        exit("Erreur lors du téléchargement des fichiers.");
+    if (!move_uploaded_file($_FILES["video"]["tmp_name"], $video_target_file)) {
+        exit("Erreur lors du téléchargement de la vidéo.");
+    }
+    if (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
+        exit("Erreur lors du téléchargement de l'image.");
     }
 
-    $ffmpeg_cmd_duration = "ffmpeg -i $video_target_file 2>&1 | grep 'Duration' | cut -d ' ' -f 4 | sed s/,//";
-    $duree = exec($ffmpeg_cmd_duration);
+    $ffmpeg_cmd_duration = escapeshellcmd("ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " . escapeshellarg($video_target_file));
+    $duree = shell_exec($ffmpeg_cmd_duration);
     list($hours, $minutes, $seconds) = explode(":", $duree);
     $hours = (int) $hours;
     $minutes = (int) $minutes;
     $seconds = (int) ($seconds);
     $total_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-    
+
 
     $random_time = rand(1, $total_seconds);
 
     $video_target_miniature = $film_dir . 'miniature.jpg';
-    $ffmpeg_cmd_extract = "ffmpeg -i $video_target_file -ss $random_time -frames:v 1 $video_target_miniature";
+    $ffmpeg_cmd_extract = "ffmpeg -i " . escapeshellarg($video_target_file) . " -ss $random_time -frames:v 1 " . escapeshellarg($video_target_miniature);
     exec($ffmpeg_cmd_extract);
+
+    // Vérification si la miniature a été générée avec succès
+    if (file_exists($video_target_miniature)) {
+        // Miniature générée avec succès
+        $miniature_success = true;
+    } else {
+        // Échec de la génération de la miniature
+        $miniature_success = false;
+    }
+
+    mysqli_begin_transaction($link);
     $ajout = date('Y-m-d H:i:s');
     $sql = "INSERT INTO film (film_title, film_synopsis, film_duree, film_tags, film_date_ajout, film_path, film_image_path, film_miniature_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -69,33 +93,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             while ($row = mysqli_fetch_assoc($result)) {
                 $valid_categories[] = $row['categorie_id'];
             }
-            $categories = $_POST['film_categories'] ?? []; // Utilisation de l'opérateur de coalescence nulle
+            $categories = $_POST['film_categories'] ?? [];
             foreach ($categories as $categorie_id) {
                 if (!in_array($categorie_id, $valid_categories)) {
-                    // Gestion des catégories invalides
                     continue;
                 }
-            
 
-                    // Insertion de la catégorie, si elle est valide
-                    $sql_cat = "INSERT INTO film_categorie (filmXcategorie_film_ID, filmXcategorie_categorie_ID) VALUES (?, ?)";
-                    if ($stmt_cat = mysqli_prepare($link, $sql_cat)) {
-                        mysqli_stmt_bind_param($stmt_cat, "ii", $film_id, $categorie_id);
-                        mysqli_stmt_execute($stmt_cat);
-                        mysqli_stmt_close($stmt_cat);
-                    }
+
+                // Insertion de la catégorie, si elle est valide
+                $sql_cat = "INSERT INTO film_categorie (filmXcategorie_film_ID, filmXcategorie_categorie_ID) VALUES (?, ?)";
+                if ($stmt_cat = mysqli_prepare($link, $sql_cat)) {
+                    mysqli_stmt_bind_param($stmt_cat, "ii", $film_id, $categorie_id);
+                    mysqli_stmt_execute($stmt_cat);
+                    mysqli_stmt_close($stmt_cat);
                 }
-            
+            }
+
 
             // Renvoyer la réponse en format JSON
-            $response = ["success" => true, "message" => "Vidéo ajoutée avec succès"];
+            $response = [
+                "success" => true,
+                "message" => "Vidéo ajoutée avec succès",
+                "miniature_generated" => $miniature_success
+            ];
             echo json_encode($response);
-        } else {
-            echo json_encode(["success" => false, "error" => "Erreur lors de l'ajout de la vidéo."]);
         }
-
+        mysqli_commit($link);
         mysqli_stmt_close($stmt);
     }
-
 }
 

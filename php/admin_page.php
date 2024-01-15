@@ -61,18 +61,52 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               Administration des utilisateurs</li>
             <li data-tab="admin-video-tab-content" onclick="showTab('admin-video-tab-content')">Administration des
               vidéos</li>
+            <li data-tab="admin-serie-tab-content" onclick="showTab('admin-serie-tab-content')">Administration des
+              séries</li>
           </ul>
-          <ul class="prev">
-            <li data-tab="prev_video">
-              <p>Preview Image</p><a href=""><img src="https://picsum.photos/240/320?random=2" alt=""></a>
-            </li>
-            <li data-tab="prev_image">
-              <p>Preview Film</p><a href=""><img src="https://picsum.photos/320/240?random=2" alt=""></a>
-            </li>
-          </ul>
+          <div id="previewVideo" style="display:none;">
+            <p>Prévisualisation vidéo</p>
+            <video id="videoPreview" controls></video>
+          </div>
+
+          <div id="previewImage" style="display:none;">
+            <p>Prévisualisation image</p>
+            <img id="imagePreview" src="" alt="Image Preview">
+          </div>
+          <script>
+            document.getElementById('fileInputVideo').addEventListener('change', function (event) {
+              var file = event.target.files[0];
+              var url = URL.createObjectURL(file);
+              var videoPreview = document.getElementById('videoPreview');
+              videoPreview.src = url;
+              videoPreview.onloadedmetadata = function () {
+                URL.revokeObjectURL(videoPreview.src); // Libérer l'URL après le chargement
+                document.getElementById('previewVideo').style.display = 'block';
+              };
+            };
+
+            document.getElementById('fileInputImage').addEventListener('change', function (event) {
+              var file = event.target.files[0];
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('previewImage').style.display = 'block';
+              };
+              reader.readAsDataURL(file);
+            });
+
+            // Ajouter le même type de gestionnaires d'événements pour la prévisualisation de la miniature
+
+          </script>
+
+          <div id="previewMiniature" style="display:none;">
+            <p>Prévisualisation miniature</p>
+            <img id="miniaturePreview" src="" alt="Miniature Preview">
+          </div>
         </nav>
         <div id="admin-user-tab-content" class="tab__content admin__content">
           <h2>Administration des utilisateurs</h2>
+
           <?php
           // Requête SQL pour récupérer tous les utilisateurs
           $sql = "SELECT user_id, username, user_role_id FROM user";
@@ -122,113 +156,142 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             echo "Erreur de requête : " . mysqli_error($link);
           }
           ?>
+
         </div>
         <div id="admin-video-tab-content" class="tab__content admin__content active-tab">
-          <h2>Administration des vidéos</h2>
+          <h2>Administration des films</h2>
           <form id="uploadForm" action="upload_film.php" method="post" enctype="multipart/form-data">
+            <div class="admin_video_first">
+              <div class="title_tags">
+                <label for="film_title">Titre du film:</label>
+                <input type="text" id="film_title" name="film_title" required><br>
 
-            <label for="film_title">Titre du film:</label>
-            <input type="text" id="film_title" name="film_title" required><br><br>
+                <label for="film_tags">Tags (séparés par des virgules):</label>
+                <input type="text" id="film_tags" name="film_tags"><br>
+              </div>
+              <div class="div_synopsis">
+                <label for="film_synopsis">Synopsis:</label>
+                <textarea id="film_synopsis" name="film_synopsis" required></textarea><br>
+              </div>
 
-            <label for="film_synopsis">Synopsis:</label>
-            <textarea id="film_synopsis" name="film_synopsis" required></textarea><br><br>
+            </div>
+            <div class="form-cat">
+              <div class="form-row row1">
+                <label for="media_type">Catégorie 1 :</label>
+                <select id="film_categories" name="film_categories[]">
+                  <option>Veuillez choisir:</option>
+                  <option value="27">Film</option>
+                  <option value="34">Spectacle</option>
+                  <option value="6">Anime</option>
+                </select>
+              </div>
 
-            <label for="film_tags">Tags (séparés par des virgules):</label>
-            <input type="text" id="film_tags" name="film_tags"><br><br>
+              <div class="form-row row2">
+                <label for="categorie_1">Catégorie 2 :</label>
+                <select id="film_categories" name="film_categories[]">
+                  <option>Veuillez choisir :</option>
+                  <?php
 
-            <div class="form-row">
-              <label for="media_type">Catégorie 1 :</label>
-              <select id="film_categories" name="film_categories[]">
-                <option>Veuillez choisir:</option>
-                <option value="film">Film</option>
-                <option value="serie">Série</option>
-                <option value="spectacle">Spectacle</option>
-                <option value="anime">Anime</option>
-                <option value="bald">Bald</option>
-              </select>
+                  include "../includes/categorie.php";
+
+                  ?>
+                </select>
+              </div>
+
+              <div class="form-row row3">
+                <label for="categorie_2">Catégorie 3 :</label>
+                <select id="film_categories" name="film_categories[]">
+                  <option>Veuillez choisir :</option>
+                  <?php
+
+                  include "../includes/categorie.php";
+
+                  ?>
+                </select>
+              </div>
             </div>
 
-            <div class="form-row">
-              <label for="categorie_1">Catégorie 2 :</label>
-              <select id="film_categories" name="film_categories[]">
-                <option>Veuillez choisir:</option>
-                <option value="5">Action</option>
-                <option value="7">Comédies</option>
-                <option value="8">Courts-Métrages</option>
-                <option value="9">Documentaires</option>
-                <option value="10">Drames</option>
-                <option value="12">Fantastique</option>
-                <option value="13">Français</option>
-                <option value="14">Horreur</option>
-                <option value="15">Indépendants</option>
-                <option value="16">International</option>
-                <option value="17">Jeunesse et famille</option>
-                <option value="18">Musique et comédies musicales</option>
-                <option value="19">Noël</option>
-                <option value="20">Policier</option>
-                <option value="21">Primés</option>
-                <option value="22">Romance</option>
-                <option value="23">SF</option>
-                <option value="24">Thriller</option>
-                <option value="25">Audiodescription</option>
-              </select>
+            <div class="upload_files">
+              <input type="file" id="fileInputVideo" name="video" required><br>
+              <input type="file" id="fileInputImage" name="image" required><br>
+              <input type="submit" id="btnUpload" value="Ajouter la vidéo">
             </div>
-
-            <div class="form-row">
-              <label for="categorie_2">Catégorie 3 :</label>
-              <select id="film_categories" name="film_categories[]">
-                <option>Veuillez choisir:</option>
-                <option value="5">Action</option>
-                <option value="7">Comédies</option>
-                <option value="8">Courts-Métrages</option>
-                <option value="9">Documentaires</option>
-                <option value="10">Drames</option>
-                <option value="12">Fantastique</option>
-                <option value="13">Français</option>
-                <option value="14">Horreur</option>
-                <option value="15">Indépendants</option>
-                <option value="16">International</option>
-                <option value="17">Jeunesse et famille</option>
-                <option value="18">Musique et comédies musicales</option>
-                <option value="19">Noël</option>
-                <option value="20">Policier</option>
-                <option value="21">Primés</option>
-                <option value="22">Romance</option>
-                <option value="23">SF</option>
-                <option value="24">Thriller</option>
-                <option value="25">Audiodescription</option>
-              </select>
-            </div>
-
-            <label for="video">Fichier vidéo:</label>
-            <input type="file" id="fileInput" name="video" required><br><br>
-
-            <label for="image">Image de couverture:</label>
-            <input type="file" id="fileInput" name="image" required><br><br>
-
-            <input type="submit" id="btnUpload" value="Ajouter la vidéo">
           </form>
           <button id="btnRestart" disabled>Recommencer</button>
           <div id="progressBarContainer" style="display:none;">
             <label for="uploadProgress">Progression du téléchargement :</label>
             <progress id="uploadProgress" value="0" max="100"></progress>
           </div>
-
-          <ul class="prev">
-            <li data-tab="prev_img">
-              <p>Preview Image</p>
-              <img id="previewImage" src="" alt="Preview img">
-            </li>
-            <li data-tab="prev_miniature">
-              <p>Preview Miniature</p>
-              <img id="previewMiniature" src="" alt="Preview miniature">
-            </li>
-            <li data-tab="prev_video">
-              <p>Preview Film</p>
-              <img id="previewVideo" src="" alt="Preview film">
-            </li>
-          </ul>
         </div>
+
+        <div id="admin-serie-tab-content" class="tab__content admin__content active-tab">
+          <h2>Administration des séries</h2>
+          <form id="uploadFormSerie" action="upload_serie.php" method="post" enctype="multipart/form-data">
+
+            <label for="serie_title">Titre de la série</label>
+            <input type="text" id="serie_title" name="serie_title" required><br>
+
+            <label for="serie_synopsis">Synopsis de la série</label>
+            <textarea id="serie_synopsis" name="serie_synopsis" required></textarea><br><br>
+
+            <label for="serie_tags">Tags (séparés par des virgules):</label>
+            <input type="text" id="film_tags" name="film_tags"><br>
+            <label for="numero_saison">Numéro de saison:</label>
+            <select id="numero_saison" name="numero_saison" required>
+              <?php for ($i = 1; $i <= 20; $i++) {
+                echo "<option value='$i'>Saison $i</option>";
+              } ?>
+            </select><br>
+
+            <div class="form-cat">
+
+              <div class="form-row row1">
+                <label for="media_type">Catégorie 1 :</label>
+                <select id="serie_categories" value="Bonjour" name="serie_categories[]">
+                  <option>Veuillez choisir:</option>
+                  <option value="26">Série</option>
+                  <option value="34">Spectacle</option>
+                  <option value="6">Anime</option>
+                </select>
+              </div>
+
+              <div class="form-row row2">
+                <label for="categorie_1">Catégorie 2 :</label>
+                <select id="serie_categories" name="serie_categories[]">
+                  <option>Veuillez choisir :</option>
+                  <?php
+
+                  include "../includes/categorie.php";
+
+                  ?>
+                </select>
+              </div>
+
+              <div class="form-row row3">
+                <label for="categorie_2">Catégorie 3 :</label>
+                <select id="serie_categories" name="serie_categories[]">
+                  <option>Veuillez choisir :</option>
+                  <?php
+
+                  include "../includes/categorie.php";
+
+                  ?>
+                </select>
+              </div>
+            </div>
+
+            <input type="file" id="fileInputVideoSerie" name="video[]" multiple required><br>
+            <input type="file" id="fileInputImageSerie" name="image" required><br>
+            <input type="submit" id="btnUploadSerie" value="Ajouter les vidéos">
+
+          </form>
+          <button id="btnRestart" disabled>Recommencer</button>
+          <div id="progressBarContainer" style="display:none;">
+            <label for="uploadProgress">Progression du téléchargement :</label>
+            <progress id="uploadProgress" value="0" max="100"></progress>
+          </div>
+        </div>
+
         <script src="../js/account.js"></script>
         <script src="../js/burger.js"></script>
         <script>
@@ -273,6 +336,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           });
         </script>
       </div>
+
     </div>
   </main>
 </body>

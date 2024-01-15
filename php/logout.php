@@ -11,4 +11,3 @@ session_destroy();
 // Redirect to login page
 header("location: baldflix_login.php");
 exit;
-?>
