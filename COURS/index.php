@@ -1,24 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Enregistrement d'un véhicule</title>
-</head>
-<body>
-    <h2>Formulaire d'enregistrement de véhicule</h2>
-    <form action="enregistrer_vehicule.php" method="post">
-        <label for="poids">Poids :</label>
-        <input type="number" id="poids" name="poids" required><br><br>
+<?php 
+  include('header.php');
+?>
 
-        <label for="chevaux">Chevaux :</label>
-        <input type="number" id="chevaux" name="chevaux" required><br><br>
+<h2>Formulaire de contact</h2>
 
-        <label for="vitesse">Vitesse de pointe :</label>
-        <input type="number" id="vitesse" name="vitesse" required><br><br>
+<form action="send_mail.php" method="POST">
+  <p>
+    <label for="subject">Sujet</label>
+    <input type="text" name="subject" id="subject" />
+  </p>
+  <p>
+    <label for="emailform">Votre email</label>
+    <input type="text" name="emailform" id="emailform" />
+  </p>
+  <p>
+    <label for="message">Votre message</label>
+    <textarea type="text" name="message" id="message"></textarea>
+  </p>
+  <p>
+    <button type="submit">Envoyer</button>
+  </p>
+</form>
 
-        <label for="type_boite">Type de boite :</label>
-        <input type="text" id="type_boite" name="type_boite" required><br><br>
 
-        <input type="submit" value="Enregistrer">
-    </form>
-</body>
-</html>
+<?php 
+  include('footer.php');
+?>

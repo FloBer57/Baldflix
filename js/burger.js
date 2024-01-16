@@ -4,6 +4,8 @@ const bodyburger = document.querySelector('.bodyburger')
 
 
 menuIcon.addEventListener('click', () => {
-    navbar.classList.toggle("change") 
+    navbar.classList.toggle("change") ;
     bodyburger.classList.toggle("lock");
 })
+
+

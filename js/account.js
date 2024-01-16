@@ -6,7 +6,7 @@ function showTab(tabId) {
   });
 
   // Désélectionner tous les onglets actifs
-  document.querySelectorAll('.admin__nav li').forEach(function (tab) {
+  document.querySelectorAll('.account__nav li').forEach(function (tab) {
     tab.classList.remove('active-onglet');
   });
 
@@ -95,3 +95,7 @@ const closeModal = document.getElementById('closeModal');
 closeModal.addEventListener('click', () => {
     body.classList.remove('body-no-scroll');
 });
+
+
+
+

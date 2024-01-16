@@ -81,6 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               $_SESSION["loggedin"] = true;
               $_SESSION["user_id"] = $id;
               $_SESSION["username"] = $username;
+              $_SESSION["intro"] = true;
 
               // Fetch and store the user's status and profile picture
               $profileData = getProfileData($id);

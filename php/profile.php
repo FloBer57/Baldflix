@@ -112,7 +112,7 @@ mysqli_close($link);
               <span class="invalid-feedback">
                 <?php echo $new_password_err; ?>
               </span>
-              <br><br>
+              <br>
             </div>
             <div class="form-group">
               <label for="confirm_new_password">Confirmer le nouveau mot de passe :</label>
@@ -122,7 +122,7 @@ mysqli_close($link);
                 value="<?php echo $confirm_password; ?>">
               <span class="invalid-feedback">
                 <?php echo $confirm_password_err; ?>
-                <br><br>
+                <br>
               </span>
             </div>
             <div class="form-group">
@@ -141,7 +141,7 @@ mysqli_close($link);
               <span class="invalid-feedback">
                 <?php echo $password_err; ?>
               </span>
-              <br><br>
+              <br>
             </div>
             <div class="form-group">
               <input type="submit" name="delete_account" value="Supprimer le compte">
@@ -155,19 +155,19 @@ mysqli_close($link);
               <label for="suggestion_firstname">Prénom :</label>
               <input type="text" placeholder="Prénom" name="suggestion_firstname" id="suggestion_firstname" required
                 class="form-control">
-              <br><br>
+              <br>
             </div>
             <div class="form-group">
               <label for="suggestion_lastname">Nom :</label>
               <input type="text" placeholder="Nom" name="suggestion_lastname" id="suggestion_lastname" required
                 class="form-control">
-              <br><br>
+              <br>
             </div>
             <div class="form-group">
               <label for="suggestion_message">Message :</label>
               <textarea placeholder="Votre suggestion" name="suggestion_message" id="suggestion_message" required
                 class="form-control"></textarea>
-              <br><br>
+              <br>
             </div>
             <div class="form-group">
               <input type="submit" name="submit_suggestion" value="Envoyer la suggestion">

@@ -9,7 +9,7 @@
       <ul class="menu-list">
         <li><a href="../php/serie.php">Séries</a></li>
         <li><a href="../films.html">Films</a></li>
-        <li><a href="../anime.php">Anime</a></li>
+        <li><a href="../php/anime.php">Anime</a></li>
         <li><a href="../spectacles.html">Spectacles</a></li>
         <li><a href="../bald.html">Bald</a></li>
       </ul>
@@ -52,7 +52,7 @@
           <a href="films.html" class="nav-link">Films</a>
         </li>
         <li class="nav-item">
-          <a href="anime.php" class="nav-link">Anime</a>
+          <a href="../php/anime.php" class="nav-link">Anime</a>
         </li>
         <li class="nav-item">
           <a href="spectacles.html" class="nav-link">Spectacles</a>

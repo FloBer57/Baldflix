@@ -27,9 +27,13 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 <body class="back bodyburger">
 
   <?php
-
   require_once "includes/header.php";
 
+  if (!isset($_SESSION['animation_vue'])) {
+  require_once "includes/netflix_intro.php";
+  
+  $_SESSION['animation_vue'] = true;
+  }
   ?>
 
   <section class="trailer">

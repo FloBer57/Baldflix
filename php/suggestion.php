@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) 
         // Paramètres du serveur
         // $mail->SMTPDebug = 2; // Activer le débogage détaillé
         $mail->isSMTP(); // Utiliser SMTP
-        $mail->Host = 'smtp.ovh.net'; // Serveur SMTP
+        $mail->Host = 'ssl0.ovh.net'; // Serveur SMTP
         $mail->SMTPAuth = true; // Activer l'authentification SMTP
         $mail->Username = 'florent.bernar@outlook.fr'; // SMTP username
         $mail->Password = MAIL_PASSWORD;// SMTP password
