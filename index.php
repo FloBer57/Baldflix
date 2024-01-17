@@ -16,7 +16,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noimageindex">
   <link rel="shortcut icon" href="image/favicon/bald_favicon.ico" type="image/x-icon" />
-  <!-- noindex, nofollown, noimageindex servent à faire en sorte que rien de ma page HTML ne sois indexé par les navigateurs de recherche.-->
   <title>BaldFlix</title>
   <link href="css/global.CSS" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,9 +29,9 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   require_once "includes/header.php";
 
   if (!isset($_SESSION['animation_vue'])) {
-  require_once "includes/netflix_intro.php";
-  
-  $_SESSION['animation_vue'] = true;
+    require_once "includes/netflix_intro.php";
+
+    $_SESSION['animation_vue'] = true;
   }
   ?>
 
@@ -96,14 +95,13 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     </div>
 
   </section>
-  <script src="js/sound.js"></script>
-  <script src="js/burger.js"></script>
 
   <?php
 
   require_once "includes/footer.php";
 
   ?>
+  <script src="js/burger.js"></script>
 </body>
 
 

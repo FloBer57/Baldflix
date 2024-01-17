@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noimageindex">
-  <!-- noindex, nofollown, noimageindex servent à faire en sorte que rien de ma page HTML ne sois indexé par les navigateurs de recherche.-->
   <title>404 Error</title>
   <link href="css/global.CSS" rel="stylesheet" />
   <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon" />

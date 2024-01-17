@@ -1,16 +1,13 @@
 <?php
 session_start();
 
-// Vérifier si l'utilisateur est connecté, sinon le rediriger vers la page de connexion
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: baldflix_login.php");
   exit;
 }
 
-// Inclure le fichier de configuration
 require_once "config.php";
 
-// Vérifier si l'utilisateur connecté est un administrateur
 if ($_SESSION["user_role_id"] != 2) {
   header("location: profile.php");
   exit;
@@ -22,15 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } elseif (isset($_POST["modify"])) {
     include_once "admin_role.php";
   }
-  // Vous pouvez ajouter d'autres conditions ici si nécessaire
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
   if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["user_id"])) {
     include_once "admin_delete.php";
   }
-  // Ajoutez d'autres conditions GET ici si nécessaire
 }
 
 $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +47,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 <body class="background bodyburger">
   <?php require_once "../includes/header.php";
   ?>
-  
+
   <main>
     <div class="account__container">
       <div class="sub__container admin__container">
@@ -189,7 +185,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
         <div id="admin-serie-tab-content" class="tab__content admin__content active-tab">
           <h2>Administration des séries</h2>
-          <form id="uploadFormSerie" action="upload_serie.php" method="post" enctype="multipart/form-data">
+          <form id="uploadForm" action="upload_serie.php" method="post" enctype="multipart/form-data">
             <div class="admin_video_first">
               <div class="title_tags">
                 <label for="serie_title">Titre de la série</label>
@@ -259,54 +255,14 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             <progress id="uploadProgress" value="0" max="100"></progress>
           </div>
         </div>
-
-        <script src="../js/account.js"></script>
-        <script src="../js/burger.js"></script>
-        <script>
-          document.getElementById('uploadForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.action, true);
-
-            // Afficher la barre de progression
-            document.getElementById('progressBarContainer').style.display = 'block';
-
-            xhr.upload.onprogress = function (e) {
-              if (e.lengthComputable) {
-                var percentComplete = (e.loaded / e.total) * 100;
-                document.getElementById('uploadProgress').value = percentComplete;
-                if (percentComplete === 100) {
-                  document.getElementById('btnRestart').disabled = false;
-                  document.getElementById('btnUpload').disabled = true;
-                }
-              }
-            };
-
-            xhr.onload = function () {
-              if (xhr.status === 200) {
-                // Traiter la réponse ici...
-              } else {
-                alert("Une erreur s'est produite lors du téléchargement.");
-              }
-            };
-
-            xhr.send(formData);
-          });
-
-          document.getElementById('btnRestart').addEventListener('click', function () {
-            // Réinitialiser le formulaire
-            document.getElementById('uploadForm').reset();
-            document.getElementById('uploadProgress').value = 0;
-            document.getElementById('progressBarContainer').style.display = 'none';
-            this.disabled = true;
-            document.getElementById('btnUpload').disabled = false;
-          });
-        </script>
       </div>
 
     </div>
   </main>
+  <script src="../js/burger.js"></script>
+  <script src="../js/onglet.js"></script>
+  <script src="../js/progressBar.js"></script>
+  <script src="../js/confirmDelete.js"></script>
 </body>
 
 </html>

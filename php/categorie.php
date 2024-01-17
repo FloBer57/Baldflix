@@ -18,7 +18,6 @@ $lower_categorie = strtolower($categorie);
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noimageindex">
   <link rel="shortcut icon" href="image/favicon/bald_favicon.ico" type="image/x-icon" />
-  <!-- noindex, nofollown, noimageindex servent à faire en sorte que rien de ma page HTML ne sois indexé par les navigateurs de recherche.-->
   <title>
     <?php echo ucfirst($categorie); ?>
   </title>
@@ -34,12 +33,12 @@ $lower_categorie = strtolower($categorie);
   require_once "../includes/header.php";
 
   ?>
-
   <section class="main-container">
     <?php
 
-function getFilmsOrSeriesByCategory($link, $categorie) {
-  $sql = "SELECT f.*, c.film_image_path AS image_path, 'film' AS type, film_ID 
+    function getFilmsOrSeriesByCategory($link, $categorie)
+    {
+      $sql = "SELECT f.*, c.film_image_path AS image_path, 'film' AS type, film_ID 
           FROM film as f 
           JOIN film_categorie fc ON f.film_ID = fc.filmXcategorie_film_ID 
           JOIN categorie c ON fc.filmXcategorie_categorie_ID = c.categorie_id 
@@ -51,42 +50,46 @@ function getFilmsOrSeriesByCategory($link, $categorie) {
           JOIN categorie c ON fc.serieXcategorie_categorie_ID = c.categorie_id 
           WHERE c.categorie_nom = ?";
 
-  if ($stmt = mysqli_prepare($link, $sql)) {
-      mysqli_stmt_bind_param($stmt, "ss", $categorie, $categorie);
-      mysqli_stmt_execute($stmt);
-      $result = mysqli_stmt_get_result($stmt);
+      if ($stmt = mysqli_prepare($link, $sql)) {
+        mysqli_stmt_bind_param($stmt, "ss", $categorie, $categorie);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
-      $filmsOrSeries = array();
-      if ($result && $result->num_rows > 0) {
+        $filmsOrSeries = array();
+        if ($result && $result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-              array_push($filmsOrSeries, $row);
+            array_push($filmsOrSeries, $row);
           }
-      }
-      mysqli_stmt_close($stmt);
-      return $filmsOrSeries;
-  } else {
-      echo "Erreur de préparation de la requête.";
-      return array();
-  }
-};
-
-$filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
-
-        echo '<div class="container" id="'.$lower_categorie.'_container">';
-        echo '<h3 id="'.$lower_categorie.'">'.htmlspecialchars($categorie).'</h3>';
-        echo '<div class="box box-'.$lower_categorie.'">';
-
-        foreach ($filmsOrSeries as $item) {
-            $image_path = htmlspecialchars($item['image_path']);
-            $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
-            echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '" data-id="' . $id . '"></a></div>';
         }
+        mysqli_stmt_close($stmt);
+        return $filmsOrSeries;
+      } else {
+        echo "Erreur de préparation de la requête.";
+        return array();
+      }
+    }
 
-        echo '</div>';
-        echo '</div>';
-        ?>
-    </section>
+    $filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
 
-    <?php require_once "../includes/footer.php"; ?>
+    echo '<div class="container" id="' . $lower_categorie . '_container">';
+    echo '<h3 id="' . $lower_categorie . '">' . htmlspecialchars($categorie) . '</h3>';
+    echo '<div class="box box-' . $lower_categorie . '">';
+
+    foreach ($filmsOrSeries as $item) {
+      $image_path = htmlspecialchars($item['image_path']);
+      $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
+      echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '" data-id="' . $id . '"></a></div>';
+    }
+
+    echo '</div>';
+    echo '</div>';
+    ?>
+  </section>
+
+  <?php 
+  require_once "../includes/footer.php"; 
+  ?>
+  <script src="../js/burger.js"></script>
 </body>
+
 </html>

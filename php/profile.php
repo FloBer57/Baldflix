@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Check if the user is logged in, otherwise redirect to login page
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: baldflix_login.php");
   exit;
@@ -20,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include_once "suggestion.php";
   }
 }
-// Close connection
+
 mysqli_close($link);
 
 ?>
@@ -71,8 +70,6 @@ mysqli_close($link);
             <p class="text_modify">Actuellement : </p>
             <img class="choose_picture" src="<?php echo $_SESSION["profile_picture"]; ?>" alt="Photo actuelle">
           <?php endif; ?>
-
-          <!-- Bouton pour ouvrir la modale -->
           <button id="openIconModal">Choisir une icône</button>
         </div>
 
@@ -129,7 +126,6 @@ mysqli_close($link);
               <input type="submit" value="Modifier le mot de passe">
             </div>
           </form>
-          <!-- You can include additional HTML content if needed -->
         </div>
         <div id="delete-tab-content" class="tab__content active-tab">
           <h2>Supprimer le compte</h2>
@@ -175,8 +171,9 @@ mysqli_close($link);
           </form>
         </div>
       </div>
-      <script src="../js/account.js"></script>
       <script src="../js/burger.js"></script>
+      <script src="../js/onglet.js"></script>
+      <script src="../js/confirmDelete.js"></script>
     </div>
   </main>
 </body>

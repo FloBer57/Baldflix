@@ -8,7 +8,6 @@ require 'path/to/PHPMailer/src/SMTP.php';
 
 session_start();
 
-// Redirection si l'utilisateur n'est pas connecté
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: baldflix_login.php");
     exit;
@@ -25,8 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) 
     $mail = new PHPMailer(true);
 
     try {
-        // Paramètres du serveur
-        // $mail->SMTPDebug = 2; // Activer le débogage détaillé
         $mail->isSMTP(); // Utiliser SMTP
         $mail->Host = 'ssl0.ovh.net'; // Serveur SMTP
         $mail->SMTPAuth = true; // Activer l'authentification SMTP
@@ -50,4 +47,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) 
         echo "Erreur lors de l'envoi de la suggestion. Mailer Error: {$mail->ErrorInfo}";
     }
 }
-?>

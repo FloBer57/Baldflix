@@ -7,6 +7,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $synopsis = filter_input(INPUT_POST, 'film_synopsis', FILTER_SANITIZE_STRING);
     $tags = filter_input(INPUT_POST, 'film_tags', FILTER_SANITIZE_STRING);
 
+    $safe_title = preg_replace("/[^A-Za-z0-9 ]/", '', $titre);
+    $safe_title = str_replace(' ', '_', $safe_title);
+
     $target_dir = "../video/film/";
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0755, true);
@@ -21,10 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     #    exit("Type de fichier non autorisé.");
     #}
 
-
-    $safe_title = preg_replace("/[^A-Za-z0-9 ]/", '', $titre);
-    $safe_title = str_replace(' ', '_', $safe_title);
-
+    
     $film_dir = $target_dir . $safe_title . "/";
     if (!file_exists($film_dir)) {
         mkdir($film_dir, 0755, true);
@@ -58,11 +58,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     mysqli_begin_transaction($link);
-    $ajout = date('Y-m-d H:i:s');
+    $date = date('Y-m-d H:i:s');
     $sql = "INSERT INTO film (film_title, film_synopsis, film_duree, film_tags, film_date_ajout, film_path, film_image_path, film_miniature_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     $film_id = mysqli_insert_id($link);
-    $categories = $_POST['film_categories']; // Assure-toi de valider et nettoyer cette entrée
+    $categories = $_POST['film_categories'];
+    $categories = htmlspecialchars($categories);
     if ($stmt = mysqli_prepare($link, $sql)) {
         mysqli_stmt_bind_param($stmt, "ssssssss", $param_titre, $param_synopsis, $param_duree, $param_tags, $param_ajout, $param_video, $param_image, $param_miniature);
 
@@ -70,13 +71,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $param_synopsis = $synopsis;
         $param_duree = $duration_formatted;
         $param_tags = $tags;
-        $param_ajout = $ajout;
+        $param_ajout = $date;
         $param_video = $video_target_file;
         $param_image = $image_target_file;
         $param_miniature = $video_target_miniature;
 
         if (mysqli_stmt_execute($stmt)) {
-            $film_id = mysqli_insert_id($link); // Récupération de l'ID du film inséré
+            $film_id = mysqli_insert_id($link); 
 
             mysqli_stmt_close($stmt);
 
@@ -92,8 +93,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     continue;
                 }
 
-
-                // Insertion de la catégorie, si elle est valide
                 $sql_cat = "INSERT INTO film_categorie (filmXcategorie_film_ID, filmXcategorie_categorie_ID) VALUES (?, ?)";
                 if ($stmt_cat = mysqli_prepare($link, $sql_cat)) {
                     mysqli_stmt_bind_param($stmt_cat, "ii", $film_id, $categorie_id);
@@ -102,8 +101,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
 
-
-            // Renvoyer la réponse en format JSON
             $response = [
                 "success" => true,
                 "message" => "Vidéo ajoutée avec succès",

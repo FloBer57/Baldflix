@@ -1,21 +1,15 @@
 <?php
-// Include config file
 require_once "config.php";
  
-// Define variables and initialize with empty values
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
  
-// Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Validate username
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter a username.";
     } elseif(!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))){
         $username_err = "Username can only contain letters, numbers, and underscores.";
     } else{
-        // Prepare a select statement
         $sql = "SELECT user_id FROM user WHERE username = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
