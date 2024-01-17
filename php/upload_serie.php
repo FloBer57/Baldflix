@@ -44,31 +44,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     foreach ($_FILES["video"]["name"] as $index => $fileName) {
         $video_target_file = $serie_dir . basename($fileName);
-        if (!move_uploaded_file($_FILES["video"]["tmp_name"][$index], $video_target_file)) {
-            echo "Erreur lors du téléchargement de la vidéo.";
-            continue;
+        if (!move_uploaded_file($_FILES["video"]["tmp_name"], $video_target_file)) {
+            exit("Erreur lors du téléchargement de la vidéo.");
         }
+        
         $ffmpeg_cmd_duration = escapeshellcmd("ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " . escapeshellarg($video_target_file));
         $duree = shell_exec($ffmpeg_cmd_duration);
-        list($hours, $minutes, $seconds) = explode(":", $duree);
-        $hours = (int) $hours;
-        $minutes = (int) $minutes;
-        $seconds = (int) ($seconds);
-        $total_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-
-
+        $total_seconds = round(floatval($duree));
+    
+        $duration_formatted = gmdate("H:i:s", $total_seconds);
+    
         $random_time = rand(1, $total_seconds);
-
         $video_target_miniature = $film_dir . 'miniature.jpg';
         $ffmpeg_cmd_extract = "ffmpeg -i " . escapeshellarg($video_target_file) . " -ss $random_time -frames:v 1 " . escapeshellarg($video_target_miniature);
         exec($ffmpeg_cmd_extract);
-
-        // Vérification si la miniature a été générée avec succès
+    
         if (file_exists($video_target_miniature)) {
-            // Miniature générée avec succès
             $miniature_success = true;
         } else {
-            // Échec de la génération de la miniature
             $miniature_success = false;
         }
 
@@ -91,17 +84,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     // Traitement des catégories
 
-    $valid_categories = [ /* Liste des ID de catégories valides */];
+    $sql = "SELECT categorie_id FROM categorie";
+    $result = mysqli_query($link, $sql);
+    $valid_categories = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $valid_categories[] = $row['categorie_id'];
+    }
+    $categories = $_POST['film_categories'] ?? [];
     foreach ($categories as $categorie_id) {
         if (!in_array($categorie_id, $valid_categories)) {
             continue;
         }
-        $sql_cat = "INSERT INTO serie_categorie (serieXcategorie_serie_ID, serieXcategorie_categorie_ID) VALUES (?, ?)";
+
+
+        // Insertion de la catégorie, si elle est valide
+        $sql_cat = "INSERT INTO film_categorie (filmXcategorie_film_ID, filmXcategorie_categorie_ID) VALUES (?, ?)";
         if ($stmt_cat = mysqli_prepare($link, $sql_cat)) {
-            mysqli_stmt_bind_param($stmt_cat, "ii", $serie_id, $categorie_id);
-            if (!mysqli_stmt_execute($stmt_cat)) {
-                echo "Erreur lors de l'insertion de la catégorie.";
-            }
+            mysqli_stmt_bind_param($stmt_cat, "ii", $film_id, $categorie_id);
+            mysqli_stmt_execute($stmt_cat);
             mysqli_stmt_close($stmt_cat);
         }
     }

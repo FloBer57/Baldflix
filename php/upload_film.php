@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $video_target_file = $film_dir . basename($_FILES["video"]["name"]);
     $image_target_file = $film_dir . basename($_FILES["image"]["name"]);
-    
+
 
     if (!move_uploaded_file($_FILES["video"]["tmp_name"], $video_target_file)) {
         exit("Erreur lors du téléchargement de la vidéo.");
@@ -42,25 +42,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $ffmpeg_cmd_duration = escapeshellcmd("ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " . escapeshellarg($video_target_file));
     $duree = shell_exec($ffmpeg_cmd_duration);
-    list($hours, $minutes, $seconds) = explode(":", $duree);
-    $hours = (int) $hours;
-    $minutes = (int) $minutes;
-    $seconds = (int) ($seconds);
-    $total_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-
+    $total_seconds = round(floatval($duree));
+    
+    $duration_formatted = gmdate("H:i:s", $total_seconds);
 
     $random_time = rand(1, $total_seconds);
-
     $video_target_miniature = $film_dir . 'miniature.jpg';
     $ffmpeg_cmd_extract = "ffmpeg -i " . escapeshellarg($video_target_file) . " -ss $random_time -frames:v 1 " . escapeshellarg($video_target_miniature);
     exec($ffmpeg_cmd_extract);
 
-    // Vérification si la miniature a été générée avec succès
     if (file_exists($video_target_miniature)) {
-        // Miniature générée avec succès
         $miniature_success = true;
     } else {
-        // Échec de la génération de la miniature
         $miniature_success = false;
     }
 
@@ -75,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $param_titre = $titre;
         $param_synopsis = $synopsis;
-        $param_duree = $total_seconds;
+        $param_duree = $duration_formatted;
         $param_tags = $tags;
         $param_ajout = $ajout;
         $param_video = $video_target_file;

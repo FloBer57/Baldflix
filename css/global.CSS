@@ -325,12 +325,6 @@ a.hero img {
   border-bottom: 3px solid var(--red);
 }
 
-/* ERROR 404 */
-
-.error_acceuil {
-  left: 74%;
-}
-
 /* MAIN CONTAINER */
 
 #watched,#watched-anime,#anime,
@@ -380,6 +374,7 @@ a.hero img {
   border-color: var(--red); /* Change la couleur de la bordure au survol */
   transform: scale(1.05); /* Agrandit légèrement l'image */
 }
+
 /* FOOTER */
 
 .footer {
@@ -393,6 +388,8 @@ a.hero img {
 .footer p {
   margin: 0;
 }
+
+
 /* Account_page */
 .account__container {
   position: relative;
@@ -535,7 +532,7 @@ textarea {
   text-align: center;
 }
 
-/* Administration films */
+/* Administration Films/Anime */
 
 .admin_video_first {
   display: flex;
@@ -729,7 +726,8 @@ div#iconContainer {
     display: block;
     padding: 20px;
   }
-  admin__content .admin__content {
+
+  .admin__content {
     margin-right: 3% !important;
     margin-left: 3% !important;
     padding: 15px !important;
