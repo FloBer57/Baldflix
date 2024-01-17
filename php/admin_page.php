@@ -141,9 +141,9 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                 <label for="media_type">Catégorie principale :</label>
                 <select id="film_categories" name="film_categories[]">
                   <option>Veuillez choisir:</option>
-                  <option value="27">Film</option>
-                  <option value="34">Spectacle</option>
-                  <option value="6">Anime</option>
+                  <option value="2">Film</option>
+                  <option value="4">Spectacle</option>
+                  <option value="1">Anime</option>
                 </select>
               </div>
 
@@ -214,9 +214,9 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                   <label for="media_type">Catégorie 1 :</label>
                   <select id="serie_categories" name="serie_categories[]">
                     <option>Veuillez choisir:</option>
-                    <option value="26">Série</option>
-                    <option value="34">Spectacle</option>
-                    <option value="6">Anime</option>
+                    <option value="3">Série</option>
+                    <option value="4">Spectacle</option>
+                    <option value="1">Anime</option>
                   </select>
                 </div>
 

@@ -7,11 +7,11 @@
   <nav class="main-nav" role="navigation">
     <div class="menu">
       <ul class="menu-list">
-        <li><a href="../php/serie.php">Séries</a></li>
-        <li><a href="../films.html">Films</a></li>
-        <li><a href="../php/anime.php">Anime</a></li>
-        <li><a href="../spectacles.html">Spectacles</a></li>
-        <li><a href="../bald.html">Bald</a></li>
+        <li><a href="../php/categorie?categorie=Serie">Séries</a></li>
+        <li><a href="../php/categorie?categorie=Film">Films</a></li>
+        <li><a href="../php/categorie?categorie=Anime">Anime</a></li>
+        <li><a href="../php/categorie?categorie=Spectacles">Spectacles</a></li>
+        <li><a href="../php/categorie?categorie=Bald">Bald</a></li>
       </ul>
     </div>
   </nav>
@@ -45,21 +45,11 @@
         }
 
         ?>
-        <li class="nav-item">
-          <a href="../php/serie.php" class="nav-link">Séries</a>
-        </li>
-        <li class="nav-item">
-          <a href="films.html" class="nav-link">Films</a>
-        </li>
-        <li class="nav-item">
-          <a href="../php/anime.php" class="nav-link">Anime</a>
-        </li>
-        <li class="nav-item">
-          <a href="spectacles.html" class="nav-link">Spectacles</a>
-        </li>
-        <li class="nav-item">
-          <a href="bald.html" class="nav-link">Bald</a>
-        </li>
+        <li><a href="../php/categorie?categorie=Serie">Séries</a></li>
+        <li><a href="../php/categorie?categorie=Film">Films</a></li>
+        <li><a href="../php/categorie?categorie=Anime">Anime</a></li>
+        <li><a href="../php/categorie?categorie=Spectacles">Spectacles</a></li>
+        <li><a href="../php/categorie?categorie=Bald">Bald</a></li>
         <li class="nav-item">
           <a href="../php/logout.php" class="nav-link">Déconnexion</a>
         </li>
