@@ -7,7 +7,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 }
 
 $categorie = mysqli_real_escape_string($link, $_GET['categorie'] ?? 'Anime');
-
+$lower_categorie = strtolower($categorie);
 ?>
 
 <!DOCTYPE html>
@@ -39,113 +39,54 @@ $categorie = mysqli_real_escape_string($link, $_GET['categorie'] ?? 'Anime');
     <?php
 
 function getFilmsOrSeriesByCategory($link, $categorie) {
-  $sql = "SELECT f.*, c.film_image_path AS image_path, 'film' AS type FROM film as f JOIN film_categorie fc ON f.film_ID = fc.filmXcategorie_film_ID JOIN categorie c ON fc.filmXcategorie_categorie_ID = c.categorie_id WHERE c.categorie_nom = '$categorie'
-  UNION ALL
-  SELECT s.*, c.serie_image_path AS image_path, 'serie' AS type FROM serie as s JOIN serie_categorie fc ON s.serie_ID = fc.serieXcategorie_serie_ID JOIN categorie c ON fc.serieXcategorie_categorie_ID = c.categorie_id WHERE c.categorie_nom = '$categorie'";
+  $sql = "SELECT f.*, c.film_image_path AS image_path, 'film' AS type, film_ID 
+          FROM film as f 
+          JOIN film_categorie fc ON f.film_ID = fc.filmXcategorie_film_ID 
+          JOIN categorie c ON fc.filmXcategorie_categorie_ID = c.categorie_id 
+          WHERE c.categorie_nom = ?
+          UNION ALL
+          SELECT s.*, c.serie_image_path AS image_path, 'serie' AS type, serie_ID 
+          FROM serie as s 
+          JOIN serie_categorie fc ON s.serie_ID = fc.serieXcategorie_serie_ID 
+          JOIN categorie c ON fc.serieXcategorie_categorie_ID = c.categorie_id 
+          WHERE c.categorie_nom = ?";
 
-  $result = mysqli_query($link, $sql);
+  if ($stmt = mysqli_prepare($link, $sql)) {
+      mysqli_stmt_bind_param($stmt, "ss", $categorie, $categorie);
+      mysqli_stmt_execute($stmt);
+      $result = mysqli_stmt_get_result($stmt);
 
-  $filmsOrSeries = array();
-
-  if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-      $image_path = htmlspecialchars($row['image_path']);
-      $type = $row['type'];
-
-      $filmsOrSeries[] = array('image_path' => $image_path, 'type' => $type);
-    }
+      $filmsOrSeries = array();
+      if ($result && $result->num_rows > 0) {
+          while ($row = $result->fetch_assoc()) {
+              array_push($filmsOrSeries, $row);
+          }
+      }
+      mysqli_stmt_close($stmt);
+      return $filmsOrSeries;
+  } else {
+      echo "Erreur de préparation de la requête.";
+      return array();
   }
+};
 
-  return $filmsOrSeries;
-}
+$filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
 
+        echo '<div class="container" id="'.$lower_categorie.'_container">';
+        echo '<h3 id="'.$lower_categorie.'">'.htmlspecialchars($categorie).'</h3>';
+        echo '<div class="box box-'.$lower_categorie.'">';
 
-    echo '<div class="container" id="categorie_container">';
-    switch ($categorie) {
-      case 'serie':
-        echo '<h3 id="anime">Anime</h3>';
-        echo '<div class="box box-anime">';
-
-        $filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
         foreach ($filmsOrSeries as $item) {
-          $image_path = $item['image_path'];
-          $type = $item['type'];
-          echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '"></a></div>';
+            $image_path = htmlspecialchars($item['image_path']);
+            $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
+            echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '" data-id="' . $id . '"></a></div>';
         }
-        echo '</div>';
-        echo '</div>';
-        break;
 
-      case 'Film':
-        echo '<h3 id="film">Film</h3>';
-        echo '<div class="box box-film">';
-    
-        $filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
-        foreach ($filmsOrSeries as $item) {
-          $image_path = $item['image_path'];
-          $type = $item['type'];
-          echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '"></a></div>';
-        }
         echo '</div>';
         echo '</div>';
-        break;
+        ?>
+    </section>
 
-      case 'Serie':
-        echo '<h3 id="serie">Serie</h3>';
-        echo '<div class="box box-serie">';
-    
-        $filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
-        foreach ($filmsOrSeries as $item) {
-          $image_path = $item['image_path'];
-          $type = $item['type'];
-          echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '"></a></div>';
-        }
-        echo '</div>';
-        echo '</div>';
-        break;
-
-      case 'Spectacle':
-        echo '<h3 id="spectacle">Spectacle</h3>';
-        echo '<div class="box box-spectacle">';
-
-        $filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
-        foreach ($filmsOrSeries as $item) {
-          $image_path = $item['image_path'];
-          $type = $item['type'];
-          echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '"></a></div>';
-        }
-        echo '</div>';
-        echo '</div>';
-        break;
-
-      case 'Bald':
-        echo '<h3 id="bald">Bald</h3>';
-        echo '<div class="box box-bald">';
-    
-        $filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
-        foreach ($filmsOrSeries as $item) {
-          $image_path = $item['image_path'];
-          $type = $item['type'];
-          echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '"></a></div>';
-        }
-        echo '</div>';
-        echo '</div>';
-        break;
-
-      default:
-        echo 'Il y a eu une erreur';
-        break;
-    }
-    ?>
-
-  </section>
-  
-  <!-- ##FOOTER## -->
-  <?php
-
-  require_once "../includes/footer.php";
-
-  ?>
+    <?php require_once "../includes/footer.php"; ?>
 </body>
-
 </html>
