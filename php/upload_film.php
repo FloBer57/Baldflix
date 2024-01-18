@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!file_exists($film_dir)) {
         mkdir($film_dir, 0755, true);
     }
+
     $video_target_file = $film_dir . basename($_FILES["video"]["name"]);
     $image_target_file = $film_dir . basename($_FILES["image"]["name"]);
 
@@ -63,7 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $film_id = mysqli_insert_id($link);
     $categories = $_POST['film_categories'];
-    $categories = htmlspecialchars($categories);
     if ($stmt = mysqli_prepare($link, $sql)) {
         mysqli_stmt_bind_param($stmt, "ssssssss", $param_titre, $param_synopsis, $param_duree, $param_tags, $param_ajout, $param_video, $param_image, $param_miniature);
 

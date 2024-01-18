@@ -122,7 +122,6 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               <div class="title_tags">
                 <label for="film_title">Titre du film:</label>
                 <input type="text" id="film_title" name="film_title" required>
-
                 <label for="film_tags">Tags (séparés par des virgules):</label>
                 <input type="text" id="film_tags" name="film_tags">
               </div>
@@ -130,7 +129,6 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                 <label for="film_synopsis">Synopsis du film :</label>
                 <textarea id="film_synopsis" name="film_synopsis" required></textarea>
               </div>
-
             </div>
             <div class="form-cat">
               <div class="form-row row1">
@@ -149,7 +147,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                   <option>Veuillez choisir :</option>
                   <?php
 
-                  include "../includes/categorie.php";
+                  include "../includes/categorie_select.php";
 
                   ?>
                 </select>
@@ -161,7 +159,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                   <option>Veuillez choisir :</option>
                   <?php
 
-                  include "../includes/categorie.php";
+                  include "../includes/categorie_select.php";
 
                   ?>
                 </select>
@@ -185,7 +183,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
         <div id="admin-serie-tab-content" class="tab__content admin__content active-tab">
           <h2>Administration des séries</h2>
-          <form id="uploadForm" action="upload_serie.php" method="post" enctype="multipart/form-data">
+          <form id="uploadFormSerie" action="upload_serie.php" method="post" enctype="multipart/form-data">
             <div class="admin_video_first">
               <div class="title_tags">
                 <label for="serie_title">Titre de la série</label>
@@ -197,72 +195,72 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                 <label for="serie_synopsis">Synopsis de la série</label>
                 <textarea id="serie_synopsis" name="serie_synopsis" required></textarea>
               </div>
-              <div class="form-cat">
-                <div class="saison_number" <label for="numero_saison">Numéro de saison:</label>
-                  <select id="numero_saison" name="numero_saison" required>
-                    <?php for ($i = 1; $i <= 20; $i++) {
-                      echo "<option value='$i'>Saison $i</option>";
-                    } ?>
-                  </select>
-                </div>
-
-                <div class="form-row row1">
-                  <label for="media_type">Catégorie 1 :</label>
-                  <select id="serie_categories" name="serie_categories[]">
-                    <option>Veuillez choisir:</option>
-                    <option value="3">Série</option>
-                    <option value="4">Spectacle</option>
-                    <option value="1">Anime</option>
-                  </select>
-                </div>
-
-                <div class="form-row row2">
-                  <label for="categorie_1">Catégorie 2 :</label>
-                  <select id="serie_categories" name="serie_categories[]">
-                    <option>Veuillez choisir :</option>
-                    <?php
-
-                    include "../includes/categorie.php";
-
-                    ?>
-                  </select>
-                </div>
-
-                <div class="form-row row3">
-                  <label for="categorie_2">Catégorie 3 :</label>
-                  <select id="serie_categories" name="serie_categories[]">
-                    <option>Veuillez choisir :</option>
-                    <?php
-
-                    include "../includes/categorie.php";
-
-                    ?>
-                  </select>
-                </div>
-              </div>
-              <div class="fileUploadSerie">
-                <label for="fileUploadVideoSerie">Fichiers vidéo de la série :</label>
-                <input type="file" id="fileInputVideoSerie" name="video[]" multiple required>
-                <label for="fileUploadImageSerie">Affiche de la série :</label>
-                <input type="file" id="fileInputImageSerie" name="image" required>
-                <input type="submit" id="btnUploadSerie" value="Ajouter les vidéos">
-                <button id="btnRestart" disabled>Recommencer</button>
+            </div>
+            <div class="form-cat">
+              <div class="saison_number" <label for="numero_saison">N°:</label>
+                <select id="numero_saison" name="numero_saison" required>
+                  <?php for ($i = 1; $i <= 20; $i++) {
+                    echo "<option value='$i'>Saison $i</option>";
+                  } ?>
+                </select>
               </div>
 
+              <div class="form-row row1">
+                <label for="media_type">Catégorie 1 :</label>
+                <select id="serie_categories" name="serie_categories[]">
+                  <option>Veuillez choisir:</option>
+                  <option value="3">Série</option>
+                  <option value="4">Spectacle</option>
+                  <option value="1">Anime</option>
+                </select>
+              </div>
+
+              <div class="form-row row2">
+                <label for="categorie_1">Catégorie 2 :</label>
+                <select id="serie_categories" name="serie_categories[]">
+                  <option>Veuillez choisir :</option>
+                  <?php
+
+                  include "../includes/categorie_select.php";
+
+                  ?>
+                </select>
+              </div>
+
+              <div class="form-row row3">
+                <label for="categorie_2">Catégorie 3 :</label>
+                <select id="serie_categories" name="serie_categories[]">
+                  <option>Veuillez choisir :</option>
+                  <?php
+
+                  include "../includes/categorie_select.php";
+
+                  ?>
+                </select>
+              </div>
+            </div>
+            <label for="fileUploadVideoSerie">Fichiers vidéo de la série :</label>
+            <input type="file" id="fileInputVideoSerie" name="video[]" multiple required>
+            <label for="fileUploadImageSerie">Affiche de la série :</label>
+            <input type="file" id="fileInputImageSerie" name="image" required>
+            <input type="submit" id="btnUploadSerie" value="Ajouter la vidéo">
           </form>
-          <div id="progressBarContainer" style="display:none;">
-            <label for="uploadProgress">Progression du téléchargement :</label>
-            <progress id="uploadProgress" value="0" max="100"></progress>
+          <div class="restartbtn">
+            <button id="btnRestartSerie" disabled>Recommencer</button>
+          </div>
+          <div id="progressBarContainerSerie" style="display:none;">
+            <label for="uploadProgressSerie">Progression du téléchargement :</label>
+            <progress id="uploadProgressSerie" value="0" max="100"></progress>
           </div>
         </div>
       </div>
-
     </div>
   </main>
+  <script src="../js/progressBarSerie.js"></script>
   <script src="../js/burger.js"></script>
   <script src="../js/onglet.js"></script>
-  <script src="../js/progressBar.js"></script>
   <script src="../js/confirmDelete.js"></script>
+  <script src="../js/progressBarFilm.js"></script>
 </body>
 
 </html>

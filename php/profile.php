@@ -174,6 +174,7 @@ mysqli_close($link);
       <script src="../js/burger.js"></script>
       <script src="../js/onglet.js"></script>
       <script src="../js/confirmDelete.js"></script>
+      <script src="../js/modaleIcon.js"></script>
     </div>
   </main>
 </body>

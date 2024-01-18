@@ -32,7 +32,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
           echo '<div class="alert alert-danger">' . $login_err . '</div>';
         }
         ?>
-        <form action="<?php echo htmlspecialchars($_SERVER["login.php"]); ?>" method="post">
+        <form action="login.php" method="post">
           <label for="username" class="username">Nom d'utilisateur*</label>
           <input type="text" placeholder="Nom d'utilisateur" id="username" name="username" required
             class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"

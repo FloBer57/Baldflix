@@ -3,14 +3,12 @@ session_start();
 require_once "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    mysqli_begin_transaction($link);
-
-
-    $nom_serie = filter_input(INPUT_POST, 'nom_serie', FILTER_SANITIZE_STRING);
+    $nom_serie = filter_input(INPUT_POST, 'serie_title', FILTER_SANITIZE_STRING);
     $numero_saison = filter_input(INPUT_POST, 'numero_saison', FILTER_SANITIZE_NUMBER_INT);
-    $nom_saison = filter_input(INPUT_POST, 'nom_saison', FILTER_SANITIZE_STRING);
     $tags = filter_input(INPUT_POST, 'serie_tags', FILTER_SANITIZE_STRING);
+    $synopsis = filter_input(INPUT_POST, 'serie_synopsis', FILTER_SANITIZE_STRING);
     $categories = array_map('intval', $_POST['serie_categories']);
+
 
 
     $safe_nom_serie = preg_replace("/[^A-Za-z0-9 ]/", '', $nom_serie);
@@ -28,12 +26,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    $sql_serie = "INSERT INTO serie (serie_title, serie_tags, serie_image_path) VALUES (?, ?, ?)";
+    mysqli_begin_transaction($link);
+    $sql_serie = "INSERT INTO serie (serie_title, serie_tags, serie_image_path,serie_synopsis) VALUES (?, ?, ?, ?)";
     if ($stmt_serie = mysqli_prepare($link, $sql_serie)) {
-        mysqli_stmt_bind_param($stmt_serie, "sss", $nom_serie, $tags, $image_target_file);
+        mysqli_stmt_bind_param($stmt_serie, "ssss", $nom_serie, $tags, $image_target_file,$synopsis);
         if (mysqli_stmt_execute($stmt_serie)) {
             $serie_id = mysqli_insert_id($link);
-            // Insertion des catégories
+
             foreach ($categories as $categorie_id) {
                 $sql_categorie = "INSERT INTO serie_categorie (serieXcategorie_categorie_ID, serieXcategorie_serie_ID) VALUES (?, ?)";
                 if ($stmt_categorie = mysqli_prepare($link, $sql_categorie)) {
@@ -56,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql_saison = "INSERT INTO saison (saison_name, saison_serie_ID) VALUES (?, ?)";
     if ($stmt_saison = mysqli_prepare($link, $sql_saison)) {
-        mysqli_stmt_bind_param($stmt_saison, "si", $nom_saison, $serie_id);
+        mysqli_stmt_bind_param($stmt_saison, "si", $numero_saison, $serie_id);
         if (!mysqli_stmt_execute($stmt_saison)) {
             echo "Erreur lors de l'insertion de la saison.";
             mysqli_rollback($link);
@@ -72,7 +71,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     foreach ($_FILES["video"]["name"] as $index => $fileName) {
         $video_target_file = $serie_dir . basename($fileName);
-        if (!move_uploaded_file($_FILES["video"]["tmp_name"], $video_target_file)) {
+        $tmp_name = $_FILES["video"]["tmp_name"][$index];
+    
+        if (!move_uploaded_file($tmp_name, $video_target_file)) {
             echo "Erreur lors du téléchargement de la vidéo.";
             mysqli_rollback($link);
             exit;
@@ -85,12 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $duration_formatted = gmdate("H:i:s", $total_seconds);
 
     $random_time = rand(1, $total_seconds);
-    $video_target_miniature = $serie_dir . 'miniature.jpg';
+    $video_target_miniature = $serie_dir . 'miniature_' . 'EP_' . ( $index + 1 ) . '.jpg';
     $ffmpeg_cmd_extract = "ffmpeg -i " . escapeshellarg($video_target_file) . " -ss $random_time -frames:v 1 " . escapeshellarg($video_target_miniature);
     exec($ffmpeg_cmd_extract);
-
-    $miniature_filename = 'miniature_' . $index . '.jpg';
-    $video_target_miniature = $serie_dir . $miniature_filename;
 
     if (file_exists($video_target_miniature)) {
         $miniature_success = true;
@@ -103,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     rename($video_target_file, $new_video_path);
 
-    $episode_title = "Épisode " . ($index + 1);
+    $episode_title = $safe_nom_serie."_".$numero_saison."_"."Épisode_" . ($index + 1);
 
     $sql_episode = "INSERT INTO episode (episode_title, episode_duree, episode_saison_ID, episode_path, episode_image_Path) VALUES (?, ?, ?, ?, ?)";
     if ($stmt_episode = mysqli_prepare($link, $sql_episode)) {
