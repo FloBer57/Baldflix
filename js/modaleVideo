@@ -1,0 +1,27 @@
+var btnOpenIconModal = document.getElementById("container_modale");
+var btnCloseIconModal = document.getElementById("closeModal");
+
+btnOpenIconModal.onclick = function () {
+  iconModal.style.display = "block";
+}
+
+btnCloseIconModal.onclick = function () {
+  iconModal.style.display = "none";
+}
+
+
+const modal = document.getElementById('container_modale'); // Votre modale
+const body = document.body; // L'élément body
+
+modal.addEventListener('click', () => {
+    body.classList.add('body-no-scroll');
+});
+
+const closeModal = document.getElementById('close_modale_video');
+closeModal.addEventListener('click', () => {
+    body.classList.remove('body-no-scroll');
+});
+
+
+
+

@@ -327,7 +327,7 @@ a.hero img {
 
 /* MAIN CONTAINER */
 
-#watched,#watched-anime,#anime,
+#watched,
 #serie {
   display: block;
   position: relative;
@@ -388,7 +388,6 @@ a.hero img {
 .footer p {
   margin: 0;
 }
-
 
 /* Account_page */
 .account__container {
@@ -595,7 +594,8 @@ select {
   margin: auto;
 }
 
-#progressBarContainer,#progressBarContainerSerie {
+#progressBarContainer,
+#progressBarContainerSerie {
   margin: 20px 0;
 }
 
@@ -620,7 +620,59 @@ progress {
   margin-bottom: 22px;
 }
 
-/* MODALE */
+/* CATEGORIE */
+
+.container_cat {
+  position: relative;
+  top: 80px;
+  display: block;
+  position: relative;
+  color: var(--light);
+  margin: 10px;
+  font-size: 2.5em;
+  font-family: "Bungee Inline", sans-serif;
+}
+/* MODALE_VIDEO */
+
+.container_modale_video {
+  display: none;
+  position: fixed;  
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.modale_video {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 5px;
+  width: 60%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.close_video {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close_video:hover,
+.close_video:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* MODALE ICON */
 
 .modal {
   display: none;
@@ -1245,7 +1297,7 @@ div#iconContainer {
     display: none;
   }
 
-  /* MODALE */
+  /* MODALE_ICON*/
 
   .modal-content {
     padding: 0;

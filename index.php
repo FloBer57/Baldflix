@@ -70,6 +70,12 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
       </div>
     </div>
 
+    <div id="container_modale" class="container_modale">
+      <div class="modale_video">
+        <span class="close"><img id="close_modale_video" src="../image/icon/close.svg" alt="Close"></span>
+      </div>
+    </div>
+
     <div class="container" id="home__series">
       <h3 id="serie">A Découvrir</h3>
       <div class="box box-serie">

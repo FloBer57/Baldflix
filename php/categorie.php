@@ -89,7 +89,7 @@ $lower_categorie = strtolower($categorie);
 
     $filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
 
-    echo '<div class="container" id="' . $lower_categorie . '_container">';
+    echo '<div class="container container_cat" id="' . $lower_categorie . '_container">';
     echo '<h3 id="' . $lower_categorie . '">' . htmlspecialchars($categorie) . '</h3>';
     echo '<div class="box box-' . $lower_categorie . '">';
 
@@ -104,15 +104,41 @@ $lower_categorie = strtolower($categorie);
         $serieID = '';
       }
 
-      echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '" data-id="' . $id . '"></a></div>';
+      echo '<div class="box-div">
+      <a href="javascript:void(0);" onclick="openModal(\'' . $id . '\')">
+          <img src="' . $image_path . '" alt="' . $image_path . '" data-id="' . $id . '">
+      </a>
+  </div>';
     }
     ?>
+
+    <div id="container_modale_video" class="container_modale_video">
+      <div class="modale_video">
+        <span class="close_video" onclick="closeModal()">&times;</span>
+        <p id="modal_video_content">Ici le contenu de la modale</p>
+      </div>
+    </div>
+
   </section>
 
   <?php
   require_once "../includes/footer.php";
   ?>
   <script src="../js/burger.js"></script>
+  <script>
+function openModal(id) {
+    var modal = document.getElementById('container_modale_video');
+    var modalContent = document.getElementById('modal_video_content');
+    modalContent.innerHTML = 'ID du film/série : ' + id; // Affiche l'ID pour l'instant
+
+    modal.style.display = 'block'; // Affiche la modale
+}
+
+function closeModal() {
+    var modal = document.getElementById('container_modale_video');
+    modal.style.display = 'none'; // Cache la modale
+}
+</script>
 </body>
 
 </html>
