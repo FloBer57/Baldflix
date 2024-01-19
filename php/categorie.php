@@ -3,7 +3,7 @@ session_start();
 require_once "config.php";
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-  header("location: php/baldflix_login.php");
+  header("location: ../php/baldflix_login.php");
   exit;
 }
 
@@ -30,26 +30,43 @@ $lower_categorie = strtolower($categorie);
 
 <body class="back bodyburger">
   <?php
-
   require_once "../includes/header.php";
-
   ?>
   <section class="main-container">
     <?php
-
     function getFilmsOrSeriesByCategory($link, $categorie)
     {
-      $sql = "SELECT f.*, c.film_image_path AS image_path, 'film' AS type, film_ID 
-          FROM film as f 
-          JOIN film_categorie fc ON f.film_ID = fc.filmXcategorie_film_ID 
-          JOIN categorie c ON fc.filmXcategorie_categorie_ID = c.categorie_id 
-          WHERE c.categorie_nom = ?
-          UNION ALL
-          SELECT s.*, c.serie_image_path AS image_path, 'serie' AS type, serie_ID 
-          FROM serie as s 
-          JOIN serie_categorie fc ON s.serie_ID = fc.serieXcategorie_serie_ID 
-          JOIN categorie c ON fc.serieXcategorie_categorie_ID = c.categorie_id 
-          WHERE c.categorie_nom = ?";
+      $sql = 'SELECT
+      film.film_ID,
+      film.film_image_path,
+      "film" AS type,
+      NULL AS serie_ID,
+      NULL AS serie_image_path,
+      NULL AS serie_type
+  FROM
+      film
+  INNER JOIN
+      film_categorie ON film.film_ID = film_categorie.filmXcategorie_film_ID
+  INNER JOIN
+      categorie ON film_categorie.filmXcategorie_categorie_ID = categorie.categorie_id
+  WHERE
+      categorie.categorie_nom = ?
+  UNION ALL
+  SELECT
+      NULL AS film_ID,
+      NULL AS film_image_path,
+      NULL AS type,
+      serie.serie_ID,
+      serie.serie_image_path,
+      "serie" AS serie_type
+  FROM
+      serie
+  INNER JOIN
+      serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
+  INNER JOIN
+      categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_id
+  WHERE
+      categorie.categorie_nom = ?';
 
       if ($stmt = mysqli_prepare($link, $sql)) {
         mysqli_stmt_bind_param($stmt, "ss", $categorie, $categorie);
@@ -77,18 +94,23 @@ $lower_categorie = strtolower($categorie);
     echo '<div class="box box-' . $lower_categorie . '">';
 
     foreach ($filmsOrSeries as $item) {
-      $image_path = htmlspecialchars($item['image_path']);
-      $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
+      $image_path = htmlspecialchars($item['film_ID'] ? $item['film_image_path'] : $item['serie_image_path']);
+      $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : '');
+
+      // Vérifiez si la clé "serie_ID" existe pour les enregistrements de type "serie"
+      if ($item['serie_type'] === 'serie' && isset($item['serie_ID'])) {
+        $serieID = htmlspecialchars($item['serie_ID']);
+      } else {
+        $serieID = '';
+      }
+
       echo '<div class="box-div"><a href=""><img src="' . $image_path . '" alt="' . $image_path . '" data-id="' . $id . '"></a></div>';
     }
-
-    echo '</div>';
-    echo '</div>';
     ?>
   </section>
 
-  <?php 
-  require_once "../includes/footer.php"; 
+  <?php
+  require_once "../includes/footer.php";
   ?>
   <script src="../js/burger.js"></script>
 </body>

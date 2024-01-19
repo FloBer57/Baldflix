@@ -133,7 +133,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             <div class="form-cat">
               <div class="form-row row1">
                 <label for="media_type">Catégorie principale :</label>
-                <select id="film_categories" name="film_categories[]">
+                <select id="film_categories_principal" name="film_categories[]">
                   <option>Veuillez choisir:</option>
                   <option value="2">Film</option>
                   <option value="4">Spectacle</option>
@@ -143,7 +143,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               <div class="form-row row2">
                 <label for="categorie_1">Catégorie 2 :</label>
-                <select id="film_categories" name="film_categories[]">
+                <select id="film_categories_annexe" name="film_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 
@@ -155,7 +155,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               <div class="form-row row3">
                 <label for="categorie_2">Catégorie 3 :</label>
-                <select id="film_categories" name="film_categories[]">
+                <select id="film_categories_annexe_deux" name="film_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 
@@ -207,7 +207,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               <div class="form-row row1">
                 <label for="media_type">Catégorie 1 :</label>
-                <select id="serie_categories" name="serie_categories[]">
+                <select id="serie_categories_principale" name="serie_categories[]">
                   <option>Veuillez choisir:</option>
                   <option value="3">Série</option>
                   <option value="4">Spectacle</option>
@@ -217,7 +217,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               <div class="form-row row2">
                 <label for="categorie_1">Catégorie 2 :</label>
-                <select id="serie_categories" name="serie_categories[]">
+                <select id="serie_categories_annexe" name="serie_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 
@@ -229,7 +229,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               <div class="form-row row3">
                 <label for="categorie_2">Catégorie 3 :</label>
-                <select id="serie_categories" name="serie_categories[]">
+                <select id="serie_categories_annexe_deux" name="serie_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 

@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    $sql_saison = "INSERT INTO saison (saison_name, saison_serie_ID) VALUES (?, ?)";
+    $sql_saison = "INSERT INTO saison (saison_number, saison_serie_ID) VALUES (?, ?)";
     if ($stmt_saison = mysqli_prepare($link, $sql_saison)) {
         mysqli_stmt_bind_param($stmt_saison, "si", $numero_saison, $serie_id);
         if (!mysqli_stmt_execute($stmt_saison)) {
@@ -103,9 +103,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $episode_title = $safe_nom_serie."_".$numero_saison."_"."Épisode_" . ($index + 1);
 
-    $sql_episode = "INSERT INTO episode (episode_title, episode_duree, episode_saison_ID, episode_path, episode_image_Path) VALUES (?, ?, ?, ?, ?)";
+    $date = date('Y-m-d H:i:s');
+
+    $sql_episode = "INSERT INTO episode (episode_title, episode_duree, episode_saison_ID, episode_path, episode_image_Path, episode_date_ajout) VALUES (?, ?, ?, ?, ?, ?)";
     if ($stmt_episode = mysqli_prepare($link, $sql_episode)) {
-        mysqli_stmt_bind_param($stmt_episode, "siiss", $episode_title, $total_seconds, $saison_id, $new_video_path, $video_target_miniature);
+        mysqli_stmt_bind_param($stmt_episode, "siisss", $episode_title, $duration_formatted, $saison_id, $new_video_path, $video_target_miniature,$date);
         if (!mysqli_stmt_execute($stmt_episode)) {
             echo "Erreur lors de l'insertion de l'épisode.";
             mysqli_rollback($link);

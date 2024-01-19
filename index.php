@@ -15,7 +15,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noimageindex">
-  <link rel="shortcut icon" href="image/favicon/bald_favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="../image/favicon/bald_favicon.ico" type="image/x-icon" />
   <title>BaldFlix</title>
   <link href="css/global.CSS" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
