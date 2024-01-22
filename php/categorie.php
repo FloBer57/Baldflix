@@ -38,11 +38,30 @@ $lower_categorie = strtolower($categorie);
     {
       $sql = 'SELECT
       film.film_ID,
+      film.film_title,
+      film.film_tags,
+      film.film_synopsis,
       film.film_image_path,
-      "film" AS type,
+      film.film_duree,
+      film.film_path,
+      film.film_miniature_path,
+      film.film_date_ajout,
       NULL AS serie_ID,
       NULL AS serie_image_path,
-      NULL AS serie_type
+      NULL AS serie_type,
+      NULL AS serie_synopsis,
+      NULL AS serie_image_path,
+      NULL AS saison_ID,
+      NULL AS saison_number,
+      NULL AS saison_serie_ID,
+      NULL AS episode_ID,
+      NULL AS episode_title,
+      NULL AS episode_duree,
+      NULL AS episode_saison_ID,
+      NULL AS episode_path,
+      NULL AS episode_miniature_path,
+      NULL AS episode_date_ajout,
+      "film" AS type
   FROM
       film
   INNER JOIN
@@ -55,9 +74,28 @@ $lower_categorie = strtolower($categorie);
   SELECT
       NULL AS film_ID,
       NULL AS film_image_path,
-      NULL AS type,
+      NULL AS film_synopsis,
+      NULL AS film_duree,
+      NULL AS film_tags,
+      NULL AS film_path,
+      NULL AS film_miniature_path,
+      NULL AS film_date_ajout,
+      NULL AS film_image_path,
       serie.serie_ID,
+      serie.serie_title,
+      serie.serie_tags,
+      serie.serie_synopsis,
       serie.serie_image_path,
+      saison.saison_ID,
+      saison.saison_number,
+      saison.saison_serie_ID,
+      episode.episode_ID,
+      episode.episode_title,
+      episode.episode_duree,
+      episode.episode_saison_ID,
+      episode.episode_path,
+      episode.episode_miniature_path,
+      episode.episode_date_ajout,
       "serie" AS serie_type
   FROM
       serie
@@ -65,6 +103,10 @@ $lower_categorie = strtolower($categorie);
       serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
   INNER JOIN
       categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_id
+  INNER JOIN
+      saison ON saison.saison_serie_ID = serie.serie_ID
+  INNER JOIN 
+      episode ON episode.episode_saison_ID = saison.saison_ID
   WHERE
       categorie.categorie_nom = ?';
 
@@ -94,51 +136,59 @@ $lower_categorie = strtolower($categorie);
     echo '<div class="box box-' . $lower_categorie . '">';
 
     foreach ($filmsOrSeries as $item) {
-      $image_path = htmlspecialchars($item['film_ID'] ? $item['film_image_path'] : $item['serie_image_path']);
-      $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : '');
-
-      // Vérifiez si la clé "serie_ID" existe pour les enregistrements de type "serie"
-      if ($item['serie_type'] === 'serie' && isset($item['serie_ID'])) {
-        $serieID = htmlspecialchars($item['serie_ID']);
-      } else {
-        $serieID = '';
-      }
+      $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
+      $title = htmlspecialchars($item['type'] === 'film' ? $item['film_title'] : $item['serie_title']);
+      $image_path = htmlspecialchars($item['type'] === 'film' ? $item['film_image_path'] : $item['serie_image_path']);
+      $synopsis = htmlspecialchars($item['type'] === 'film' ? $item['film_synopsis'] : $item['serie_synopsis']);
+      $duree = htmlspecialchars($item['type'] === 'film' ? $item['film_duree'] : (isset($item['episode_duree']) ? $item['episode_duree'] : ''));
+      $tags = htmlspecialchars($item['type'] === 'film' ? $item['film_tags'] : (isset($item['serie_tags']) ? $item['serie_tags'] : ''));
+      $video_path = htmlspecialchars($item['type'] === 'film' ? $item['film_path'] : (isset($item['episode_path']) ? $item['episode_path'] : ''));
+      $date_ajout = htmlspecialchars($item['type'] === 'film' ? $item['film_date_ajout'] : (isset($item['episode_date_ajout']) ? $item['episode_date_ajout'] : ''));
 
       echo '<div class="box-div">
-      <a href="javascript:void(0);" onclick="openModal(\'' . $id . '\')">
-          <img src="' . $image_path . '" alt="' . $image_path . '" data-id="' . $id . '">
+      <a href="javascript:void(0);" onclick="openModal(this)"
+         data-id="' . $id . '"
+         data-image="' . $image_path . '"
+         data-title="' . $title . '"
+         data-synopsis="' . $synopsis . '"
+         data-tags="' . $tags . '"
+         data-duration="' . $duree . '"
+         data-video="' . $video_path . '"
+         data-date-ajout="' . $date_ajout . '">
+          <img src="' . $image_path . '" alt="' . $title . '">
       </a>
   </div>';
     }
     ?>
 
-    <div id="container_modale_video" class="container_modale_video">
+    <div id="container_modale_video" class="container_modale_video" style="display:none">
       <div class="modale_video">
         <span class="close_video" onclick="closeModal()">&times;</span>
-        <p id="modal_video_content">Ici le contenu de la modale</p>
+        <div class="title_video">
+          <h2></h2>
+        </div>
+        <div class="container_duree_affiche">
+          <div class="affiche_modale">
+            <img src="" alt="">
+          </div>
+          <div class="tags_duree_modale">
+          </div>
+        </div>
+        <div class="title_synopsis_modale">
+          <div class="player_modale">
+            <video src=""></video>
+            <p></p>
+          </div>
+        </div>
       </div>
     </div>
-
   </section>
 
   <?php
   require_once "../includes/footer.php";
   ?>
   <script src="../js/burger.js"></script>
-  <script>
-function openModal(id) {
-    var modal = document.getElementById('container_modale_video');
-    var modalContent = document.getElementById('modal_video_content');
-    modalContent.innerHTML = 'ID du film/série : ' + id; // Affiche l'ID pour l'instant
-
-    modal.style.display = 'block'; // Affiche la modale
-}
-
-function closeModal() {
-    var modal = document.getElementById('container_modale_video');
-    modal.style.display = 'none'; // Cache la modale
-}
-</script>
+  <script src="../js/modaleVideo.js"></script>
 </body>
 
 </html>

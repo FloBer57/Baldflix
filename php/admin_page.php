@@ -261,6 +261,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
   <script src="../js/onglet.js"></script>
   <script src="../js/confirmDelete.js"></script>
   <script src="../js/progressBarFilm.js"></script>
+  <script src="../js/saisonUpload.js"></script>
 </body>
 
 </html>
