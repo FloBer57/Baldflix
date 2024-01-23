@@ -633,13 +633,21 @@ progress {
   margin-bottom: 50px;
 }
 
-h3#film {
+h3 {
   margin-bottom: 0px;
   margin-left: 8px
 ;
 }
 
 /* MODALE_VIDEO */
+
+.synopsis {
+  text-align: justify; 
+  line-height: 1.5; 
+  margin: 0;
+  font-size: 0.6em;
+  overflow: auto;
+}
 
 .container_modale_video {
   display: none;
@@ -654,6 +662,7 @@ h3#film {
   align-items: center;
   justify-content: center;
   display: flex;
+  overflow: unset;
 }
 
 .modale_video {
@@ -674,7 +683,9 @@ h3#film {
   float: right;
   font-size: 28px;
   font-weight: bold;
+  z-index: 15;
   cursor: pointer;
+  position: relative;
 }
 
 .close_video:hover,
@@ -682,6 +693,117 @@ h3#film {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+.title_video h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 1.2em;
+    position: relative;
+    bottom: 10px;
+    border-bottom: 2px solid var(--light);
+}
+
+.sub_container_modale_video {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 95%;
+}
+
+.affiche_modale {
+  display: flex;
+  justify-content: center;
+}
+.affiche_modale img {
+  max-width: 90%;
+  height: 100%;
+  height: auto;
+}
+
+.container_duree_affiche {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding-right: 15px;
+  border-right: 2px solid var(--light);
+}
+
+.tags_duree_modale {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+.tags_duree_modale p {
+  margin: 0;
+} 
+
+.title_synopsis_modale {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.title_synopsis_modale video {
+  position: relative;
+  width: 100%;
+  object-fit: 100%;
+  filter: grayscale(100%);
+}
+
+.close_video {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  z-index: 15;
+  cursor: pointer;
+  position: relative;
+}
+.tags_duree_modale {
+  font-size: 0.8em;
+  border-top: 2px solid var(--light);
+  margin-top: 20px;
+}
+
+.player_modale {
+  position: relative;
+  width: 100%;
+  margin-left: 3%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-height: 100%;
+}
+
+#myVideo {
+  width: 100%;
+  filter: grayscale(40%);
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--light);
+}
+
+
+
+#playButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -700%);
+}
+
+.video-playing #playButton {
+  display: none;
+}
+
+/* Cacher le bouton après le démarrage de la vidéo */
+.video-playing #playButton {
+  display: none;
 }
 
 /* MODALE ICON */

@@ -1,4 +1,8 @@
 <?php
+
+require_once "config.php";
+
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -13,7 +17,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-require_once "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) {
     $suggestion_firstname = htmlspecialchars(trim($_POST["suggestion_firstname"]));

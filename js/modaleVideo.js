@@ -8,6 +8,7 @@ function openModal(element) {
     var tags = element.getAttribute('data-tags');
     var duration = element.getAttribute('data-duration');
     var videoPath = element.getAttribute('data-video');
+    var miniature = element.getAttribute('data-miniature');
     var dateAjout = element.getAttribute('data-date-ajout');
 
     // Mise à jour du contenu de la modale
@@ -16,8 +17,8 @@ function openModal(element) {
     modal.querySelector('.title_video h2').textContent = title;
     modal.querySelector('.player_modale p').textContent = synopsis;
     modal.querySelector('.tags_duree_modale').innerHTML = '<p>' + tags + '</p><p>' + duration + '</p>';
-    modal.querySelector('.player_modale video').src = videoPath;
-
+    modal.querySelector('.player_modale video source').src = videoPath;
+    modal.querySelector('.player_modale video').poster = miniature;
     modal.style.display = 'block'; // Affiche la modale
 }
 
