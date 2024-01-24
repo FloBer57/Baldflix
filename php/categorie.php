@@ -183,7 +183,6 @@ $lower_categorie = strtolower($categorie);
                 <source src="" type="video/mp4">
                 Votre navigateur ne supporte pas la balise vidéo.
               </video>
-              <button id="playButton">Play</button>
               <p class="synopsis"></p>
             </div>
           </div>
@@ -193,11 +192,12 @@ $lower_categorie = strtolower($categorie);
   </section>
 
   <?php
+
   require_once "../includes/footer.php";
+
   ?>
   <script src="../js/burger.js"></script>
   <script src="../js/modaleVideo.js"></script>
-  <script src="../js/videoPlay.js"></script>
 </body>
 
 </html>
