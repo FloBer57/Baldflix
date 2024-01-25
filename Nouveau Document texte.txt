@@ -1,0 +1,20 @@
+SELECT
+  serie.serie_ID,
+  serie.serie_title,
+  serie.serie_tags,
+  serie.serie_synopsis,
+  saison.saison_ID,
+  saison.saison_number,
+  GROUP_CONCAT(DISTINCT categorie.categorie_nom ORDER BY categorie.categorie_nom ASC SEPARATOR ', ') AS categories
+FROM
+  serie
+INNER JOIN
+  serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
+INNER JOIN
+  categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_id
+INNER JOIN
+  saison ON saison.saison_serie_ID = serie.serie_ID
+WHERE
+  serie.serie_ID = 16
+GROUP BY saison.saison_ID
+ORDER BY serie.serie_title ASC;

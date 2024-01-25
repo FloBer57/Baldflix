@@ -205,10 +205,12 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                 </select>
               </div>
 
+              <button type="button" id="openSaisonModal">+</button>
+
               <div class="form-row row1">
                 <label for="media_type">Catégorie 1 :</label>
-                <select id="serie_categories_principale" name="serie_categories[]">
-                  <option>Veuillez choisir:</option>
+                <select id="serie_categorie_un" name="serie_categories[]">
+                  <option>Veuillez choisir :</option>
                   <option value="3">Série</option>
                   <option value="4">Spectacle</option>
                   <option value="1">Anime</option>
@@ -217,7 +219,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               <div class="form-row row2">
                 <label for="categorie_1">Catégorie 2 :</label>
-                <select id="serie_categories_annexe" name="serie_categories[]">
+                <select id="serie_categorie_deux" name="serie_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 
@@ -229,7 +231,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               <div class="form-row row3">
                 <label for="categorie_2">Catégorie 3 :</label>
-                <select id="serie_categories_annexe_deux" name="serie_categories[]">
+                <select id="serie_categorie_trois" name="serie_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 
@@ -255,6 +257,97 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         </div>
       </div>
     </div>
+
+    <div id="saisonModal" class="saisonModal" style="display:none">
+      <div class="saisonModalContent">
+        <span class="closeSaisonModal" onclick="closeModal()">&times;</span>
+        <h2>Choisir une icône</h2>
+        <div id="saisonContainer">
+          <?php
+
+          function getSeriesByCategoryAdmin($link, $categorie){
+            $sql = "SELECT
+              serie.serie_ID,
+              serie.serie_title,
+              serie.serie_tags,
+              serie.serie_image_path,
+              serie.serie_synopsis,
+              saison.saison_ID,
+              saison.saison_number,
+              GROUP_CONCAT(DISTINCT categorie.categorie_nom ORDER BY categorie.categorie_nom ASC SEPARATOR ',') AS categories
+              FROM
+              serie
+              INNER JOIN
+              serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
+              INNER JOIN
+              categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_id
+              INNER JOIN
+              saison ON saison.saison_serie_ID = serie.serie_ID
+              WHERE
+              serie.serie_ID = 16
+              GROUP BY saison.saison_ID
+              ORDER BY serie.serie_title ASC";
+
+            if ($stmt = mysqli_prepare($link, $sql)) {
+              mysqli_stmt_bind_param($stmt, "ss", $categorie, $categorie);
+              mysqli_stmt_execute($stmt);
+              $result = mysqli_stmt_get_result($stmt);
+
+              $Series = array();
+              if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                  array_push($Series, $row);
+                }
+              }
+              mysqli_stmt_close($stmt);
+              return $Series;
+            } else {
+              echo "Erreur de préparation de la requête.";
+              return array();
+            }
+          }
+
+          $categorie = "admin";
+          $GetSeries = getSeriesByCategoryAdmin($link, $categorie);
+
+          echo '<div class="container container_cat" id="' . $categorie . '_container">';
+          echo '<div class="box box-' . $categorie . '">';
+
+          foreach ($GetSeries as $item) {
+            $id = htmlspecialchars($item['serie_ID']);
+            $title = htmlspecialchars($item['serie_title']);
+            $image_path = htmlspecialchars($item['serie_image_path']);
+            $synopsis = htmlspecialchars($item['serie_synopsis']);
+            $tags = htmlspecialchars($item['serie_tags']);
+            $categories = htmlspecialchars($item['categories']);
+
+            $liste_categories = explode(", ", $categories);
+
+            $categorie_un = isset($liste_categories[0]) ? $liste_categories[0] : "";
+            $categorie_deux = isset($liste_categories[1]) ? $liste_categories[1] : "";
+            $categorie_trois = isset($liste_categories[2]) ? $liste_categories[2] : "";
+
+            echo '<div class="box-div" onclick="fillFormData(this)"
+                data-id="' . $id . '"
+                data-title="' . $title . '"
+                data-synopsis="' . $synopsis . '"
+                data-tags="' . $tags . '">
+                data-image="' . $image_path . '"
+                data-categorie_un="' . $categorie_un . '"
+                data-categorie_deux="' . $categorie_deux . '"
+                data-categorie_trois="' . $categorie_trois . '"
+                  <img src="' . $image_path . '" alt="' . $title . '">
+              </a>
+            </div>';
+          }
+
+          //// PROBLEME AVEC MON PHP ////
+          
+          ?>
+        </div>
+      </div>
+    </div>
+
   </main>
   <script src="../js/progressBarSerie.js"></script>
   <script src="../js/burger.js"></script>
@@ -262,6 +355,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
   <script src="../js/confirmDelete.js"></script>
   <script src="../js/progressBarFilm.js"></script>
   <script src="../js/saisonUpload.js"></script>
+  <script src="../js/modaleSaison.js"></script>
 </body>
 
 </html>

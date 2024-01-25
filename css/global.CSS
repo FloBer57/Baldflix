@@ -619,6 +619,29 @@ progress {
   margin-bottom: 22px;
 }
 
+.saisonModal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,0.4); /* Black with opacity */
+}
+
+.saisonModalContent {
+  position: relative;
+  background-color: #fefefe;
+  margin: 10% auto; /* 10% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%; /* Adjust as needed */
+  max-height: 80%; /* Adjust as needed */
+  overflow: auto; /* Enable scroll if the content is too big */
+}
+
 /* CATEGORIE */
 
 .container_cat {
@@ -649,7 +672,7 @@ h3 {
   overflow: auto;
 }
 
-.container_modale_video {
+.container_modale_video,.saisonModal {
   display: none;
   position: fixed;  
   z-index: 1000;
@@ -663,23 +686,32 @@ h3 {
   justify-content: center;
   display: flex;
   overflow: unset;
+  box-sizing: border-box;
 }
 
-.modale_video {
+.modale_video, .saisonModalContent {
   background-color: var(--primary);
   padding: 20px;
   border-radius: 5px;
   border: 2px solid;
-  margin-right: 4%;
-  margin-left: 4%;
-  margin-top: 4%;
-  height: calc(100dvh - 14% );
-  margin-bottom: 4%;
+  height: calc(95%);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  width: 94%;
+  margin: auto;
+  margin-top: 2%;
 }
 
-.close_video {
-  color: #aaaaaa;
+.saisonContainer{
+  display: flex;
+}
+
+.saisonModalContent h2 {
+  margin: 0;
+  text-align: center;
+}
+.close_video,.closeSaisonModal {
+  color: var(--light);
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -688,9 +720,9 @@ h3 {
   position: relative;
 }
 
-.close_video:hover,
-.close_video:focus {
-  color: #000;
+.close_video:hover,.closeSaisonModal,
+.close_video:focus,.closeSaisonModal {
+  color: var(--red);
   text-decoration: none;
   cursor: pointer;
 }
@@ -755,7 +787,7 @@ h3 {
   filter: grayscale(100%);
 }
 
-.close_video {
+.close_video,.closeSaisonModal {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
@@ -764,6 +796,7 @@ h3 {
   cursor: pointer;
   position: relative;
 }
+
 .tags_duree_modale {
   font-size: 0.8em;
   border-top: 2px solid var(--light);
