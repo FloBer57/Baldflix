@@ -8,7 +8,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 require_once "config.php";
 
-if ($_SESSION["user_role_id"] != 2) {
+if ($_SESSION["user_role_ID"] != 2) {
   header("location: profile.php");
   exit;
 }
@@ -20,12 +20,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include_once "admin_role.php";
   }
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
-  if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["user_id"])) {
+  if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["user_ID"])) {
     include_once "admin_delete.php";
   }
 }
 
 $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+
+/// TEST
+if(isset($_SESSION['duree_brute'])) {
+  echo "Durée brute: " . $_SESSION['duree_brute'] . " secondes<br>";
+}
+
+if(isset($_SESSION['duree_arrondie'])) {
+  echo "Durée arrondie: " . $_SESSION['duree_arrondie'] . " secondes<br>";
+}
+
+if(isset($_SESSION['duree_formattee'])) {
+  echo "Durée formatée: " . $_SESSION['duree_formattee'] . "<br>";
+}
+
+echo "bonjour";
+// FIN TEST
 
 ?>
 
@@ -66,7 +82,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
           <?php
           // Requête SQL pour récupérer tous les utilisateurs
-          $sql = "SELECT user_id, username, user_role_id FROM user";
+          $sql = "SELECT user_ID, username, user_role_ID FROM user";
           $result = mysqli_query($link, $sql);
 
           if ($result) {
@@ -75,16 +91,16 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             while ($row = mysqli_fetch_assoc($result)) {
               echo "<tr>";
               echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-              echo "<td>" . htmlspecialchars($row['user_role_id']) . "</td>";
+              echo "<td>" . htmlspecialchars($row['user_role_ID']) . "</td>";
 
               // Formulaire pour modifier le statut
               echo "<td>
               <form method='post' action=''>
                 <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
-                <input type='hidden' name='user_id' value='{$row['user_id']}'>
+                <input type='hidden' name='user_ID' value='{$row['user_ID']}'>
                 <select name='new_role'>
-                    <option value='1' " . ($row['user_role_id'] == '1' ? 'selected' : '') . ">User</option>
-                    <option value='2' " . ($row['user_role_id'] == '2' ? 'selected' : '') . ">Admin</option>
+                    <option value='1' " . ($row['user_role_ID'] == '1' ? 'selected' : '') . ">User</option>
+                    <option value='2' " . ($row['user_role_ID'] == '2' ? 'selected' : '') . ">Admin</option>
                 </select>
                 <input type='submit' name='modify' value='Modifier'>
               </form>
@@ -94,14 +110,14 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               echo "<td>
         <form method='post' action=''>
           <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
-          <input type='hidden' name='user_id' value='{$row['user_id']}'>
+          <input type='hidden' name='user_ID' value='{$row['user_ID']}'>
           <input type='submit' name='reset_password' value='Réinitialiser'>
         </form>
       </td>";
 
               // Lien pour supprimer l'utilisateur
               echo "<td>
-        <a href='#' onclick='confirmDelete(\"?action=delete&user_id={$row['user_id']}&csrf_token={$_SESSION["csrf_token"]}\")'>
+        <a href='#' onclick='confirmDelete(\"?action=delete&user_ID={$row['user_ID']}&csrf_token={$_SESSION["csrf_token"]}\")'>
           <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
         </a>
       </td>";
@@ -206,6 +222,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               </div>
 
               <button type="button" id="openSaisonModal">+</button>
+              <input type="number" id="serie_ID" name="serie_ID" >
 
               <div class="form-row row1">
                 <label for="media_type">Catégorie 1 :</label>
@@ -261,35 +278,32 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
     <div id="saisonModal" class="saisonModal" style="display:none">
       <div class="saisonModalContent">
         <span class="closeSaisonModal" onclick="closeModal()">&times;</span>
-        <h2>Choisir une icône</h2>
+        <h2>Veuillez choisir une Série</h2>
         <div id="saisonContainer">
           <?php
 
-          function getSeriesByCategoryAdmin($link, $categorie){
+          function getSeriesByCategoryAdmin($link)
+          {
             $sql = "SELECT
-              serie.serie_ID,
-              serie.serie_title,
-              serie.serie_tags,
-              serie.serie_image_path,
-              serie.serie_synopsis,
-              saison.saison_ID,
-              saison.saison_number,
-              GROUP_CONCAT(DISTINCT categorie.categorie_nom ORDER BY categorie.categorie_nom ASC SEPARATOR ',') AS categories
-              FROM
-              serie
-              INNER JOIN
-              serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
-              INNER JOIN
-              categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_id
-              INNER JOIN
-              saison ON saison.saison_serie_ID = serie.serie_ID
-              WHERE
-              serie.serie_ID = 16
-              GROUP BY saison.saison_ID
-              ORDER BY serie.serie_title ASC";
-
+            serie.serie_ID,
+            serie.serie_title,
+            serie.serie_tags,
+            serie.serie_image_path,
+            serie.serie_synopsis,
+            saison.saison_ID,
+            saison.saison_number,
+            GROUP_CONCAT(DISTINCT categorie.categorie_ID ORDER BY categorie.categorie_ID ASC SEPARATOR ',') AS categories
+            FROM
+            serie
+            INNER JOIN
+            serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
+            INNER JOIN
+            categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
+            INNER JOIN
+            saison ON saison.saison_serie_ID = serie.serie_ID
+            GROUP BY saison.saison_ID
+            ORDER BY serie.serie_title ASC";
             if ($stmt = mysqli_prepare($link, $sql)) {
-              mysqli_stmt_bind_param($stmt, "ss", $categorie, $categorie);
               mysqli_stmt_execute($stmt);
               $result = mysqli_stmt_get_result($stmt);
 
@@ -302,16 +316,15 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               mysqli_stmt_close($stmt);
               return $Series;
             } else {
-              echo "Erreur de préparation de la requête.";
+              echo "Erreur de préparation de la requête : " . mysqli_error($link);
               return array();
             }
-          }
+          } 
 
-          $categorie = "admin";
-          $GetSeries = getSeriesByCategoryAdmin($link, $categorie);
+          $GetSeries = getSeriesByCategoryAdmin($link);
 
-          echo '<div class="container container_cat" id="' . $categorie . '_container">';
-          echo '<div class="box box-' . $categorie . '">';
+          echo '<div class="container container_cat" id="admin_container">';
+          echo '<div class="box box-admin">';
 
           foreach ($GetSeries as $item) {
             $id = htmlspecialchars($item['serie_ID']);
@@ -320,29 +333,35 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             $synopsis = htmlspecialchars($item['serie_synopsis']);
             $tags = htmlspecialchars($item['serie_tags']);
             $categories = htmlspecialchars($item['categories']);
-
-            $liste_categories = explode(", ", $categories);
-
-            $categorie_un = isset($liste_categories[0]) ? $liste_categories[0] : "";
-            $categorie_deux = isset($liste_categories[1]) ? $liste_categories[1] : "";
-            $categorie_trois = isset($liste_categories[2]) ? $liste_categories[2] : "";
-
+        
+            $categories_ids = [];
+        
+            if (!empty($categories)) {
+                $liste_categories = explode(",", $categories); 
+                
+                echo "<pre>Categories: "; print_r($liste_categories); echo "</pre>";
+                
+                $categories_ids = array_slice($liste_categories, 0, 3);
+            }
+        
+            $categorie_un_id = isset($categories_ids[0]) ? trim($categories_ids[0]) : ""; 
+            $categorie_deux_id = isset($categories_ids[1]) ? trim($categories_ids[1]) : "";
+            $categorie_trois_id = isset($categories_ids[2]) ? trim($categories_ids[2]) : "";
+        
             echo '<div class="box-div" onclick="fillFormData(this)"
-                data-id="' . $id . '"
-                data-title="' . $title . '"
-                data-synopsis="' . $synopsis . '"
-                data-tags="' . $tags . '">
-                data-image="' . $image_path . '"
-                data-categorie_un="' . $categorie_un . '"
-                data-categorie_deux="' . $categorie_deux . '"
-                data-categorie_trois="' . $categorie_trois . '"
-                  <img src="' . $image_path . '" alt="' . $title . '">
-              </a>
+            data-id="' . $id . '"
+            data-title="' . $title . '"
+            data-synopsis="' . $synopsis . '"
+            data-tags="' . $tags . '"
+            data-image="' . $image_path . '"
+            data-serie_categorie_un_id="' . $categorie_un_id . '"
+            data-serie_categorie_deux_id="' . $categorie_deux_id . '"
+            data-serie_categorie_trois_id="' . $categorie_trois_id . '">
+            <img src="' . $image_path . '" alt="' . $title . '">
             </div>';
-          }
-
+        }
           //// PROBLEME AVEC MON PHP ////
-          
+
           ?>
         </div>
       </div>

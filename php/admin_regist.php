@@ -8,7 +8,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 require_once "config.php";
 
-if ($_SESSION["user_role_id"] != 2) {
+if ($_SESSION["user_role_ID"] != 2) {
     header("location: profile.php");
     exit;
 }
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))) {
         $username_err = "Le nom d'utilisateur ne peux contenir que des lettres, chiffre et l'underscore.";
     } else {
-        $sql = "SELECT user_id FROM user WHERE username = ?";
+        $sql = "SELECT user_ID FROM user WHERE username = ?";
         if ($stmt = mysqli_prepare($link, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_username);
             $param_username = trim($_POST["username"]);
@@ -60,10 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $role = "";
     $role_err = "";
 
-    if (empty(trim($_POST["user_role_id"]))) {
+    if (empty(trim($_POST["user_role_ID"]))) {
         $role_err = "Veuillez choisir un role.";
     } else {
-        $role = trim($_POST["user_role_id"]);
+        $role = trim($_POST["user_role_ID"]);
     }
 
     $email = "";
@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($role_err)) {
 
-        $sql = "INSERT INTO user (username, password, user_role_id, email) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO user (username, password, user_role_ID, email) VALUES (?, ?, ?, ?)";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             mysqli_stmt_bind_param($stmt, "ssss", $param_username, $param_password, $param_role, $param_email);
@@ -149,8 +149,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php echo $email_err; ?>
                     </span>
                     <br><br>
-                    <label for="user_role_id">Role :</label>
-                    <select name="user_role_id" required class="form-control">
+                    <label for="user_role_ID">Role :</label>
+                    <select name="user_role_ID" required class="form-control">
                         <option value="1">Utilisateur</option>
                         <option value="2">Administrateur</option>
                     </select>

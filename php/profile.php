@@ -73,7 +73,7 @@ mysqli_close($link);
           <button id="openIconModal">Choisir une icône</button>
         </div>
 
-        <div id="iconModal" class="modal">
+        <div id="iconModal" class="modal" style="display:none">
           <div class="modal-content">
             <span class="close"><img id="closeModal" src="../image/icon/close.svg" alt="Close"></span>
             <h2>Choisir une icône</h2>

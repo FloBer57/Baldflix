@@ -33,13 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new_password"])) {
   }
 
   if (empty($new_password_err) && empty($confirm_password_err)) {
-    $sql = "UPDATE user SET password = ? WHERE user_id = ?";
+    $sql = "UPDATE user SET password = ? WHERE user_ID = ?";
 
     if ($stmt = mysqli_prepare($link, $sql)) {
       mysqli_stmt_bind_param($stmt, "si", $param_password, $param_id);
 
       $param_password = password_hash($new_password, PASSWORD_DEFAULT);
-      $param_id = $_SESSION["user_id"];
+      $param_id = $_SESSION["user_ID"];
 
       if (mysqli_stmt_execute($stmt)) {
         session_destroy();

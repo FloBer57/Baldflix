@@ -32,7 +32,7 @@
   INNER JOIN
       film_categorie ON film.film_ID = film_categorie.filmXcategorie_film_ID
   INNER JOIN
-      categorie ON film_categorie.filmXcategorie_categorie_ID = categorie.categorie_id
+      categorie ON film_categorie.filmXcategorie_categorie_ID = categorie.categorie_ID
   WHERE
       categorie.categorie_nom = ?
   UNION ALL
@@ -67,7 +67,7 @@
   INNER JOIN
       serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
   INNER JOIN
-      categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_id
+      categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
   INNER JOIN
       saison ON saison.saison_serie_ID = serie.serie_ID
   INNER JOIN 

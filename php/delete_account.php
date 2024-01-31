@@ -12,21 +12,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
     }
 
     if (empty($password_err)) {
-        $sql_verify = "SELECT password FROM user WHERE user_id = ?";
+        $sql_verify = "SELECT password FROM user WHERE user_ID = ?";
 
         if ($stmt_verify = mysqli_prepare($link, $sql_verify)) {
             mysqli_stmt_bind_param($stmt_verify, "i", $param_id_verify);
-            $param_id_verify = $_SESSION["user_id"];
+            $param_id_verify = $_SESSION["user_ID"];
             if (mysqli_stmt_execute($stmt_verify)) {
                 mysqli_stmt_store_result($stmt_verify);
                 if (mysqli_stmt_num_rows($stmt_verify) == 1) {
                     mysqli_stmt_bind_result($stmt_verify, $hashed_password_verify);
                     if (mysqli_stmt_fetch($stmt_verify)) {
                         if (password_verify($password, $hashed_password_verify)) {
-                            $delete_sql = "DELETE FROM user WHERE user_id = ?";
+                            $delete_sql = "DELETE FROM user WHERE user_ID = ?";
                             if ($delete_stmt = mysqli_prepare($link, $delete_sql)) {
                                 mysqli_stmt_bind_param($delete_stmt, "i", $param_id_delete);
-                                $param_id_delete = $_SESSION["user_id"];
+                                $param_id_delete = $_SESSION["user_ID"];
                                 if (mysqli_stmt_execute($delete_stmt)) {
                                     session_destroy();
                                     header("location: baldflix_login.php");

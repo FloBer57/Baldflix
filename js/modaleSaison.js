@@ -27,18 +27,19 @@ function fillFormData(element) {
   const title = element.getAttribute('data-title');
   const synopsis = element.getAttribute('data-synopsis');
   const tags = element.getAttribute('data-tags');
-  const categorie_un = element.getAttribute('categorie_un');
-  const categorie_deux = element.getAttribute('categorie_deux');
-  const categorie_trois = element.getAttribute('categorie_trois');
-
+  const categorieUnId = element.getAttribute('data-serie_categorie_un_id');
+  const categorieDeuxId = element.getAttribute('data-serie_categorie_deux_id');
+  const categorieTroisId = element.getAttribute('data-serie_categorie_trois_id');
 
   // Remplir le formulaire
+  document.getElementById('serie_ID').value = id;
   document.getElementById('serie_title').value = title;
   document.getElementById('serie_synopsis').value = synopsis;
   document.getElementById('serie_tags').value = tags;
-  document.getElementById('serie_categorie_un').value = categorie_un;
-  document.getElementById('serie_categorie_deux').value = categorie_deux;
-  document.getElementById('serie_categorie_trois').value = categorie_trois;
+  document.getElementById('serie_categorie_un').value = categorieUnId;
+  document.getElementById('serie_categorie_deux').value = categorieDeuxId;
+  document.getElementById('serie_categorie_trois').value = categorieTroisId;
+
 
   // Afficher la modale
   saisonModal.style.display = "block";

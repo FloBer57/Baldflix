@@ -4,7 +4,7 @@ require_once "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $user_id = $_POST["user_id"];
+    $user_ID = $_POST["user_ID"];
     function generateRandomPassword($length = 12)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -21,15 +21,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $new_password = generateRandomPassword();
     $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-    $reset_password_sql = "UPDATE user SET password = ? WHERE user_id = ?";
+    $reset_password_sql = "UPDATE user SET password = ? WHERE user_ID = ?";
     $reset_password_stmt = mysqli_prepare($link, $reset_password_sql);
-    mysqli_stmt_bind_param($reset_password_stmt, "ss", $hashed_password, $user_id);
+    mysqli_stmt_bind_param($reset_password_stmt, "ss", $hashed_password, $user_ID);
     mysqli_stmt_execute($reset_password_stmt);
     mysqli_stmt_close($reset_password_stmt);
 
-    $user_email_query = "SELECT email FROM user WHERE user_id = ?";
+    $user_email_query = "SELECT email FROM user WHERE user_ID = ?";
     $user_email_stmt = mysqli_prepare($link, $user_email_query);
-    mysqli_stmt_bind_param($user_email_stmt, "i", $user_id);
+    mysqli_stmt_bind_param($user_email_stmt, "i", $user_ID);
     mysqli_stmt_execute($user_email_stmt);
     mysqli_stmt_bind_result($user_email_stmt, $user_email);
 

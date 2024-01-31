@@ -18,14 +18,14 @@ function getProfileData($userId)
 {
   global $link;
 
-  $sql = "SELECT user_role_id, profile_picture FROM user WHERE user_id = ?";
+  $sql = "SELECT user_role_ID, profile_picture FROM user WHERE user_ID = ?";
   $stmt = mysqli_prepare($link, $sql);
   mysqli_stmt_bind_param($stmt, "i", $userId);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_bind_result($stmt, $user_role, $profile_picture);
   mysqli_stmt_fetch($stmt);
 
-  return ['user_role_id' => $user_role, 'profile_picture' => $profile_picture];
+  return ['user_role_ID' => $user_role, 'profile_picture' => $profile_picture];
 }
 
 $username = $password = "";
@@ -53,7 +53,7 @@ else {
   }
 
   if (empty($username_err) && empty($password_err)) {
-    $sql = "SELECT user_id, username, password FROM user WHERE username = ?";
+    $sql = "SELECT user_ID, username, password FROM user WHERE username = ?";
 
     if ($stmt = mysqli_prepare($link, $sql)) {
       mysqli_stmt_bind_param($stmt, "s", $param_username);
@@ -69,11 +69,11 @@ else {
 
             if (password_verify($password, $hashed_password)) {
               $_SESSION["loggedin"] = true;
-              $_SESSION["user_id"] = $id;
+              $_SESSION["user_ID"] = $id;
               $_SESSION["username"] = $username;
               $_SESSION["intro"] = true;
               $profileData = getProfileData($id);
-              $_SESSION["user_role_id"] = $profileData['user_role_id'];
+              $_SESSION["user_role_ID"] = $profileData['user_role_ID'];
               $_SESSION["profile_picture"] = $profileData['profile_picture'];
               header("location: ../index.php");
             } else {

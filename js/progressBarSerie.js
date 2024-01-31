@@ -18,21 +18,6 @@ document.getElementById('uploadFormSerie').addEventListener('submit', function (
       }
     };
 
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        if (response.success) {
-          // Afficher un message de succès, réinitialiser le formulaire, etc.
-          alert(response.message);
-        } else {
-          // Gérer l'erreur
-          alert(response.message);
-        }
-      } else {
-        alert("Une erreur s'est produite lors du téléchargement.");
-      }
-    };
-
     xhr.send(formData);
   });
 

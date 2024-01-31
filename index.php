@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once "php/config.php";
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: php/baldflix_login.php");
@@ -25,80 +26,175 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 <body class="back bodyburger">
 
-  <?php
-  require_once "includes/header.php";
+<?php
+require_once "includes/header.php";
 
-  if (!isset($_SESSION['animation_vue'])) {
-    require_once "includes/netflix_intro.php";
+if (!isset($_SESSION['animation_vue'])) {
+  echo '<script>
+          document.body.classList.add("no-scroll");
+          setTimeout(function() {
+              document.body.classList.remove("no-scroll");
+          }, 3500);
+        </script>';
+  require_once "includes/netflix_intro.php";
 
-    $_SESSION['animation_vue'] = true;
-  }
-  ?>
+  $_SESSION['animation_vue'] = true;
+}
+?>
 
   <section class="trailer">
     <div class="present-vid" id="video">
       <video class="preview" autoplay muted loop id="video-background">
-        <source src="trailer.mp4" type="video/mp4">
+        <source src="../video/trailer/trailer.mp4" type="video/mp4">
         Votre navigateur ne prend pas en charge la vidéo.
       </video>
-      <h2 class="text-video">Nouveau sur BaldFlix</h2>
+      <h2 class="text-video">Bienvenue sur BaldFlix</h2>
     </div>
   </section>
 
-  <section class="main-container">
-    <div class="container" id="home__watched">
-      <h3 id="watched">Vue précédemment</h3>
-      <div class="box box-watched">
-        <div class="box-div div1"><a href=""><img src="https://picsum.photos/240/320?random=2" alt=""></a></div>
-        <div class="box-div div2"><a href=""><img src="https://picsum.photos/240/320?random=3" alt=""></a></div>
-        <div class="box-div div3"><a href=""><img src="https://picsum.photos/240/320?random=4" alt=""></a></div>
-        <div class="box-div div4"><a href=""><img src="https://picsum.photos/240/320?random=5" alt=""></a></div>
-        <div class="box-div div5"><a href=""><img src="https://picsum.photos/240/320?random=6" alt=""></a></div>
-        <div class="box-div div6"><a href=""><img src="https://picsum.photos/240/320?random=7" alt=""></a></div>
-        <div class="box-div div7"><a href=""><img src="https://picsum.photos/240/320?random=8" alt=""></a></div>
-        <div class="box-div div8"><a href=""><img src="https://picsum.photos/240/320?random=9" alt=""></a></div>
-        <div class="box-div div9"><a href=""><img src="https://picsum.photos/240/320?random=10" alt=""></a></div>
-        <div class="box-div div10"><a href=""><img src="https://picsum.photos/240/320?random=11" alt=""></a></div>
-        <div class="box-div div11"><a href=""><img src="https://picsum.photos/240/320?random=12" alt=""></a></div>
-        <div class="box-div div12"><a href=""><img src="https://picsum.photos/240/320?random=13" alt=""></a></div>
-        <div class="box-div div13"><a href=""><img src="https://picsum.photos/240/320?random=14" alt=""></a></div>
-        <div class="box-div div14"><a href=""><img src="https://picsum.photos/240/320?random=15" alt=""></a></div>
-        <div class="box-div div15"><a href=""><img src="https://picsum.photos/240/320?random=16" alt=""></a></div>
-        <div class="box-div div16"><a href=""><img src="https://picsum.photos/240/320?random=17" alt=""></a></div>
-        <div class="box-div div17"><a href=""><img src="https://picsum.photos/240/320?random=18" alt=""></a></div>
-        <div class="box-div div18"><a href=""><img src="https://picsum.photos/240/320?random=19" alt=""></a></div>
-      </div>
-    </div>
+  <section class="main-container main-watched">
 
-    <div id="container_modale" class="container_modale">
+
+  <?php
+    function getFilmsOrSeries($link)
+    {
+      $sql = 'SELECT
+        film.film_ID,
+        film.film_image_path,
+        film.film_synopsis,
+        film.film_duree,
+        film.film_tags,
+        film.film_path,
+        film.film_miniature_path,
+        film.film_image_path,
+        film.film_title,
+        NULL AS serie_ID,
+        NULL AS serie_title,
+        NULL AS serie_tags,
+        NULL AS serie_synopsis,
+        NULL AS serie_image_path,
+        "film" AS type
+    FROM
+        film
+    INNER JOIN
+        film_categorie ON film.film_ID = film_categorie.filmXcategorie_film_ID
+    INNER JOIN
+        categorie ON film_categorie.filmXcategorie_categorie_ID = categorie.categorie_ID
+    GROUP BY
+        film.film_ID
+    UNION ALL
+    SELECT
+        NULL AS film_ID,
+        NULL AS film_image_path,
+        NULL AS film_synopsis,
+        NULL AS film_duree,
+        NULL AS film_tags,
+        NULL AS film_path,
+        NULL AS film_miniature_path,
+        NULL AS film_image_path,
+        NULL AS film_title,
+        serie.serie_ID, 
+        serie.serie_title,
+        serie.serie_tags,
+        serie.serie_synopsis,
+        serie.serie_image_path,
+        "serie" AS serie_type
+    FROM
+        serie
+    INNER JOIN
+        serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
+    INNER JOIN
+        categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
+    GROUP BY
+        serie.serie_ID';
+
+if ($stmt = mysqli_prepare($link, $sql)) {
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
+
+  $filmsOrSeries = array();
+  if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+      array_push($filmsOrSeries, $row);
+    }
+  }
+  mysqli_stmt_close($stmt);
+  return $filmsOrSeries;
+} else {
+  echo "Erreur de préparation de la requête.";
+  return array();
+}
+    }
+
+
+    $filmsOrSeries = getFilmsOrSeries($link);
+
+    echo '<div class="container container_cat" id="' . "index" . '_container">';
+    echo '<h3 id="' . "index" . '">' . "Film & Serie" . '</h3>';
+    echo '<div class="box box-' . "index" . '">';
+
+    foreach ($filmsOrSeries as $item) {
+      $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
+      $type = htmlspecialchars($item['type']); // Ajout du type (film ou serie)
+      $title = htmlspecialchars_decode($item['type'] === 'film' ? $item['film_title'] : $item['serie_title']);
+      $title = str_replace("_", " ", $title);
+      $image_path = htmlspecialchars($item['type'] === 'film' ? $item['film_image_path'] : $item['serie_image_path']);
+      $synopsis = htmlspecialchars_decode($item['type'] === 'film' ? $item['film_synopsis'] : $item['serie_synopsis']);
+      $duree = htmlspecialchars($item['type'] === 'film' ? $item['film_duree'] : ''); // Durée pour les séries non disponible ici
+      $video_path = htmlspecialchars($item['type'] === 'film' ? $item['film_path'] : ''); // Chemin vidéo pour les séries non disponible ici
+      $miniature = htmlspecialchars($item['type'] === 'film' ? $item['film_miniature_path'] : ''); // Miniature pour les séries non disponible ici
+
+      echo '<div class="box-div">
+          <a href="javascript:void(0);" onclick="openModal(this)"
+             data-id="' . $id . '"
+             data-type="' . $type . '"
+             data-image="' . $image_path . '"
+             data-title="' . $title . '"
+             data-synopsis="' . $synopsis . '"
+             data-duration="' . $duree . '"
+             data-video="' . $video_path . '"
+             data-miniature="' . $miniature . '">
+              <img src="' . $image_path . '" alt="' . $title . '">
+          </a>
+      </div>';
+    }
+
+
+    ?>
+    </div>
+    </div>
+    <div id="container_modale_video" class="container_modale_video" style="display:none">
       <div class="modale_video">
-        <span class="close"><img id="close_modale_video" src="../image/icon/close.svg" alt="Close"></span>
+        <span class="close_video" onclick="closeModal()">&times;</span>
+        <div class="title_video">
+          <h2></h2>
+        </div>
+        <div class="sub_container_modale_video">
+          <div class="container_duree_affiche">
+            <div class="affiche_modale">
+              <img src="" alt="">
+            </div>
+            <div class="tags_duree_modale">
+            </div>
+          </div>
+          <div class="title_synopsis_modale">
+            <div class="player_modale">
+              <video id="myVideo" controls>
+                <source src="" type="video/mp4">
+                Votre navigateur ne supporte pas la balise vidéo.
+              </video>
+              <div class="select_saison_episode">
+                <div id="saisonSelectContainer" class="saison-select-container"></div>
+                <div id="episodesSelectContainer" class="episodes-select-container"></div>
+              </div>
+              <p class="synopsis"></p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="container" id="home__series">
-      <h3 id="serie">A Découvrir</h3>
-      <div class="box box-serie">
-        <div class="box-div div19"><a href=""><img src="https://picsum.photos/240/320?random=20" alt=""></a></div>
-        <div class="box-div div20"><a href=""><img src="https://picsum.photos/240/320?random=21" alt=""></a></div>
-        <div class="box-div div21"><a href=""><img src="https://picsum.photos/240/320?random=22" alt=""></a></div>
-        <div class="box-div div22"><a href=""><img src="https://picsum.photos/240/320?random=23" alt=""></a></div>
-        <div class="box-div div23"><a href=""><img src="https://picsum.photos/240/320?random=24" alt=""></a></div>
-        <div class="box-div div24"><a href=""><img src="https://picsum.photos/240/320?random=25" alt=""></a></div>
-        <div class="box-div div25"><a href=""><img src="https://picsum.photos/240/320?random=26" alt=""></a></div>
-        <div class="box-div div26"><a href=""><img src="https://picsum.photos/240/320?random=27" alt=""></a></div>
-        <div class="box-div div27"><a href=""><img src="https://picsum.photos/240/320?random=28" alt=""></a></div>
-        <div class="box-div div28"><a href=""><img src="https://picsum.photos/240/320?random=29" alt=""></a></div>
-        <div class="box-div div29"><a href=""><img src="https://picsum.photos/240/320?random=40" alt=""></a></div>
-        <div class="box-div div30"><a href=""><img src="https://picsum.photos/240/320?random=41" alt=""></a></div>
-        <div class="box-div div31"><a href=""><img src="https://picsum.photos/240/320?random=42" alt=""></a></div>
-        <div class="box-div div32"><a href=""><img src="https://picsum.photos/240/320?random=43" alt=""></a></div>
-        <div class="box-div div33"><a href=""><img src="https://picsum.photos/240/320?random=44" alt=""></a></div>
-        <div class="box-div div34"><a href=""><img src="https://picsum.photos/240/320?random=45" alt=""></a></div>
-        <div class="box-div div35"><a href=""><img src="https://picsum.photos/240/320?random=46" alt=""></a></div>
-        <div class="box-div div36"><a href=""><img src="https://picsum.photos/240/320?random=47" alt=""></a></div>
-      </div>
-    </div>
+
 
   </section>
 
@@ -107,9 +203,9 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   require_once "includes/footer.php";
 
   ?>
-  <script src="js/burger.js"></script>
+  <script src="../js/burger.js"></script>
+  <script src="../js/loadSeasonsIndex.js"></script>
+  <script src="../js/loadEpisodesIndex.js"></script>
+  <script src="../js/modaleVideo.js"></script>
 </body>
-
-
-
 </html>
