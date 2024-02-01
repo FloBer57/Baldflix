@@ -1,5 +1,5 @@
 function openModal(element) {
-    var modal = document.getElementById('container_modale_video');
+    var modal = document.getElementById('containerModaleVideo');
     var image = element.getAttribute('data-image');
     var title = element.getAttribute('data-title');
     var synopsis = element.getAttribute('data-synopsis');
@@ -31,7 +31,7 @@ function openModal(element) {
 }
 
 function closeModal() {
-    var modal = document.getElementById('container_modale_video');
+    var modal = document.getElementById('containerModaleVideo');
     var videoPlayer = document.getElementById('myVideo');
 
     if (videoPlayer) {
@@ -41,5 +41,5 @@ function closeModal() {
     }
 
     modal.style.display = 'none'; // Cache la modale
-    document.body.classList.remove('body-no-scroll'); // Réactive le scroll du body
+    document.body.classList.remove('body_no_scroll'); // Réactive le scroll du body
 }

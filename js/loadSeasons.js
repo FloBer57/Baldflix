@@ -5,6 +5,6 @@ function loadSeasons(serieId) {
             document.getElementById("saisonSelectContainer").innerHTML = '<select onchange="loadEpisodes(this.value, ' + serieId + ')">' + this.responseText + '</select>';
         }
     };
-    xhttp.open("GET", "getSeasons.php?serieId=" + serieId, true);
+    xhttp.open("GET", "../php/getSeasons.php?serieId=" + serieId, true);
     xhttp.send();
 }

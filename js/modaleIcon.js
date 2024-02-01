@@ -15,16 +15,16 @@ btnCloseIconModal.onclick = function () {
 document.querySelectorAll('.modal_radio').forEach(function(radio) {
   radio.addEventListener('change', function() {
       // Retirer la classe de toutes les images
-      document.querySelectorAll('.icon-preview').forEach(function(img) {
-          img.classList.remove('icon-selected');
+      document.querySelectorAll('.icon_preview').forEach(function(img) {
+          img.classList.remove('icon_selected');
       });
 
       // Trouver l'image dans le label parent et ajouter la classe
-      var labelParent = this.closest('.icon-label');
+      var labelParent = this.closest('.icon_label');
       if (labelParent) {
-          var img = labelParent.querySelector('.icon-preview');
+          var img = labelParent.querySelector('.icon_preview');
           if (img) {
-              img.classList.add('icon-selected');
+              img.classList.add('icon_selected');
           }
       }
   });
@@ -34,12 +34,12 @@ const modal = document.getElementById('openIconModal'); // Votre modale
 const body = document.body; // L'élément body
 
 modal.addEventListener('click', () => {
-    body.classList.add('body-no-scroll');
+    body.classList.add('body_no_scroll');
 });
 
 const closeModal = document.getElementById('closeModal');
 closeModal.addEventListener('click', () => {
-    body.classList.remove('body-no-scroll');
+    body.classList.remove('body_no_scroll');
 });
 
 

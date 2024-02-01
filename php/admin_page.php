@@ -65,19 +65,19 @@ echo "bonjour";
   ?>
 
   <main>
-    <div class="account__container">
-      <div class="sub__container admin__container">
-        <nav class="account__nav">
-          <ul class="admin__nav">
-            <li data-tab="admin-user-tab-content" onclick="showTab('admin-user-tab-content')">
+    <div class="account_container">
+      <div class="sub_container admin__container">
+        <nav class="account_nav">
+          <ul class="admin_nav">
+            <li data-tab="adminUserTabContent" onclick="showTab('adminUserTabContent')">
               Administration des utilisateurs</li>
-            <li data-tab="admin-video-tab-content" onclick="showTab('admin-video-tab-content')">Administration des
+            <li data-tab="adminVideoTabContent" onclick="showTab('adminVideoTabContent')">Administration des
               vidéos</li>
-            <li data-tab="admin-serie-tab-content" onclick="showTab('admin-serie-tab-content')">Administration des
+            <li data-tab="adminSerieTabContent" onclick="showTab('adminSerieTabContent')">Administration des
               séries</li>
           </ul>
         </nav>
-        <div id="admin-user-tab-content" class="tab__content admin__content">
+        <div id="adminUserTabContent" class="tab_content admin_content">
           <h2>Administration des utilisateurs</h2>
 
           <?php
@@ -101,6 +101,7 @@ echo "bonjour";
                 <select name='new_role'>
                     <option value='1' " . ($row['user_role_ID'] == '1' ? 'selected' : '') . ">User</option>
                     <option value='2' " . ($row['user_role_ID'] == '2' ? 'selected' : '') . ">Admin</option>
+                    <option value='2' " . ($row['user_role_ID'] == '3' ? 'selected' : '') . ">Démo</option>
                 </select>
                 <input type='submit' name='modify' value='Modifier'>
               </form>
@@ -131,25 +132,25 @@ echo "bonjour";
           ?>
 
         </div>
-        <div id="admin-video-tab-content" class="tab__content admin__content active-tab">
+        <div id="adminVideoTabContent" class="tab_content admin_content active_tab">
           <h2>Administration des films</h2>
           <form id="uploadForm" action="upload_film.php" method="post" enctype="multipart/form-data">
             <div class="admin_video_first">
               <div class="title_tags">
                 <label for="film_title">Titre du film:</label>
-                <input type="text" id="film_title" name="film_title" required>
+                <input type="text" id="filmTitle" class ="film_title" name="film_title" required>
                 <label for="film_tags">Tags (séparés par des virgules):</label>
-                <input type="text" id="film_tags" name="film_tags">
+                <input type="text" id="filmTags" class="film_tags" name="film_tags">
               </div>
               <div class="div_synopsis">
                 <label for="film_synopsis">Synopsis du film :</label>
-                <textarea id="film_synopsis" name="film_synopsis" required></textarea>
+                <textarea id="filmSynopsis" name="film_synopsis" required></textarea>
               </div>
             </div>
-            <div class="form-cat">
-              <div class="form-row row1">
+            <div class="form_cat">
+              <div class="form_row row1">
                 <label for="media_type">Catégorie principale :</label>
-                <select id="film_categories_principal" name="film_categories[]">
+                <select id="filmCategoriesCrincipal" name="film_categories[]">
                   <option>Veuillez choisir:</option>
                   <option value="2">Film</option>
                   <option value="4">Spectacle</option>
@@ -157,9 +158,9 @@ echo "bonjour";
                 </select>
               </div>
 
-              <div class="form-row row2">
+              <div class="form_row row2">
                 <label for="categorie_1">Catégorie 2 :</label>
-                <select id="film_categories_annexe" name="film_categories[]">
+                <select id="filmCategoriesAnnexe" name="film_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 
@@ -169,9 +170,9 @@ echo "bonjour";
                 </select>
               </div>
 
-              <div class="form-row row3">
+              <div class="form_row row3">
                 <label for="categorie_2">Catégorie 3 :</label>
-                <select id="film_categories_annexe_deux" name="film_categories[]">
+                <select id="filmCategoriesAnnexeDeux" name="film_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 
@@ -186,47 +187,47 @@ echo "bonjour";
             <input type="file" id="fileInputVideo" name="video" required>
             <label for="fileUploadImage">Affiche du film</label>
             <input type="file" id="fileInputImage" name="image" required>
-            <input type="submit" id="btnUpload" value="Ajouter la vidéo">
+            <input type="submit" class ="btn_upload_film" id="btnUploadFilm" value="Ajouter la vidéo">
           </form>
-          <div class="restartbtn">
-            <button id="btnRestart" disabled>Recommencer</button>
+          <div class="restart_btn">
+            <button class ="btn_restart" id="btnRestart" disabled>Recommencer</button>
           </div>
-          <div id="progressBarContainer" style="display:none;">
+          <div class="progress_bar_container" id="progressBarContainer" style="display:none;">
             <label for="uploadProgress">Progression du téléchargement :</label>
             <progress id="uploadProgress" value="0" max="100"></progress>
           </div>
         </div>
 
-        <div id="admin-serie-tab-content" class="tab__content admin__content active-tab">
+        <div id="adminSerieTabContent" class="tab_content admin_content active_tab">
           <h2>Administration des séries</h2>
           <form id="uploadFormSerie" action="upload_serie.php" method="post" enctype="multipart/form-data">
             <div class="admin_video_first">
               <div class="title_tags">
                 <label for="serie_title">Titre de la série</label>
-                <input type="text" id="serie_title" name="serie_title" required>
+                <input type="text" class="serie_title" id="serieTitle" name="serie_title" required>
                 <label for="serie_tags">Tags (séparés par des virgules):</label>
-                <input type="text" id="serie_tags" name="serie_tags">
+                <input type="text" class="serie_tags" id="serieTags" name="serie_tags">
               </div>
               <div class="div_synopsis">
                 <label for="serie_synopsis">Synopsis de la série</label>
-                <textarea id="serie_synopsis" name="serie_synopsis" required></textarea>
+                <textarea id="serieSynopsis" name="serie_synopsis" required></textarea>
               </div>
             </div>
-            <div class="form-cat">
+            <div class="form_cat">
               <div class="saison_number" <label for="numero_saison">N°:</label>
-                <select id="numero_saison" name="numero_saison" required>
+                <select id="numeroSaison" name="numero_saison" required>
                   <?php for ($i = 1; $i <= 20; $i++) {
                     echo "<option value='$i'>Saison $i</option>";
                   } ?>
                 </select>
               </div>
 
-              <button type="button" id="openSaisonModal">+</button>
-              <input type="number" id="serie_ID" name="serie_ID" >
+              <button type="button" id="openSaisonModal">Liste séries</button>
+              <input class="serie_ID_input_btn" type="number" id="serieID" name="serie_ID" >
 
-              <div class="form-row row1">
+              <div class="form_row row1">
                 <label for="media_type">Catégorie 1 :</label>
-                <select id="serie_categorie_un" name="serie_categories[]">
+                <select id="serieCategorieUn" name="serie_categories[]">
                   <option>Veuillez choisir :</option>
                   <option value="3">Série</option>
                   <option value="4">Spectacle</option>
@@ -234,9 +235,9 @@ echo "bonjour";
                 </select>
               </div>
 
-              <div class="form-row row2">
+              <div class="form_row row2">
                 <label for="categorie_1">Catégorie 2 :</label>
-                <select id="serie_categorie_deux" name="serie_categories[]">
+                <select id="serieCategorieDeux" name="serie_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 
@@ -246,9 +247,9 @@ echo "bonjour";
                 </select>
               </div>
 
-              <div class="form-row row3">
+              <div class="form_row row3">
                 <label for="categorie_2">Catégorie 3 :</label>
-                <select id="serie_categorie_trois" name="serie_categories[]">
+                <select id="serieCategorieTrois" name="serie_categories[]">
                   <option>Veuillez choisir :</option>
                   <?php
 
@@ -262,12 +263,12 @@ echo "bonjour";
             <input type="file" id="fileInputVideoSerie" name="video[]" multiple required>
             <label for="fileUploadImageSerie">Affiche de la série :</label>
             <input type="file" id="fileInputImageSerie" name="image" required>
-            <input type="submit" id="btnUploadSerie" value="Ajouter la vidéo">
+            <input type="submit" class="btn_upload_serie" id="btnUploadSerie" value="Ajouter la vidéo">
           </form>
-          <div class="restartbtn">
-            <button id="btnRestartSerie" disabled>Recommencer</button>
+          <div class="restart_btn">
+            <button class ="btn_restart_serie" id="btnRestartSerie" disabled>Recommencer</button>
           </div>
-          <div id="progressBarContainerSerie" style="display:none;">
+          <div class="progress_bar_container_serie" id="progressBarContainerSerie" style="display:none;">
             <label for="uploadProgressSerie">Progression du téléchargement :</label>
             <progress id="uploadProgressSerie" value="0" max="100"></progress>
           </div>
@@ -275,9 +276,9 @@ echo "bonjour";
       </div>
     </div>
 
-    <div id="saisonModal" class="saisonModal" style="display:none">
-      <div class="saisonModalContent">
-        <span class="closeSaisonModal" onclick="closeModal()">&times;</span>
+    <div id="saisonModal" class="saison_modal" style="display:none">
+      <div class="saison_modal_content">
+        <span class="close_saison_modal" id ="closeSaisonModal" onclick="closeModal()">&times;</span>
         <h2>Veuillez choisir une Série</h2>
         <div id="saisonContainer">
           <?php
@@ -323,8 +324,8 @@ echo "bonjour";
 
           $GetSeries = getSeriesByCategoryAdmin($link);
 
-          echo '<div class="container container_cat" id="admin_container">';
-          echo '<div class="box box-admin">';
+          echo '<div class="container container_cat" id="adminContainer">';
+          echo '<div class="box box_admin">';
 
           foreach ($GetSeries as $item) {
             $id = htmlspecialchars($item['serie_ID']);
@@ -348,7 +349,7 @@ echo "bonjour";
             $categorie_deux_id = isset($categories_ids[1]) ? trim($categories_ids[1]) : "";
             $categorie_trois_id = isset($categories_ids[2]) ? trim($categories_ids[2]) : "";
         
-            echo '<div class="box-div" onclick="fillFormData(this)"
+            echo '<div class="box_div" onclick="fillFormData(this)"
             data-id="' . $id . '"
             data-title="' . $title . '"
             data-synopsis="' . $synopsis . '"
@@ -360,7 +361,6 @@ echo "bonjour";
             <img src="' . $image_path . '" alt="' . $title . '">
             </div>';
         }
-          //// PROBLEME AVEC MON PHP ////
 
           ?>
         </div>

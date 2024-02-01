@@ -25,6 +25,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit("Erreur lors du téléchargement de l'image.");
         }
 
+        if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
+            $converted_image_file = $film_dir . $safe_title . '_Affiche.jpg';
+        
+            $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " -vf 'scale=\"min(250\\, iw*355/ih)\":\"min(355\\, ih*250/iw)\",pad=250:355:(250-iw)/2:(355-ih)/2' " . escapeshellarg($converted_image_file);
+            exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
+        
+            if ($return_var_image === 0 && file_exists($converted_image_file)) {
+                if (file_exists($image_target_file)) {
+                    unlink($image_target_file);
+                }
+                $image_target_file = $converted_image_file;
+            } else {
+                exit("Erreur lors de la conversion de l'image.");
+            }
+        }
+    
+
         mysqli_begin_transaction($link);
         $sql_serie = "INSERT INTO serie (serie_title, serie_tags, serie_image_path, serie_synopsis) VALUES (?, ?, ?, ?)";
         if ($stmt_serie = mysqli_prepare($link, $sql_serie)) {
@@ -127,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             rename($video_target_file, $new_video_path);
 
-            $episode_title = $safe_nom_serie . "_" . $numero_saison . "_" . "Épisode_" . ($index + 1);
+            $episode_title = $safe_nom_serie . "_S0" . $numero_saison . "_" . "Épisode_0" . ($index + 1);
 
             $date = date('Y-m-d H:i:s');
 
@@ -214,7 +231,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $duration_formatted = gmdate("H:i:s", $total_seconds);
 
             $random_time = rand(1, $total_seconds);
-            $video_target_miniature = $serie_dir . 'miniature_' . 'EP_' . ($index + 1) . '.jpg';
+            $video_target_miniature = $serie_dir . 'miniature_' . 'EP_0' . ($index + 1) . '.jpg';
             $ffmpeg_cmd_extract = "ffmpeg -i " . escapeshellarg($video_target_file) . " -ss $random_time -frames:v 1 " . escapeshellarg($video_target_miniature);
             exec($ffmpeg_cmd_extract);
 
@@ -229,7 +246,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             rename($video_target_file, $new_video_path);
 
-            $episode_title = $safe_nom_serie . "_" . $numero_saison . "_" . "Épisode_" . ($index + 1);
+            $episode_title = $safe_nom_serie . "_S0" . $numero_saison . "_Épisode_0" . ($index + 1);
 
             $date = date('Y-m-d H:i:s');
 

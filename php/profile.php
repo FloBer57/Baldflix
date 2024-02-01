@@ -50,44 +50,44 @@ mysqli_close($link);
   ?>
 
   <main>
-    <div class="account__container">
-      <div class="sub__container">
-        <nav class="account__nav">
+    <div class="account_container">
+      <div class="sub_container">
+        <nav class="account_nav">
           <ul>
-            <li data-tab="profile-tab-content" onclick="showTab('profile-tab-content')">Mon profil</li>
-            <li data-tab="password-tab-content" onclick="showTab('password-tab-content')">Mot de passe et
+            <li data-tab="profileTabContent" onclick="showTab('profileTabContent')">Mon profil</li>
+            <li data-tab="passwordTabContent" onclick="showTab('passwordTabContent')">Mot de passe et
               Sécurité</li>
-            <li data-tab="delete-tab-content" onclick="showTab('delete-tab-content')">Supprimer le compte
+            <li data-tab="deleteTabContent" onclick="showTab('deleteTabContent')">Supprimer le compte
             </li>
-            <li data-tab="suggest-tab-content" onclick="showTab('suggest-tab-content')">Une suggestion?
+            <li data-tab="suggestTabContent" onclick="showTab('suggestTabContent')">Une suggestion?
             </li>
           </ul>
         </nav>
 
-        <div id="profile-tab-content" class="tab__content">
+        <div id="profileTabContent" class="tab_content">
           <h2>Modifier la photo de profil</h2>
           <?php if (isset($_SESSION["profile_picture"])): ?>
             <p class="text_modify">Actuellement : </p>
             <img class="choose_picture" src="<?php echo $_SESSION["profile_picture"]; ?>" alt="Photo actuelle">
           <?php endif; ?>
-          <button id="openIconModal">Choisir une icône</button>
+          <button class="btn_open_icon_modal" id="openIconModal">Choisir une icône</button>
         </div>
 
         <div id="iconModal" class="modal" style="display:none">
-          <div class="modal-content">
+          <div class="modal_content">
             <span class="close"><img id="closeModal" src="../image/icon/close.svg" alt="Close"></span>
             <h2>Choisir une icône</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-              <div id="iconContainer">
+              <div class ="icon_container" id="iconContainer">
                 <?php
                 $imagesDirectory = '../image/users_icon/';
                 $images = glob($imagesDirectory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
                 foreach ($images as $image) {
                   $imageName = basename($image);
                   echo "
-                        <label class=\"icon-label\">
+                        <label class=\"icon_label\">
                             <input type=\"radio\" class=\"modal_radio\" name=\"selectedIcon\" value=\"$imageName\">
-                            <img class=\"icon-preview\" src=\"$image\" data-icon=\"$imageName\">
+                            <img class=\"icon_preview\" src=\"$image\" data-icon=\"$imageName\">
                         </label>
                     ";
                 }
@@ -98,74 +98,74 @@ mysqli_close($link);
           </div>
         </div>
 
-        <div id="password-tab-content" class="tab__content active-tab">
+        <div id="passwordTabContent" class="tab_content active_tab">
           <h2>Modifier le mot de passe</h2>
           <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="form-group">
+            <div class="form_group">
               <label for="new_password" class="new_password">Nouveau mot de passe*</label>
-              <input type="password" placeholder="Nouveau mot de passe" name="new_password" id="new_password" required
-                class="form-control <?php echo (!empty($new_password_err)) ? 'is-invalid' : ''; ?>"
+              <input type="password" placeholder="Nouveau mot de passe" name="new_password" id="newPassword" required
+                class="form_control <?php echo (!empty($new_password_err)) ? 'is_invalid' : ''; ?>"
                 value="<?php echo $new_password; ?>">
-              <span class="invalid-feedback">
+              <span class="invalid_feedback">
                 <?php echo $new_password_err; ?>
               </span>
               <br>
             </div>
-            <div class="form-group">
+            <div class="form_group">
               <label for="confirm_new_password">Confirmer le nouveau mot de passe :</label>
               <input type="password" placeholder="Confirmez le mot de passe" name="confirm_password"
-                id="confirm_new_password" required
-                class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>"
+                id="confirmNewPassword" required
+                class="form_control <?php echo (!empty($confirm_password_err)) ? 'is_invalid' : ''; ?>"
                 value="<?php echo $confirm_password; ?>">
-              <span class="invalid-feedback">
+              <span class="invalid_feedback">
                 <?php echo $confirm_password_err; ?>
                 <br>
               </span>
             </div>
-            <div class="form-group">
+            <div class="form_group">
               <input type="submit" value="Modifier le mot de passe">
             </div>
           </form>
         </div>
-        <div id="delete-tab-content" class="tab__content active-tab">
+        <div id="deleteTabContent" class="tab_content active_tab">
           <h2>Supprimer le compte</h2>
           <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="form-group">
+            <div class="form_group">
               <label for="password_delete">Entrez votre mot de passe pour confirmer :</label>
               <input type="password" placeholder="Mot de passe" name="password_delete" id="password_delete" required
-                class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
-              <span class="invalid-feedback">
+                class="form_control <?php echo (!empty($password_err)) ? 'is_invalid' : ''; ?>">
+              <span class="invalid_feedback">
                 <?php echo $password_err; ?>
               </span>
               <br>
             </div>
-            <div class="form-group">
+            <div class="form_group">
               <input type="submit" name="delete_account" value="Supprimer le compte">
             </div>
           </form>
         </div>
-        <div id="suggest-tab-content" class="tab__content active-tab">
+        <div id="suggestTabContent" class="tab_content active_tab">
           <h2>Une suggestion?</h2>
           <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="form-group">
+            <div class="form_group">
               <label for="suggestion_firstname">Prénom :</label>
-              <input type="text" placeholder="Prénom" name="suggestion_firstname" id="suggestion_firstname" required
-                class="form-control">
+              <input type="text" placeholder="Prénom" name="suggestion_firstname" id="suggestionFirstname" required
+                class="form_control">
               <br>
             </div>
-            <div class="form-group">
+            <div class="form_group">
               <label for="suggestion_lastname">Nom :</label>
-              <input type="text" placeholder="Nom" name="suggestion_lastname" id="suggestion_lastname" required
-                class="form-control">
+              <input type="text" placeholder="Nom" name="suggestion_lastname" id="suggestionLastname" required
+                class="form_control">
               <br>
             </div>
-            <div class="form-group">
+            <div class="form_group">
               <label for="suggestion_message">Message :</label>
-              <textarea placeholder="Votre suggestion" name="suggestion_message" id="suggestion_message" required
-                class="form-control"></textarea>
+              <textarea placeholder="Votre suggestion" class="suggestion_message" name="suggestion_message" id="suggestionMessage" required
+                class="form_control"></textarea>
               <br>
             </div>
-            <div class="form-group">
+            <div class="form_group">
               <input type="submit" name="submit_suggestion" value="Envoyer la suggestion">
             </div>
           </form>

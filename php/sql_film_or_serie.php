@@ -98,7 +98,7 @@
 
     echo '<div class="container container_cat" id="' . $lower_categorie . '_container">';
     echo '<h3 id="' . $lower_categorie . '">' . htmlspecialchars($categorie) . '</h3>';
-    echo '<div class="box box-' . $lower_categorie . '">';
+    echo '<div class="box box_' . $lower_categorie . '">';
 
     foreach ($filmsOrSeries as $item) {
       $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
@@ -111,7 +111,7 @@
       $date_ajout = htmlspecialchars($item['type'] === 'film' ? $item['film_date_ajout'] : (isset($item['episode_date_ajout']) ? $item['episode_date_ajout'] : ''));
       $miniature = htmlspecialchars($item['type'] === 'film' ? $item['film_miniature_path'] : (isset($item['episode_miniature_pate']) ? $item['episode_miniature_path'] : ''));
 
-      echo '<div class="box-div">
+      echo '<div class="box_div">
       <a href="javascript:void(0);" onclick="openModal(this)"
          data-id="' . $id . '"
          data-image="' . $image_path . '"

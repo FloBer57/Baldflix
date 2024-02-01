@@ -16,13 +16,13 @@
   
     ?>
     <section class="trailer">
-        <div class="present-vid" id="video">
-          <video class="preview" autoplay muted loop id="video-background">
+        <div class="present_vid" id="video">
+          <video class="preview" autoplay muted loop id="videoBackground">
             <source src="video/error/404 error même.mp4" type="video/mp4">
             Votre navigateur ne prend pas en charge la vidéo.
           </video>
-          <h2 class="error text-video" >Erreur 404</h3>
-            <h2 class="error_acceuil text-video">Acceuil  </h3>
+          <h2 class="error text_video" >Erreur 404</h3>
+            <h2 class="error_acceuil text_video">Acceuil</h3>
         </div>
       </section>
       <?php

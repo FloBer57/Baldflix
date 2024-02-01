@@ -31,9 +31,9 @@ require_once "includes/header.php";
 
 if (!isset($_SESSION['animation_vue'])) {
   echo '<script>
-          document.body.classList.add("no-scroll");
+          document.body.classList.add("no_scroll");
           setTimeout(function() {
-              document.body.classList.remove("no-scroll");
+              document.body.classList.remove("no_scroll");
           }, 3500);
         </script>';
   require_once "includes/netflix_intro.php";
@@ -43,16 +43,16 @@ if (!isset($_SESSION['animation_vue'])) {
 ?>
 
   <section class="trailer">
-    <div class="present-vid" id="video">
-      <video class="preview" autoplay muted loop id="video-background">
+    <div class="present_vid" id="video">
+      <video class="preview" autoplay muted loop id="videoBackground">
         <source src="../video/trailer/trailer.mp4" type="video/mp4">
         Votre navigateur ne prend pas en charge la vidéo.
       </video>
-      <h2 class="text-video">Bienvenue sur BaldFlix</h2>
+      <h2 class="text_video">Bienvenue sur BaldFlix</h2>
     </div>
   </section>
 
-  <section class="main-container main-watched">
+  <section class="main_container main_watched">
 
 
   <?php
@@ -129,9 +129,9 @@ if ($stmt = mysqli_prepare($link, $sql)) {
 
     $filmsOrSeries = getFilmsOrSeries($link);
 
-    echo '<div class="container container_cat" id="' . "index" . '_container">';
+    echo '<div class="container container_cat" id="' . "index" . 'Container">';
     echo '<h3 id="' . "index" . '">' . "Film & Serie" . '</h3>';
-    echo '<div class="box box-' . "index" . '">';
+    echo '<div class="box box_' . "index" . '">';
 
     foreach ($filmsOrSeries as $item) {
       $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
@@ -144,7 +144,7 @@ if ($stmt = mysqli_prepare($link, $sql)) {
       $video_path = htmlspecialchars($item['type'] === 'film' ? $item['film_path'] : ''); // Chemin vidéo pour les séries non disponible ici
       $miniature = htmlspecialchars($item['type'] === 'film' ? $item['film_miniature_path'] : ''); // Miniature pour les séries non disponible ici
 
-      echo '<div class="box-div">
+      echo '<div class="box_div">
           <a href="javascript:void(0);" onclick="openModal(this)"
              data-id="' . $id . '"
              data-type="' . $type . '"
@@ -163,7 +163,7 @@ if ($stmt = mysqli_prepare($link, $sql)) {
     ?>
     </div>
     </div>
-    <div id="container_modale_video" class="container_modale_video" style="display:none">
+    <div id="containerModaleVideo" class="container_modale_video" style="display:none">
       <div class="modale_video">
         <span class="close_video" onclick="closeModal()">&times;</span>
         <div class="title_video">
@@ -179,13 +179,13 @@ if ($stmt = mysqli_prepare($link, $sql)) {
           </div>
           <div class="title_synopsis_modale">
             <div class="player_modale">
-              <video id="myVideo" controls>
+              <video class ="my_video" id="myVideo" controls>
                 <source src="" type="video/mp4">
                 Votre navigateur ne supporte pas la balise vidéo.
               </video>
               <div class="select_saison_episode">
-                <div id="saisonSelectContainer" class="saison-select-container"></div>
-                <div id="episodesSelectContainer" class="episodes-select-container"></div>
+                <div id="saisonSelectContainer" class="saison_select_container"></div>
+                <div id="episodesSelectContainer" class="episodes_select_container"></div>
               </div>
               <p class="synopsis"></p>
             </div>
@@ -204,8 +204,8 @@ if ($stmt = mysqli_prepare($link, $sql)) {
 
   ?>
   <script src="../js/burger.js"></script>
-  <script src="../js/loadSeasonsIndex.js"></script>
-  <script src="../js/loadEpisodesIndex.js"></script>
+  <script src="../js/loadSeasons.js"></script>
+  <script src="../js/loadEpisodes.js"></script>
   <script src="../js/modaleVideo.js"></script>
 </body>
 </html>

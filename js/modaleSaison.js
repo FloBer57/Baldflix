@@ -7,18 +7,18 @@ const body = document.body; // L'élément body
 
 btnOpenSaisonModal.onclick = function () {
     saisonModal.style.display = "block";
-    document.body.classList.add('body-no-scroll'); // Ajout de no-scroll ici
+    document.body.classList.add('body_no_scroll'); // Ajout de no-scroll ici
 }
 
 btnCloseSaisonModal.onclick = function () {
     saisonModal.style.display = "none";
-    document.body.classList.remove('body-no-scroll'); // Retrait de no-scroll ici
+    document.body.classList.remove('body_no_scroll'); // Retrait de no-scroll ici
 }
 
 function closeModal() {
     var modal = document.getElementById('saisonModal');
     modal.style.display = 'none'; // Cache la modale
-    document.body.classList.remove('body-no-scroll'); // Réactive le scroll du body
+    document.body.classList.remove('body_no_scroll'); // Réactive le scroll du body
 }
 
 function fillFormData(element) {
@@ -32,16 +32,16 @@ function fillFormData(element) {
   const categorieTroisId = element.getAttribute('data-serie_categorie_trois_id');
 
   // Remplir le formulaire
-  document.getElementById('serie_ID').value = id;
-  document.getElementById('serie_title').value = title;
-  document.getElementById('serie_synopsis').value = synopsis;
-  document.getElementById('serie_tags').value = tags;
-  document.getElementById('serie_categorie_un').value = categorieUnId;
-  document.getElementById('serie_categorie_deux').value = categorieDeuxId;
-  document.getElementById('serie_categorie_trois').value = categorieTroisId;
+  document.getElementById('serieID').value = id;
+  document.getElementById('serieTitle').value = title;
+  document.getElementById('serieSynopsis').value = synopsis;
+  document.getElementById('serieTags').value = tags;
+  document.getElementById('serieCategorieUn').value = categorieUnId;
+  document.getElementById('serieCategorieDeux').value = categorieDeuxId;
+  document.getElementById('serieCategorieTrois').value = categorieTroisId;
 
 
   // Afficher la modale
   saisonModal.style.display = "block";
-  body.classList.add('body-no-scroll');
+  body.classList.add('body_no_scroll');
 }

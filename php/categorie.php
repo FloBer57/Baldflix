@@ -18,7 +18,7 @@ $lower_categorie = strtolower($categorie);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noimageindex">
-  <link rel="shortcut icon" href="image/favicon/bald_favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="../image/favicon/bald_favicon.ico" type="image/x-icon" />
   <title>
     <?php echo ucfirst($categorie); ?>
   </title>
@@ -32,7 +32,7 @@ $lower_categorie = strtolower($categorie);
   <?php
   require_once "../includes/header.php";
   ?>
-  <section class="main-container">
+  <section class="main_container">
     <?php
     function getFilmsOrSeriesByCategory($link, $categorie)
     {
@@ -112,9 +112,9 @@ $lower_categorie = strtolower($categorie);
 
     $filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
 
-    echo '<div class="container container_cat" id="' . $lower_categorie . '_container">';
+    echo '<div class="container container_cat" id="' . $lower_categorie . 'Container">';
     echo '<h3 id="' . $lower_categorie . '">' . htmlspecialchars($categorie) . '</h3>';
-    echo '<div class="box box-' . $lower_categorie . '">';
+    echo '<div class="box box_' . $lower_categorie . '">';
 
     foreach ($filmsOrSeries as $item) {
       $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
@@ -127,7 +127,7 @@ $lower_categorie = strtolower($categorie);
       $video_path = htmlspecialchars($item['type'] === 'film' ? $item['film_path'] : ''); // Chemin vidéo pour les séries non disponible ici
       $miniature = htmlspecialchars($item['type'] === 'film' ? $item['film_miniature_path'] : ''); // Miniature pour les séries non disponible ici
 
-      echo '<div class="box-div">
+      echo '<div class="box_div">
           <a href="javascript:void(0);" onclick="openModal(this)"
              data-id="' . $id . '"
              data-type="' . $type . '"
@@ -146,7 +146,7 @@ $lower_categorie = strtolower($categorie);
     ?>
     </div>
     </div>
-    <div id="container_modale_video" class="container_modale_video" style="display:none">
+    <div id="containerModaleVideo" class="container_modale_video" style="display:none">
       <div class="modale_video">
         <span class="close_video" onclick="closeModal()">&times;</span>
         <div class="title_video">
@@ -162,13 +162,13 @@ $lower_categorie = strtolower($categorie);
           </div>
           <div class="title_synopsis_modale">
             <div class="player_modale">
-              <video id="myVideo" controls>
+              <video class ="my_video" id="myVideo" controls>
                 <source src="" type="video/mp4">
                 Votre navigateur ne supporte pas la balise vidéo.
               </video>
               <div class="select_saison_episode">
-                <div id="saisonSelectContainer" class="saison-select-container"></div>
-                <div id="episodesSelectContainer" class="episodes-select-container"></div>
+                <div id="saisonSelectContainer" class="saison_select_container"></div>
+                <div id="episodesSelectContainer" class="episodes_select_container"></div>
               </div>
               <p class="synopsis">Durée:</p>
             </div>

@@ -24,42 +24,42 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 </head>
 
 <body class="background">
-  <div class="main__container">
+  <div class="main_container">
     <div class="container">
-      <div class="container__form">
+      <div class="container_form">
         <?php
         if (!empty($login_err)) {
-          echo '<div class="alert alert-danger">' . $login_err . '</div>';
+          echo '<div class="alert alert_danger">' . $login_err . '</div>';
         }
         ?>
         <form action="login.php" method="post">
           <label for="username" class="username">Nom d'utilisateur*</label>
           <input type="text" placeholder="Nom d'utilisateur" id="username" name="username" required
-            class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"
+            class="form_control <?php echo (!empty($username_err)) ? 'is_invalid' : ''; ?>"
             value="<?php echo $username; ?>">
-          <span class="invalid-feedback">
+          <span class="invalid_feedback">
             <?php echo $username_err; ?>
           </span>
           <br><br>
 
           <label for="password">Mot de passe* :</label>
           <input type="password" placeholder="Mot de passe" id="password" name="password" required
-            class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
-          <span class="invalid-feedback">
+            class="form_control <?php echo (!empty($password_err)) ? 'is_invalid' : ''; ?>">
+          <span class="invalid_feedback">
             <?php echo $password_err; ?>
           </span>
           <br><br>
 
           <input class="input" id="inepute" type="submit" value="Connexion">
-          <p>Vous n'avez pas de compte? Cheh</p>
+          <p>Vous n'avez pas de compte? Dommage.</p>
         </form>
       </div>
 
-      <div class="container__title">
+      <div class="container_title">
         <div class="title">
           <h1>Baldflix</h1>
         </div>
-        <p class="wai">Bienvenue sur Baldflix! Identifie toi pour accéder à de superbes contenus !</p>
+        <p class="message_demo">Bienvenue sur Baldflix! Identifie toi pour accéder à de superbes contenus !</p>
 
       </div>
     </div>

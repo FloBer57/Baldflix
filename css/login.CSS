@@ -36,7 +36,7 @@ body {
   display: none;
 }
 
-.main__container {
+.main_container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,8 +49,8 @@ body {
   width: 90%;
 }
 
-.container__form,
-.container__title {
+.container_form,
+.container_title {
   flex: 1;
   padding: 20px;
   margin: 20px;
@@ -83,7 +83,7 @@ body {
   text-decoration: none;
 }
 
-.wai {
+.message_Demo {
   text-align: center;
   margin-top: 50px;
   font-size: 15px;
@@ -131,11 +131,11 @@ input[type="submit"] {
     margin: 0;
   }
 
-  .wai {
+  .message_demo {
     display: none;
   }
 
-  .container__title {
+  .container_title {
     padding: 25px;
     order: 1;
     box-shadow: none;
@@ -144,7 +144,7 @@ input[type="submit"] {
     padding: 0;
     margin: 0;
   }
-  .container__form {
+  .container_form {
     padding: 25px;
     order: 2;
     margin-bottom: 15vh;

@@ -15,15 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mkdir($target_dir, 0755, true);
     }
 
-    // A DECOMMENTER ET MODIFIER UNE FOIS QUE JE SAURAI QUEL TYPE DE VIDEO JE VEUX!!! 
-
-    #$videoFileType = strtolower(pathinfo($video_target_file, PATHINFO_EXTENSION));
-    #$imageFileType = strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION));
-
-    #if (!in_array($_FILES["video"]["type"], $allowedVideoTypes) || !in_array($_FILES["image"]["type"], $allowedImageTypes)) {
-    #    exit("Type de fichier non autorisé.");
-    #}
-
 
     $film_dir = $target_dir . $safe_title . "/";
     if (!file_exists($film_dir)) {
@@ -53,8 +44,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
 
 
+    
     if (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
         exit("Erreur lors du téléchargement de l'image.");
+    }
+
+    if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
+        $converted_image_file = $film_dir . $safe_title . '_Affiche.jpg';
+    
+        $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " -vf 'scale=\"min(250\\, iw*355/ih)\":\"min(355\\, ih*250/iw)\",pad=250:355:(250-iw)/2:(355-ih)/2' " . escapeshellarg($converted_image_file);
+        exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
+    
+        if ($return_var_image === 0 && file_exists($converted_image_file)) {
+            if (file_exists($image_target_file)) {
+                unlink($image_target_file);
+            }
+            $image_target_file = $converted_image_file;
+        } else {
+            exit("Erreur lors de la conversion de l'image.");
+        }
     }
 
 
