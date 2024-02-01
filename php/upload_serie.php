@@ -18,15 +18,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mkdir($serie_dir, 0755, true);
         }
 
-        
-        $image_new_name = $safe_nom_serie . str_replace(' ', '_', $nom_serie) . '_Affiche.' . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
-        $image_target_file = $image_new_name;
+        $image_target_file = $serie_dir .  $safe_nom_serie . '_Affiche.' . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
+       
         if (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
             exit("Erreur lors du téléchargement de l'image.");
         }
 
         if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
-            $converted_image_file = $film_dir . $safe_title . '_Affiche.jpg';
+            $converted_image_file = $serie_dir . $safe_nom_serie . '_Affiche.jpg';
         
             $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " -vf 'scale=\"min(250\\, iw*355/ih)\":\"min(355\\, ih*250/iw)\",pad=250:355:(250-iw)/2:(355-ih)/2' " . escapeshellarg($converted_image_file);
             exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);

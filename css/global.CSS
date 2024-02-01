@@ -926,6 +926,21 @@ img.icon_preview.icon_selected {
   overflow: hidden;
 }
 
+/* Mention légale */
+
+.back_mention{
+  background-color: var(--primary);
+}
+
+.section_mention{
+    padding: 20px;
+    margin-top: 150px;
+}
+
+.section_mention h2 {
+  border-bottom: 1px solid var(--red);
+}
+
 @media screen and (min-width: 451px) and (max-width: 1050px) {
   .box_div img {
     width: 190px;
@@ -1560,4 +1575,10 @@ img.icon_preview.icon_selected {
   .sub_container_modale_video {
     justify-content: flex-start;
   }
+
+  /* Mention légales */
+
+  .section_mention{
+    margin-top: 125px;
+}
 }
