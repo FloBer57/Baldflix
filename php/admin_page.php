@@ -23,25 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["user_ID"])) {
     include_once "admin_delete.php";
   }
+} elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
+  if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["ID"]) && isset($_GET["type"]) && isset($_GET["csrf_token"])) {
+    include_once "delete_video.php";
+  }
 }
 
+include_once "delete_video.php";
 $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
-
-/// TEST
-if(isset($_SESSION['duree_brute'])) {
-  echo "Durée brute: " . $_SESSION['duree_brute'] . " secondes<br>";
-}
-
-if(isset($_SESSION['duree_arrondie'])) {
-  echo "Durée arrondie: " . $_SESSION['duree_arrondie'] . " secondes<br>";
-}
-
-if(isset($_SESSION['duree_formattee'])) {
-  echo "Durée formatée: " . $_SESSION['duree_formattee'] . "<br>";
-}
-
-echo "bonjour";
-// FIN TEST
 
 ?>
 
@@ -75,7 +64,7 @@ echo "bonjour";
               vidéos</li>
             <li data-tab="adminSerieTabContent" onclick="showTab('adminSerieTabContent')">Administration des
               séries</li>
-              <li data-tab="adminVideoDeleteTabContent" onclick="showTab('adminVideoDeleteTabContent')">Administration des
+            <li data-tab="adminVideoDeleteTabContent" onclick="showTab('adminVideoDeleteTabContent')">Administration des
               séries</li>
           </ul>
         </nav>
@@ -140,7 +129,7 @@ echo "bonjour";
             <div class="admin_video_first">
               <div class="title_tags">
                 <label for="film_title">Titre du film:</label>
-                <input type="text" id="filmTitle" class ="film_title" name="film_title" required>
+                <input type="text" id="filmTitle" class="film_title" name="film_title" required>
                 <label for="film_tags">Tags (séparés par des virgules):</label>
                 <input type="text" id="filmTags" class="film_tags" name="film_tags">
               </div>
@@ -189,10 +178,10 @@ echo "bonjour";
             <input type="file" id="fileInputVideo" name="video" required>
             <label for="fileUploadImage">Affiche du film</label>
             <input type="file" id="fileInputImage" name="image" required>
-            <input type="submit" class ="btn_upload_film" id="btnUploadFilm" value="Ajouter la vidéo">
+            <input type="submit" class="btn_upload_film" id="btnUploadFilm" value="Ajouter la vidéo">
           </form>
           <div class="restart_btn">
-            <button class ="btn_restart" id="btnRestart" disabled>Recommencer</button>
+            <button class="btn_restart" id="btnRestart" disabled>Recommencer</button>
           </div>
           <div class="progress_bar_container" id="progressBarContainer" style="display:none;">
             <label for="uploadProgress">Progression du téléchargement :</label>
@@ -225,7 +214,7 @@ echo "bonjour";
               </div>
 
               <button type="button" id="openSaisonModal">Liste séries</button>
-              <input class="serie_ID_input_btn" type="number" id="serieID" name="serie_ID" >
+              <input class="serie_ID_input_btn" type="number" id="serieID" name="serie_ID">
 
               <div class="form_row row1">
                 <label for="media_type">Catégorie 1 :</label>
@@ -268,7 +257,7 @@ echo "bonjour";
             <input type="submit" class="btn_upload_serie" id="btnUploadSerie" value="Ajouter la vidéo">
           </form>
           <div class="restart_btn">
-            <button class ="btn_restart_serie" id="btnRestartSerie" disabled>Recommencer</button>
+            <button class="btn_restart_serie" id="btnRestartSerie" disabled>Recommencer</button>
           </div>
           <div class="progress_bar_container_serie" id="progressBarContainerSerie" style="display:none;">
             <label for="uploadProgressSerie">Progression du téléchargement :</label>
@@ -315,21 +304,21 @@ echo "bonjour";
             echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
             while ($row = mysqli_fetch_assoc($result)) {
               $id = $row['type'] === 'film' ? $row['film_ID'] : $row['serie_ID'];
-              $title = htmlspecialchars_decode($row['type'] === 'film'? $row['title'] : $row['serie_title']);
+              $title = htmlspecialchars_decode($row['type'] === 'film' ? $row['title'] : $row['serie_title']);
               $title = str_replace("_", " ", $title);
               $imagePath = $row['type'] === 'film' ? $row['film_image_path'] : $row['serie_image_path'];
               $type = $row['type'];
-              
+
               echo "<tr>";
               echo "<td><img src='{$imagePath}' alt='Affiche' style='width:50px;'></td>";
               echo "<td>" . htmlspecialchars($title) . "</td>";
               echo "<td>" . htmlspecialchars($type) . "</td>";
               echo "<td>" . htmlspecialchars($id) . "</td>";
               echo "<td>
-                <a href='?action=delete&ID={$id}&type={$type}&csrf_token={$_SESSION["csrf_token"]}' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cette vidéo ?\")'>
-                  <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
-                </a>
-              </td>";
+            <a href='#' onclick='confirmDeleteVideo(\"?action=deleteVideo&ID={$id}&type={$type}&csrf_token={$_SESSION["csrf_token"]}\")'>
+                <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
+            </a>
+        </td>";
               echo "</tr>";
             }
             echo "</table>";
@@ -346,7 +335,7 @@ echo "bonjour";
 
     <div id="saisonModal" class="saison_modal" style="display:none">
       <div class="saison_modal_content">
-        <span class="close_saison_modal" id ="closeSaisonModal" onclick="closeModal()">&times;</span>
+        <span class="close_saison_modal" id="closeSaisonModal" onclick="closeModal()">&times;</span>
         <h2>Veuillez choisir une Série</h2>
         <div id="saisonContainer">
           <?php
@@ -388,7 +377,7 @@ echo "bonjour";
               echo "Erreur de préparation de la requête : " . mysqli_error($link);
               return array();
             }
-          } 
+          }
 
           $GetSeries = getSeriesByCategoryAdmin($link);
 
@@ -402,21 +391,23 @@ echo "bonjour";
             $synopsis = htmlspecialchars($item['serie_synopsis']);
             $tags = htmlspecialchars($item['serie_tags']);
             $categories = htmlspecialchars($item['categories']);
-        
+
             $categories_ids = [];
-        
+
             if (!empty($categories)) {
-                $liste_categories = explode(",", $categories); 
-                
-                echo "<pre>Categories: "; print_r($liste_categories); echo "</pre>";
-                
-                $categories_ids = array_slice($liste_categories, 0, 3);
+              $liste_categories = explode(",", $categories);
+
+              echo "<pre>Categories: ";
+              print_r($liste_categories);
+              echo "</pre>";
+
+              $categories_ids = array_slice($liste_categories, 0, 3);
             }
-        
-            $categorie_un_id = isset($categories_ids[0]) ? trim($categories_ids[0]) : ""; 
+
+            $categorie_un_id = isset($categories_ids[0]) ? trim($categories_ids[0]) : "";
             $categorie_deux_id = isset($categories_ids[1]) ? trim($categories_ids[1]) : "";
             $categorie_trois_id = isset($categories_ids[2]) ? trim($categories_ids[2]) : "";
-        
+
             echo '<div class="box_div" onclick="fillFormData(this)"
             data-id="' . $id . '"
             data-title="' . $title . '"
@@ -428,7 +419,7 @@ echo "bonjour";
             data-serie_categorie_trois_id="' . $categorie_trois_id . '">
             <img src="' . $image_path . '" alt="' . $title . '">
             </div>';
-        }
+          }
 
           ?>
         </div>
@@ -440,6 +431,7 @@ echo "bonjour";
   <script src="../js/burger.js"></script>
   <script src="../js/onglet.js"></script>
   <script src="../js/confirmDelete.js"></script>
+  <script src="../js/confirmDeleteVideo.js"></script>
   <script src="../js/progressBarFilm.js"></script>
   <script src="../js/saisonUpload.js"></script>
   <script src="../js/modaleSaison.js"></script>

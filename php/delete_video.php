@@ -1,5 +1,8 @@
 <?php 
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["ID"]) && isset($_GET["type"]) && isset($_GET["csrf_token"])) {
+session_start();
+require_once "config.php";
+
+if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["ID"]) && isset($_GET["type"]) && isset($_GET["csrf_token"])) {
   if ($_GET["csrf_token"] === $_SESSION["csrf_token"]) {
     $idToDelete = $_GET["ID"];
     $typeToDelete = $_GET["type"];
@@ -10,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["action"]) && $_GET["acti
     try {
       if ($typeToDelete === 'film') {
         // Supprimer les entrées dans filmXcategorie
-        $sql = "DELETE FROM filmXcategorie WHERE filmXcategorie_film_ID = ?";
+        $sql = "DELETE FROM film_categorie WHERE filmXcategorie_film_ID = ?";
         $stmt = mysqli_prepare($link, $sql);
         mysqli_stmt_bind_param($stmt, "i", $idToDelete);
         mysqli_stmt_execute($stmt);
@@ -20,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["action"]) && $_GET["acti
         $sql = "DELETE FROM film WHERE film_ID = ?";
       } elseif ($typeToDelete === 'serie') {
         // Supprimer les entrées dans serieXcategorie
-        $sql = "DELETE FROM serieXcategorie WHERE serieXcategorie_serie_ID = ?";
+        $sql = "DELETE FROM serie_categorie WHERE serieXcategorie_serie_ID = ?";
         $stmt = mysqli_prepare($link, $sql);
         mysqli_stmt_bind_param($stmt, "i", $idToDelete);
         mysqli_stmt_execute($stmt);
@@ -54,7 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["action"]) && $_GET["acti
 
       // Valider la transaction
       mysqli_commit($link);
-      echo "<p>La vidéo a été supprimée avec succès.</p>";
     } catch (Exception $e) {
       // Annuler la transaction en cas d'erreur
       mysqli_rollback($link);
