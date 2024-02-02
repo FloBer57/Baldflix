@@ -569,6 +569,21 @@ textarea {
   text-align: center;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  color: var(--light);
+}
+
+.pagination a {
+  scale: 1.5;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.pagination a:visited{
+  color: var(--light);
+}
 .row1,
 .row2,
 .row3 {
