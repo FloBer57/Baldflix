@@ -182,6 +182,7 @@ function submitForm() {
               <img src="" alt="">
             </div>
             <div class="tags_duree_modale">
+            <button id="likeButton" onclick="toggleLike()">Like</button>
             </div>
           </div>
           <div class="title_synopsis_modale">
