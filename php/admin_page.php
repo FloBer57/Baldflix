@@ -6,13 +6,17 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   exit;
 }
 
+
 require_once "config.php";
 
 if ($_SESSION["user_role_ID"] != 2) {
   header("location: profile.php");
   exit;
 }
-
+if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
+  afficherContenu();
+  exit;
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (isset($_POST["reset_password"])) {
     include_once "admin_reset_password.php";
@@ -270,20 +274,8 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           <h2>Suppression des vidéos</h2>
 
           <?php
-          $sqlCount = 'SELECT COUNT(*) AS total FROM (
-        SELECT film.film_ID FROM film GROUP BY film.film_ID
-        UNION ALL
-        SELECT serie.serie_ID FROM serie GROUP BY serie.serie_ID
-    ) AS totalFilmsSeries ';
-
-          $resultCount = mysqli_query($link, $sqlCount);
-
-          if ($resultCount && mysqli_num_rows($resultCount) > 0) {
-            $row = mysqli_fetch_assoc($resultCount);
-            $totalFilmsSeries = $row['total'];
-          } else {
-            $totalFilmsSeries = 0;
-          }
+          function afficherContenu() {
+            global $link;
           // Définir le nombre de films/series par page
           $filmsSeriesParPage = 5;
 
@@ -307,7 +299,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           $resultat = mysqli_query($link, $sql);
 
           if ($resultat) {
-            echo "<table>";
+            echo "<table id=\"videoList\">";
             echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
             while ($ligne = mysqli_fetch_assoc($resultat)) {
               $id = $ligne['type'] === 'film' ? $ligne['film_ID'] : $ligne['serie_ID'];
@@ -332,17 +324,46 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           } else {
             echo "Erreur de requête : " . mysqli_error($link);
           }
+        }
 
-          // Liens de pagination
+        function afficherpagination() {
+          global $link;
 
-          $totalPages = ceil($totalFilmsSeries / $filmsSeriesParPage);
+        $sqlCount = 'SELECT COUNT(*) AS total FROM (
+      SELECT film.film_ID FROM film GROUP BY film.film_ID
+      UNION ALL
+      SELECT serie.serie_ID FROM serie GROUP BY serie.serie_ID
+  ) AS totalFilmsSeries ';
 
-          echo "<div class='pagination'>";
-          for ($i = 1; $i <= $totalPages; $i++) {
-            $classeActive = $i === $pageActuelle ? 'active' : '';
-            echo "<a class='$classeActive' href='admin_page.php?page=$i'>$i</a>";
-          }
-          echo "</div>";
+        $resultCount = mysqli_query($link, $sqlCount);
+
+        if ($resultCount && mysqli_num_rows($resultCount) > 0) {
+          $row = mysqli_fetch_assoc($resultCount);
+          $totalFilmsSeries = $row['total'];
+        } else {
+          $totalFilmsSeries = 0;
+        }
+        // Définir le nombre de films/series par page
+        $filmsSeriesParPage = 5;
+
+        // Récupérer le numéro de page actuel depuis l'URL
+        $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+        $totalPages = ceil($totalFilmsSeries / $filmsSeriesParPage);
+        echo "<div class='pagination' id='pagination-container'>";
+        for ($i = 1; $i <= $totalPages; $i++) {
+          $classeActive = $i === $pageActuelle ? 'active' : '';
+          echo "<a class='page-link $classeActive' href='#' data-page='$i'>$i</a>";
+        }
+        echo "</div>";
+      }
+
+        if (!isset($_GET['ajax'])) {
+          afficherContenu();
+          afficherpagination();
+        }else{
+          afficherContenu();
+        }
           ?>
         </div>
 
@@ -355,86 +376,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           <div id="saisonContainer">
             <?php
 
-            function getSeriesByCategoryAdmin($link)
-            {
-              $sql = "SELECT
-            serie.serie_ID,
-            serie.serie_title,
-            serie.serie_tags,
-            serie.serie_image_path,
-            serie.serie_synopsis,
-            saison.saison_ID,
-            saison.saison_number,
-            GROUP_CONCAT(DISTINCT categorie.categorie_ID ORDER BY categorie.categorie_ID ASC SEPARATOR ',') AS categories
-            FROM
-            serie
-            INNER JOIN
-            serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
-            INNER JOIN
-            categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
-            INNER JOIN
-            saison ON saison.saison_serie_ID = serie.serie_ID
-            GROUP BY saison.saison_ID
-            ORDER BY serie.serie_title ASC";
-              if ($stmt = mysqli_prepare($link, $sql)) {
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-
-                $Series = array();
-                if ($result && $result->num_rows > 0) {
-                  while ($row = $result->fetch_assoc()) {
-                    array_push($Series, $row);
-                  }
-                }
-                mysqli_stmt_close($stmt);
-                return $Series;
-              } else {
-                echo "Erreur de préparation de la requête : " . mysqli_error($link);
-                return array();
-              }
-            }
-
-            $GetSeries = getSeriesByCategoryAdmin($link);
-
-            echo '<div class="container container_cat" id="adminContainer">';
-            echo '<div class="box box_admin">';
-
-            foreach ($GetSeries as $item) {
-              $id = htmlspecialchars($item['serie_ID']);
-              $title = htmlspecialchars($item['serie_title']);
-              $image_path = htmlspecialchars($item['serie_image_path']);
-              $synopsis = htmlspecialchars($item['serie_synopsis']);
-              $tags = htmlspecialchars($item['serie_tags']);
-              $categories = htmlspecialchars($item['categories']);
-
-              $categories_ids = [];
-
-              if (!empty($categories)) {
-                $liste_categories = explode(",", $categories);
-
-                echo "<pre>Categories: ";
-                print_r($liste_categories);
-                echo "</pre>";
-
-                $categories_ids = array_slice($liste_categories, 0, 3);
-              }
-
-              $categorie_un_id = isset($categories_ids[0]) ? trim($categories_ids[0]) : "";
-              $categorie_deux_id = isset($categories_ids[1]) ? trim($categories_ids[1]) : "";
-              $categorie_trois_id = isset($categories_ids[2]) ? trim($categories_ids[2]) : "";
-
-              echo '<div class="box_div" onclick="fillFormData(this)"
-            data-id="' . $id . '"
-            data-title="' . $title . '"
-            data-synopsis="' . $synopsis . '"
-            data-tags="' . $tags . '"
-            data-image="' . $image_path . '"
-            data-serie_categorie_un_id="' . $categorie_un_id . '"
-            data-serie_categorie_deux_id="' . $categorie_deux_id . '"
-            data-serie_categorie_trois_id="' . $categorie_trois_id . '">
-            <img src="' . $image_path . '" alt="' . $title . '">
-            </div>';
-            }
+            require_once "function_getSeriesByCategoryAdmin.php";
 
             ?>
           </div>
@@ -450,6 +392,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
   <script src="../js/progressBarFilm.js"></script>
   <script src="../js/saisonUpload.js"></script>
   <script src="../js/modaleSaison.js"></script>
+  <script src="../js/pagination.js"></script>
 </body>
 
 </html>
