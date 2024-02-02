@@ -12,6 +12,7 @@
         <li><a href="../php/categorie.php?categorie=Anime">Anime</a></li>
         <li><a href="../php/categorie.php?categorie=Spectacles">Spectacles</a></li>
         <li><a href="../php/categorie.php?categorie=Bald">Bald</a></li>
+        <li><a href="../php/mention_legale.php">Mentions</a></li>
       </ul>
     </div>
   </nav>

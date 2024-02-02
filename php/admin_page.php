@@ -75,9 +75,11 @@ echo "bonjour";
               vidéos</li>
             <li data-tab="adminSerieTabContent" onclick="showTab('adminSerieTabContent')">Administration des
               séries</li>
+              <li data-tab="adminVideoDeleteTabContent" onclick="showTab('adminVideoDeleteTabContent')">Administration des
+              séries</li>
           </ul>
         </nav>
-        <div id="adminUserTabContent" class="tab_content admin_content">
+        <div id="adminUserTabContent" class="tab_content admin_content admin_user_tab_content">
           <h2>Administration des utilisateurs</h2>
 
           <?php
@@ -132,7 +134,7 @@ echo "bonjour";
           ?>
 
         </div>
-        <div id="adminVideoTabContent" class="tab_content admin_content active_tab">
+        <div id="adminVideoTabContent" class="tab_content admin_content active_tab admin_video_tab_content">
           <h2>Administration des films</h2>
           <form id="uploadForm" action="upload_film.php" method="post" enctype="multipart/form-data">
             <div class="admin_video_first">
@@ -198,7 +200,7 @@ echo "bonjour";
           </div>
         </div>
 
-        <div id="adminSerieTabContent" class="tab_content admin_content active_tab">
+        <div id="adminSerieTabContent" class="tab_content admin_content active_tab admin_serie_tab_content">
           <h2>Administration des séries</h2>
           <form id="uploadFormSerie" action="upload_serie.php" method="post" enctype="multipart/form-data">
             <div class="admin_video_first">
@@ -273,6 +275,72 @@ echo "bonjour";
             <progress id="uploadProgressSerie" value="0" max="100"></progress>
           </div>
         </div>
+
+
+        <div id="adminVideoDeleteTabContent" class="tab_content admin_content active_tab admin_video_delete_tab_content">
+          <h2>Suppression des videos</h2>
+
+          <?php
+          // Requête SQL pour récupérer tous les utilisateurs
+          $sql = 'SELECT
+          film.film_ID,
+          film.film_image_path,
+          film.film_title AS title,
+          NULL AS serie_ID,
+          NULL AS serie_title,
+          NULL AS serie_image_path,
+          "film" AS type
+      FROM
+          film
+      GROUP BY
+          film.film_ID
+      UNION ALL
+      SELECT
+          NULL AS film_ID,
+          NULL AS film_image_path,
+          NULL AS film_title,
+          serie.serie_ID, 
+          serie.serie_title AS title,
+          serie.serie_image_path,
+          "serie" AS serie_type
+      FROM
+          serie
+      GROUP BY
+          serie.serie_ID
+      ORDER BY title ASC';
+
+          $result = mysqli_query($link, $sql);
+          if ($result) {
+            echo "<table>";
+            echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
+            while ($row = mysqli_fetch_assoc($result)) {
+              $id = $row['type'] === 'film' ? $row['film_ID'] : $row['serie_ID'];
+              $title = htmlspecialchars_decode($row['type'] === 'film'? $row['title'] : $row['serie_title']);
+              $title = str_replace("_", " ", $title);
+              $imagePath = $row['type'] === 'film' ? $row['film_image_path'] : $row['serie_image_path'];
+              $type = $row['type'];
+              
+              echo "<tr>";
+              echo "<td><img src='{$imagePath}' alt='Affiche' style='width:50px;'></td>";
+              echo "<td>" . htmlspecialchars($title) . "</td>";
+              echo "<td>" . htmlspecialchars($type) . "</td>";
+              echo "<td>" . htmlspecialchars($id) . "</td>";
+              echo "<td>
+                <a href='?action=delete&ID={$id}&type={$type}&csrf_token={$_SESSION["csrf_token"]}' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cette vidéo ?\")'>
+                  <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
+                </a>
+              </td>";
+              echo "</tr>";
+            }
+            echo "</table>";
+          } else {
+            echo "Erreur de requête : " . mysqli_error($link);
+          }
+          ?>
+
+        </div>
+
+
       </div>
     </div>
 

@@ -54,12 +54,12 @@ mysqli_close($link);
       <div class="sub_container">
         <nav class="account_nav">
           <ul>
-            <li data-tab="profileTabContent" onclick="showTab('profileTabContent')">Mon profil</li>
-            <li data-tab="passwordTabContent" onclick="showTab('passwordTabContent')">Mot de passe et
+            <li data-tab="profileTabContent" class ="menu_dropdown" onclick="showTab('profileTabContent')">Mon profil</li>
+            <li data-tab="passwordTabContent" class ="menu_dropdown" onclick="showTab('passwordTabContent')">Mot de passe et
               Sécurité</li>
-            <li data-tab="deleteTabContent" onclick="showTab('deleteTabContent')">Supprimer le compte
+            <li data-tab="deleteTabContent" class ="menu_dropdown" onclick="showTab('deleteTabContent')">Supprimer le compte
             </li>
-            <li data-tab="suggestTabContent" onclick="showTab('suggestTabContent')">Une suggestion?
+            <li data-tab="suggestTabContent" class ="menu_dropdown" onclick="showTab('suggestTabContent')">Une suggestion?
             </li>
           </ul>
         </nav>

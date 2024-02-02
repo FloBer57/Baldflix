@@ -28,7 +28,7 @@ $lower_categorie = strtolower($categorie);
   <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&display=swap" rel="stylesheet">
 </head>
 
-<body class="back bodyburger">
+<body class="back bodyburger categorie_body">
   <?php
   require_once "../includes/header.php";
   ?>
@@ -36,59 +36,70 @@ $lower_categorie = strtolower($categorie);
     <?php
     function getFilmsOrSeriesByCategory($link, $categorie)
     {
+      $orderBy = "title ASC"; 
+      if (isset($_GET['tri'])) {
+          switch ($_GET['tri']) {
+              case 'title_asc':
+                  $orderBy = "title ASC";
+                  break;
+              case 'title_desc':
+                  $orderBy = "title DESC";
+                  break;
+          }
+      }
+      
       $sql = 'SELECT
-        film.film_ID,
-        film.film_image_path,
-        film.film_synopsis,
-        film.film_duree,
-        film.film_tags,
-        film.film_path,
-        film.film_miniature_path,
-        film.film_image_path,
-        film.film_title,
-        NULL AS serie_ID,
-        NULL AS serie_title,
-        NULL AS serie_tags,
-        NULL AS serie_synopsis,
-        NULL AS serie_image_path,
-        "film" AS type
-    FROM
-        film
-    INNER JOIN
-        film_categorie ON film.film_ID = film_categorie.filmXcategorie_film_ID
-    INNER JOIN
-        categorie ON film_categorie.filmXcategorie_categorie_ID = categorie.categorie_ID
-    WHERE
-        categorie.categorie_nom = ?
-    GROUP BY
-        film.film_ID
-    UNION ALL
-    SELECT
-        NULL AS film_ID,
-        NULL AS film_image_path,
-        NULL AS film_synopsis,
-        NULL AS film_duree,
-        NULL AS film_tags,
-        NULL AS film_path,
-        NULL AS film_miniature_path,
-        NULL AS film_image_path,
-        NULL AS film_title,
-        serie.serie_ID, 
-        serie.serie_title,
-        serie.serie_tags,
-        serie.serie_synopsis,
-        serie.serie_image_path,
-        "serie" AS serie_type
-    FROM
-        serie
-    INNER JOIN
-        serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
-    INNER JOIN
-        categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
-    WHERE
-        categorie.categorie_nom = ?
-    GROUP BY
-        serie.serie_ID';
+      film.film_ID,
+      film.film_image_path,
+      film.film_synopsis,
+      film.film_duree,
+      film.film_tags,
+      film.film_path,
+      film.film_miniature_path,
+      film.film_title AS title,
+      NULL AS serie_ID,
+      NULL AS serie_title,
+      NULL AS serie_tags,
+      NULL AS serie_synopsis,
+      NULL AS serie_image_path,
+      "film" AS type
+  FROM
+      film
+  INNER JOIN
+      film_categorie ON film.film_ID = film_categorie.filmXcategorie_film_ID
+  INNER JOIN
+      categorie ON film_categorie.filmXcategorie_categorie_ID = categorie.categorie_ID
+  WHERE
+      categorie.categorie_nom = ?
+  GROUP BY
+      film.film_ID
+  UNION ALL
+  SELECT
+      NULL AS film_ID,
+      NULL AS film_image_path,
+      NULL AS film_synopsis,
+      NULL AS film_duree,
+      NULL AS film_tags,
+      NULL AS film_path,
+      NULL AS film_miniature_path,
+      NULL AS film_title,
+      serie.serie_ID, 
+      serie.serie_title AS title,
+      serie.serie_tags,
+      serie.serie_synopsis,
+      serie.serie_image_path,
+      "serie" AS serie_type
+  FROM
+      serie
+  INNER JOIN
+      serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
+  INNER JOIN
+      categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
+  WHERE
+      categorie.categorie_nom = ?
+  GROUP BY
+      serie.serie_ID
+  ORDER BY ' . $orderBy;
 
       if ($stmt = mysqli_prepare($link, $sql)) {
         mysqli_stmt_bind_param($stmt, "ss", $categorie, $categorie);
@@ -113,13 +124,26 @@ $lower_categorie = strtolower($categorie);
     $filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
 
     echo '<div class="container container_cat" id="' . $lower_categorie . 'Container">';
+    echo '<div class="cat_select">';
     echo '<h3 id="' . $lower_categorie . '">' . htmlspecialchars($categorie) . '</h3>';
+    echo '<form id="triForm" method="get">';
+    echo '<input type="radio" id="title_asc" name="tri" value="title_asc" onchange="submitForm()" ' . (isset($_GET['tri']) && $_GET['tri'] == 'title_asc' ? 'checked' : '') . '>';
+    echo '<label for="title_asc">Titre (A-Z)</label>';
+    echo '<input type="radio" id="title_desc" name="tri" value="title_desc" onchange="submitForm()" ' . (isset($_GET['tri']) && $_GET['tri'] == 'title_desc' ? 'checked' : '') . '>';
+    echo '<label for="title_desc">Titre (Z-A)</label>';
+    echo '</form>';
+    echo '</div>';
+    echo '<script>
+function submitForm() {
+  document.getElementById("triForm").submit();
+}
+</script>';
     echo '<div class="box box_' . $lower_categorie . '">';
 
     foreach ($filmsOrSeries as $item) {
       $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
       $type = htmlspecialchars($item['type']); // Ajout du type (film ou serie)
-      $title = htmlspecialchars_decode($item['type'] === 'film' ? $item['film_title'] : $item['serie_title']);
+      $title = htmlspecialchars_decode($item['type'] === 'film' ? $item['title'] : $item['serie_title']);
       $title = str_replace("_", " ", $title);
       $image_path = htmlspecialchars($item['type'] === 'film' ? $item['film_image_path'] : $item['serie_image_path']);
       $synopsis = htmlspecialchars_decode($item['type'] === 'film' ? $item['film_synopsis'] : $item['serie_synopsis']);

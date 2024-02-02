@@ -3,7 +3,7 @@ session_start();
 require_once "../php/config.php";
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: php/baldflix_login.php");
+    header("location: ../php/baldflix_login.php");
     exit;
 }
 
@@ -18,7 +18,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     <meta name="robots" content="noindex, nofollow, noimageindex">
     <link rel="shortcut icon" href="../image/favicon/bald_favicon.ico" type="image/x-icon" />
     <title>BaldFlix</title>
-    <link href="css/global.CSS" rel="stylesheet" />
+    <link href="../css/global.CSS" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 <body class="back_mention">
     <?php
-    include "includes/header.php";
+    include "../includes/header.php";
     ?>
     <section class="section_mention">
         <h1>Mention Légale</h1>
@@ -35,7 +35,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
             <p>Baldflix estune plateforme de diffusion de films libres de droit, est éditée par Bernar Florent.</p>
         </div>
         <div class="legal">
-            <h2>Editeur du site :</h2>
+            <h2>Hébergement du site :</h2>
             <p>Le site Baldflix est hébergé par sur les services d'OVH.</p>
         </div>
         <div class="legal">
@@ -62,6 +62,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
         </div>
     </section>
     <?php
-    include "includes/footer.php";
+    include "../includes/footer.php";
     ?>
 </body>
