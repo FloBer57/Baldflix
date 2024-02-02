@@ -68,11 +68,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT);
             $param_role = $DefaultRole;
-            $param_email = $email; 
+            $param_email = $email;
 
             if (mysqli_stmt_execute($stmt)) {
                 header("location: baldflix_login.php");
-                exit(); 
+                exit();
             } else {
                 echo "Il y a eu un problème lors de l'inscription : " . mysqli_error($link);
             }

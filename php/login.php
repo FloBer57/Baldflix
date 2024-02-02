@@ -78,6 +78,7 @@ else {
               header("location: ../index.php");
             } else {
               $login_err = "Nom d'utilisateur ou mot de passe invalide.";
+              $_SESSION["login_err"] = $login_err; 
             }
           }
         } else {
@@ -90,4 +91,8 @@ else {
     }
   }
   mysqli_close($link);
+}
+if ($_SERVER["REQUEST_METHOD"] != "POST" || !empty($login_err)) {
+  header("location: baldflix_login.php");
+  exit;
 }

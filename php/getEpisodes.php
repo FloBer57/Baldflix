@@ -1,7 +1,12 @@
 <?php
 // getEpisodes.php
 
-require_once "config.php"; // Assurez-vous que le chemin vers votre fichier de configuration est correct
+require_once "config.php"; 
+
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+}
 
 if (isset($_GET['saisonNumber']) && isset($_GET['serieId'])) {
     $saisonNumber = $_GET['saisonNumber'];

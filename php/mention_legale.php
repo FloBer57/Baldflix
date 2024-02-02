@@ -64,4 +64,5 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     <?php
     include "../includes/footer.php";
     ?>
+    <script src="../js/burger.js"></script>
 </body>

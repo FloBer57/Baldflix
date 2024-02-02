@@ -2,6 +2,15 @@
 session_start();
 require_once "config.php";
 
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+}
+if ($_SESSION["user_role_ID"] != 2) {
+    header("location: profile.php");
+    exit;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titre = filter_input(INPUT_POST, 'film_title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $synopsis = filter_input(INPUT_POST, 'film_synopsis', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -29,10 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     if (strtolower(pathinfo($video_target_file, PATHINFO_EXTENSION)) != 'mp4') {
         $converted_video_file = $film_dir . $safe_title . ".mp4";
-    
+
         $ffmpeg_cmd_convert = "ffmpeg -i " . escapeshellarg($video_target_file) . " -c:v libx264 -preset slow -crf 22 -c:a aac " . escapeshellarg($converted_video_file);
         exec($ffmpeg_cmd_convert, $output, $return_var);
-    
+
         if ($return_var === 0 && file_exists($converted_video_file)) {
             if (file_exists($video_target_file)) {
                 unlink($video_target_file);
@@ -41,20 +50,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             exit("Erreur lors de la conversion de la vidéo.");
         }
-    } 
+    }
 
 
-    
+
     if (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
         exit("Erreur lors du téléchargement de l'image.");
     }
 
     if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
         $converted_image_file = $film_dir . $safe_title . '_Affiche.jpg';
-    
+
         $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " -vf 'scale=\"min(250\\, iw*355/ih)\":\"min(355\\, ih*250/iw)\",pad=250:355:(250-iw)/2:(355-ih)/2' " . escapeshellarg($converted_image_file);
         exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
-    
+
         if ($return_var_image === 0 && file_exists($converted_image_file)) {
             if (file_exists($image_target_file)) {
                 unlink($image_target_file);
@@ -134,4 +143,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_close($stmt);
     }
 }
-

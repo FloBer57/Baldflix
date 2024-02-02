@@ -658,6 +658,9 @@ progress {
   overflow: auto;
 }
 
+.btnListSerie {
+  display: none;
+}
 /* CATEGORIE */
 
 .container_cat {
@@ -975,7 +978,7 @@ form#triForm {
 
 .section_mention {
   padding: 20px;
-  margin-top: 150px;
+  margin-top: 60px;
 }
 
 .section_mention h2 {
@@ -1647,6 +1650,6 @@ form#triForm {
   /* Mention légales */
 
   .section_mention {
-    margin-top: 125px;
+    margin-top: 40px;
   }
 }

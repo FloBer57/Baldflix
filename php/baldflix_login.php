@@ -1,5 +1,4 @@
 <?php
-// Initialize the session
 session_start();
 require_once "config.php";
 
@@ -28,9 +27,10 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     <div class="container">
       <div class="container_form">
         <?php
-        if (!empty($login_err)) {
-          echo '<div class="alert alert_danger">' . $login_err . '</div>';
-        }
+if (isset($_SESSION["login_err"])) {
+  echo '<div class="alert alert_danger">' . $_SESSION["login_err"] . '</div>';
+  unset($_SESSION["login_err"]); // Nettoyer le message d'erreur après l'affichage
+}
         ?>
         <form action="login.php" method="post">
           <label for="username" class="username">Nom d'utilisateur*</label>

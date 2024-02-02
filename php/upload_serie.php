@@ -2,6 +2,15 @@
 session_start();
 require_once "config.php";
 
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+}
+if ($_SESSION["user_role_ID"] != 2) {
+    header("location: profile.php");
+    exit;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nom_serie = filter_input(INPUT_POST, 'serie_title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $numero_saison = filter_input(INPUT_POST, 'numero_saison', FILTER_SANITIZE_NUMBER_INT);
@@ -19,17 +28,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         $image_target_file = $serie_dir .  $safe_nom_serie . '_Affiche.' . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
-       
+
         if (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
             exit("Erreur lors du téléchargement de l'image.");
         }
 
         if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
             $converted_image_file = $serie_dir . $safe_nom_serie . '_Affiche.jpg';
-        
+
             $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " -vf 'scale=\"min(250\\, iw*355/ih)\":\"min(355\\, ih*250/iw)\",pad=250:355:(250-iw)/2:(355-ih)/2' " . escapeshellarg($converted_image_file);
             exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
-        
+
             if ($return_var_image === 0 && file_exists($converted_image_file)) {
                 if (file_exists($image_target_file)) {
                     unlink($image_target_file);
@@ -39,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit("Erreur lors de la conversion de l'image.");
             }
         }
-    
+
 
         mysqli_begin_transaction($link);
         $sql_serie = "INSERT INTO serie (serie_title, serie_tags, serie_image_path, serie_synopsis) VALUES (?, ?, ?, ?)";
@@ -106,10 +115,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (strtolower(pathinfo($video_target_file, PATHINFO_EXTENSION)) != 'mp4') {
                 $converted_video_file = $video_target_file . ".mp4";
-            
+
                 $ffmpeg_cmd_convert = "ffmpeg -i " . escapeshellarg($video_target_file) . " -c:v libx264 -preset slow -crf 22 -c:a aac " . escapeshellarg($converted_video_file);
                 exec($ffmpeg_cmd_convert, $output, $return_var);
-            
+
                 if ($return_var === 0 && file_exists($converted_video_file)) {
                     if (file_exists($video_target_file)) {
                         unlink($video_target_file);
@@ -118,20 +127,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } else {
                     exit("Erreur lors de la conversion de la vidéo.");
                 }
-            } 
-        
+            }
+
 
             $ffmpeg_cmd_duration = escapeshellcmd("ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " . escapeshellarg($video_target_file));
             $duree = shell_exec($ffmpeg_cmd_duration);
             $total_seconds = round(floatval($duree));
-            
+
             $duration_formatted = gmdate("H:i:s", $total_seconds);
-    
+
             $random_time = rand(1, $total_seconds);
             $video_target_miniature = $serie_dir . 'miniature_' . 'EP_0' . ($index + 1) . '.jpg';
             $ffmpeg_cmd_extract = "ffmpeg -i " . escapeshellarg($video_target_file) . " -ss $random_time -frames:v 1 " . escapeshellarg($video_target_miniature);
             exec($ffmpeg_cmd_extract);
-    
+
             if (file_exists($video_target_miniature)) {
                 $miniature_success = true;
             } else {
@@ -178,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!file_exists($serie_dir)) {
             mkdir($serie_dir, 0755, true);
         }
-        
+
         $sql_saison = "INSERT INTO saison (saison_number, saison_serie_ID) VALUES (?, ?)";
         if ($stmt_saison = mysqli_prepare($link, $sql_saison)) {
             $param_numero_saison = $numero_saison;
@@ -206,13 +215,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_rollback($link);
                 exit;
             }
-            
+
             if (strtolower(pathinfo($video_target_file, PATHINFO_EXTENSION)) != 'mp4') {
                 $converted_video_file = $video_target_file . ".mp4";
-            
+
                 $ffmpeg_cmd_convert = "ffmpeg -i " . escapeshellarg($video_target_file) . " -c:v libx264 -preset slow -crf 22 -c:a aac " . escapeshellarg($converted_video_file);
                 exec($ffmpeg_cmd_convert, $output, $return_var);
-            
+
                 if ($return_var === 0 && file_exists($converted_video_file)) {
                     if (file_exists($video_target_file)) {
                         unlink($video_target_file);
@@ -221,7 +230,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } else {
                     exit("Erreur lors de la conversion de la vidéo.");
                 }
-            } 
+            }
 
             $ffmpeg_cmd_duration = escapeshellcmd("ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " . escapeshellarg($video_target_file));
             $duree = shell_exec($ffmpeg_cmd_duration);
@@ -269,7 +278,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_rollback($link);
             }
         }
-    } 
+    }
 
     mysqli_commit($link);
 }

@@ -1,6 +1,15 @@
 <?php
 session_start();
-require_once "config.php"; 
+require_once "config.php";
+
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+}
+if ($_SESSION["user_role_ID"] != 2) {
+    header("location: profile.php");
+    exit;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
     if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {

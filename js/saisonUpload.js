@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var categoriesInputUn = document.getElementById('serieCategorieUn');
     var categoriesInputDeux = document.getElementById('serieCategorieDeux');
     var categoriesInputTrois = document.getElementById('serieCategorieTrois');
+    var btnopenSaisonModal = document.getElementById('openSaisonModal');
 
     // Écoutez les changements de sélection dans le menu déroulant
     numeroSaisonDropdown.addEventListener('change', function() {
@@ -27,7 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
             categoriesInputDeux.disabled = true;
             categoriesInputTrois.disabled = true;
             categoriesInputUn.disabled = true;
+            btnopenSaisonModal.style.display = "inline-block";
         } else {
+            btnopenSaisonModal.style.display = "none";
             imageUploadInput.disabled = false;
             titleInput.disabled = false;
             tagsInput.disabled = false;

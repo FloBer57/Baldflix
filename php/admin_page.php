@@ -1,13 +1,11 @@
 <?php
 session_start();
+require_once "config.php";
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: baldflix_login.php");
   exit;
 }
-
-
-require_once "config.php";
 
 if ($_SESSION["user_role_ID"] != 2) {
   header("location: profile.php");
@@ -68,64 +66,14 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               vidéos</li>
             <li data-tab="adminSerieTabContent" onclick="showTab('adminSerieTabContent')">Administration des
               séries</li>
-            <li data-tab="adminVideoDeleteTabContent" onclick="showTab('adminVideoDeleteTabContent')">Administration des
-              séries</li>
+            <li data-tab="adminVideoDeleteTabContent" onclick="showTab('adminVideoDeleteTabContent')">Suppression des vidéos</li>
           </ul>
         </nav>
         <div id="adminUserTabContent" class="tab_content admin_content admin_user_tab_content">
           <h2>Administration des utilisateurs</h2>
-
           <?php
-          // Requête SQL pour récupérer tous les utilisateurs
-          $sql = "SELECT user_ID, username, user_role_ID FROM user";
-          $result = mysqli_query($link, $sql);
-
-          if ($result) {
-            echo "<table>";
-            echo "<tr><th>Nom</th><th>Role</th><th>Action</th><th>MDP</th><th>Supprimer</th></tr>";
-            while ($row = mysqli_fetch_assoc($result)) {
-              echo "<tr>";
-              echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-              echo "<td>" . htmlspecialchars($row['user_role_ID']) . "</td>";
-
-              // Formulaire pour modifier le statut
-              echo "<td>
-              <form method='post' action=''>
-                <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
-                <input type='hidden' name='user_ID' value='{$row['user_ID']}'>
-                <select name='new_role'>
-                    <option value='1' " . ($row['user_role_ID'] == '1' ? 'selected' : '') . ">User</option>
-                    <option value='2' " . ($row['user_role_ID'] == '2' ? 'selected' : '') . ">Admin</option>
-                    <option value='2' " . ($row['user_role_ID'] == '3' ? 'selected' : '') . ">Démo</option>
-                </select>
-                <input type='submit' name='modify' value='Modifier'>
-              </form>
-            </td>";
-
-              // Formulaire pour réinitialiser le mot de passe
-              echo "<td>
-        <form method='post' action=''>
-          <input type='hidden' name='csrf_token' value='{$_SESSION["csrf_token"]}'>
-          <input type='hidden' name='user_ID' value='{$row['user_ID']}'>
-          <input type='submit' name='reset_password' value='Réinitialiser'>
-        </form>
-      </td>";
-
-              // Lien pour supprimer l'utilisateur
-              echo "<td>
-        <a href='#' onclick='confirmDelete(\"?action=delete&user_ID={$row['user_ID']}&csrf_token={$_SESSION["csrf_token"]}\")'>
-          <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
-        </a>
-      </td>";
-
-              echo "</tr>";
-            }
-            echo "</table>";
-          } else {
-            echo "Erreur de requête : " . mysqli_error($link);
-          }
+          require_once "gestionUtilisateurs.php"
           ?>
-
         </div>
         <div id="adminVideoTabContent" class="tab_content admin_content active_tab admin_video_tab_content">
           <h2>Administration des films</h2>
@@ -216,8 +164,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                   } ?>
                 </select>
               </div>
-
-              <button type="button" id="openSaisonModal">Liste séries</button>
+              <button class="btnListSerie" type="button" id="openSaisonModal">Liste séries</button>
               <input class="serie_ID_input_btn" type="number" id="serieID" name="serie_ID">
 
               <div class="form_row row1">
@@ -274,96 +221,98 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           <h2>Suppression des vidéos</h2>
 
           <?php
-          function afficherContenu() {
+          function afficherContenu()
+          {
             global $link;
-          // Définir le nombre de films/series par page
-          $filmsSeriesParPage = 5;
+            // Définir le nombre de films/series par page
+            $filmsSeriesParPage = 5;
 
-          // Récupérer le numéro de page actuel depuis l'URL
-          $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+            // Récupérer le numéro de page actuel depuis l'URL
+            $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
-          // Calculer la valeur OFFSET pour la requête SQL
-          $offset = ($pageActuelle - 1) * $filmsSeriesParPage;
+            // Calculer la valeur OFFSET pour la requête SQL
+            $offset = ($pageActuelle - 1) * $filmsSeriesParPage;
 
-          // Requête SQL pour récupérer les films et séries en fonction de la pagination
-          $sql = "SELECT film.film_ID, film.film_image_path, film.film_title AS title, NULL AS serie_ID, NULL AS serie_title, NULL AS serie_image_path, 'film' AS type
-        FROM film
-        GROUP BY film.film_ID
-        UNION ALL
-        SELECT NULL AS film_ID, NULL AS film_image_path, NULL AS film_title, serie.serie_ID, serie.serie_title AS title, serie.serie_image_path, 'serie' AS serie_type
-        FROM serie
-        GROUP BY serie.serie_ID
-        ORDER BY title ASC
-        LIMIT $filmsSeriesParPage OFFSET $offset";
+            // Requête SQL pour récupérer les films et séries en fonction de la pagination
+            $sql = "SELECT film.film_ID, film.film_image_path, film.film_title AS title, NULL AS serie_ID, NULL AS serie_title, NULL AS serie_image_path, 'film' AS type
+                    FROM film
+                    GROUP BY film.film_ID
+                    UNION ALL
+                    SELECT NULL AS film_ID, NULL AS film_image_path, NULL AS film_title, serie.serie_ID, serie.serie_title AS title, serie.serie_image_path, 'serie' AS serie_type
+                    FROM serie
+                    GROUP BY serie.serie_ID
+                    ORDER BY title ASC
+                    LIMIT $filmsSeriesParPage OFFSET $offset";
 
-          $resultat = mysqli_query($link, $sql);
+            $resultat = mysqli_query($link, $sql);
 
-          if ($resultat) {
-            echo "<table id=\"videoList\">";
-            echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
-            while ($ligne = mysqli_fetch_assoc($resultat)) {
-              $id = $ligne['type'] === 'film' ? $ligne['film_ID'] : $ligne['serie_ID'];
-              $titre = htmlspecialchars_decode($ligne['type'] === 'film' ? $ligne['title'] : $ligne['serie_title']);
-              $titre = str_replace("_", " ", $titre);
-              $cheminImage = $ligne['type'] === 'film' ? $ligne['film_image_path'] : $ligne['serie_image_path'];
-              $type = $ligne['type'];
+            if ($resultat) {
+              echo "<table id=\"videoList\">";
+              echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
+              while ($ligne = mysqli_fetch_assoc($resultat)) {
+                $id = $ligne['type'] === 'film' ? $ligne['film_ID'] : $ligne['serie_ID'];
+                $titre = htmlspecialchars_decode($ligne['type'] === 'film' ? $ligne['title'] : $ligne['serie_title']);
+                $titre = str_replace("_", " ", $titre);
+                $cheminImage = $ligne['type'] === 'film' ? $ligne['film_image_path'] : $ligne['serie_image_path'];
+                $type = $ligne['type'];
 
-              echo "<tr>";
-              echo "<td><img src='{$cheminImage}' alt='Affiche' style='width:50px;'></td>";
-              echo "<td>" . htmlspecialchars($titre) . "</td>";
-              echo "<td>" . htmlspecialchars($type) . "</td>";
-              echo "<td>" . htmlspecialchars($id) . "</td>";
-              echo "<td>
+                echo "<tr>";
+                echo "<td><img src='{$cheminImage}' alt='Affiche' style='width:50px;'></td>";
+                echo "<td>" . htmlspecialchars($titre) . "</td>";
+                echo "<td>" . htmlspecialchars($type) . "</td>";
+                echo "<td>" . htmlspecialchars($id) . "</td>";
+                echo "<td>
                 <a href='#' onclick='confirmDeleteVideo(\"?action=deleteVideo&ID={$id}&type={$type}&csrf_token={$_SESSION["csrf_token"]}\")'>
-                    <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
+                    <img src='../image/icon/close.svg' alt='Supprimer' title='Supprimer'>
                 </a>
             </td>";
-              echo "</tr>";
+                echo "</tr>";
+              }
+              echo "</table>";
+            } else {
+              echo "Erreur de requête : " . mysqli_error($link);
             }
-            echo "</table>";
-          } else {
-            echo "Erreur de requête : " . mysqli_error($link);
           }
-        }
 
-        function afficherpagination() {
-          global $link;
+          function afficherpagination()
+          {
+            global $link;
 
-        $sqlCount = 'SELECT COUNT(*) AS total FROM (
-      SELECT film.film_ID FROM film GROUP BY film.film_ID
-      UNION ALL
-      SELECT serie.serie_ID FROM serie GROUP BY serie.serie_ID
-  ) AS totalFilmsSeries ';
+            $sqlCount = 'SELECT COUNT(*) AS total FROM (
+                         SELECT film.film_ID FROM film GROUP BY film.film_ID
+                         UNION ALL
+                         SELECT serie.serie_ID FROM serie GROUP BY serie.serie_ID
+                         ) AS totalFilmsSeries ';
 
-        $resultCount = mysqli_query($link, $sqlCount);
+            $resultCount = mysqli_query($link, $sqlCount);
 
-        if ($resultCount && mysqli_num_rows($resultCount) > 0) {
-          $row = mysqli_fetch_assoc($resultCount);
-          $totalFilmsSeries = $row['total'];
-        } else {
-          $totalFilmsSeries = 0;
-        }
-        // Définir le nombre de films/series par page
-        $filmsSeriesParPage = 5;
+            if ($resultCount && mysqli_num_rows($resultCount) > 0) {
+              $row = mysqli_fetch_assoc($resultCount);
+              $totalFilmsSeries = $row['total'];
+            } else {
+              $totalFilmsSeries = 0;
+            }
 
-        // Récupérer le numéro de page actuel depuis l'URL
-        $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+            $filmsSeriesParPage = 5;
 
-        $totalPages = ceil($totalFilmsSeries / $filmsSeriesParPage);
-        echo "<div class='pagination' id='pagination-container'>";
-        for ($i = 1; $i <= $totalPages; $i++) {
-          $classeActive = $i === $pageActuelle ? 'active' : '';
-          echo "<a class='page-link $classeActive' href='#' data-page='$i'>$i</a>";
-        }
-        echo "</div>";
-      }
+            // Récupérer le numéro de page actuel depuis l'URL
+            $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
-        if (!isset($_GET['ajax'])) {
-          afficherContenu();
-          afficherpagination();
-        }else{
-          afficherContenu();
-        }
+            $totalPages = ceil($totalFilmsSeries / $filmsSeriesParPage);
+            echo "<div class='pagination' id='paginationContainer'>";
+            for ($i = 1; $i <= $totalPages; $i++) {
+              $classeActive = $i === $pageActuelle ? 'active' : '';
+              echo "<a class='page-link $classeActive' href='#' data-page='$i'>$i</a>";
+            }
+            echo "</div>";
+          }
+
+          if (!isset($_GET['ajax'])) {
+            afficherContenu();
+            afficherpagination();
+          } else {
+            afficherContenu();
+          }
           ?>
         </div>
 
@@ -376,7 +325,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           <div id="saisonContainer">
             <?php
 
-            require_once "function_getSeriesByCategoryAdmin.php";
+            require_once "getSeriesByCategoryAdmin.php";
 
             ?>
           </div>

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const paginationContainer = document.getElementById('pagination-container');
+    const paginationContainer = document.getElementById('paginationContainer');
     
     if (paginationContainer) {
       paginationContainer.addEventListener('click', function(e) {
