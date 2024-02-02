@@ -267,34 +267,34 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
 
         <div id="adminVideoDeleteTabContent" class="tab_content admin_content active_tab admin_video_delete_tab_content">
-    <h2>Suppression des vidéos</h2>
+          <h2>Suppression des vidéos</h2>
 
-    <?php
-    $sqlCount = 'SELECT COUNT(*) AS total FROM (
+          <?php
+          $sqlCount = 'SELECT COUNT(*) AS total FROM (
         SELECT film.film_ID FROM film GROUP BY film.film_ID
         UNION ALL
         SELECT serie.serie_ID FROM serie GROUP BY serie.serie_ID
-    ) AS totalFilmsSeries';
+    ) AS totalFilmsSeries ';
 
-    $resultCount = mysqli_query($link, $sqlCount);
+          $resultCount = mysqli_query($link, $sqlCount);
 
-    if ($resultCount && mysqli_num_rows($resultCount) > 0) {
-        $row = mysqli_fetch_assoc($resultCount);
-        $totalFilmsSeries = $row['total'];
-    } else {
-        $totalFilmsSeries = 0;
-    }
-    // Définir le nombre de films/series par page
-    $filmsSeriesParPage = 5;
+          if ($resultCount && mysqli_num_rows($resultCount) > 0) {
+            $row = mysqli_fetch_assoc($resultCount);
+            $totalFilmsSeries = $row['total'];
+          } else {
+            $totalFilmsSeries = 0;
+          }
+          // Définir le nombre de films/series par page
+          $filmsSeriesParPage = 5;
 
-    // Récupérer le numéro de page actuel depuis l'URL
-    $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+          // Récupérer le numéro de page actuel depuis l'URL
+          $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
-    // Calculer la valeur OFFSET pour la requête SQL
-    $offset = ($pageActuelle - 1) * $filmsSeriesParPage;
+          // Calculer la valeur OFFSET pour la requête SQL
+          $offset = ($pageActuelle - 1) * $filmsSeriesParPage;
 
-    // Requête SQL pour récupérer les films et séries en fonction de la pagination
-    $sql = "SELECT film.film_ID, film.film_image_path, film.film_title AS title, NULL AS serie_ID, NULL AS serie_title, NULL AS serie_image_path, 'film' AS type
+          // Requête SQL pour récupérer les films et séries en fonction de la pagination
+          $sql = "SELECT film.film_ID, film.film_image_path, film.film_title AS title, NULL AS serie_ID, NULL AS serie_title, NULL AS serie_image_path, 'film' AS type
         FROM film
         GROUP BY film.film_ID
         UNION ALL
@@ -304,62 +304,60 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         ORDER BY title ASC
         LIMIT $filmsSeriesParPage OFFSET $offset";
 
-    $resultat = mysqli_query($link, $sql);
+          $resultat = mysqli_query($link, $sql);
 
-    if ($resultat) {
-        echo "<table>";
-        echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
-        while ($ligne = mysqli_fetch_assoc($resultat)) {
-            $id = $ligne['type'] === 'film' ? $ligne['film_ID'] : $ligne['serie_ID'];
-            $titre = htmlspecialchars_decode($ligne['type'] === 'film' ? $ligne['title'] : $ligne['serie_title']);
-            $titre = str_replace("_", " ", $titre);
-            $cheminImage = $ligne['type'] === 'film' ? $ligne['film_image_path'] : $ligne['serie_image_path'];
-            $type = $ligne['type'];
+          if ($resultat) {
+            echo "<table>";
+            echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
+            while ($ligne = mysqli_fetch_assoc($resultat)) {
+              $id = $ligne['type'] === 'film' ? $ligne['film_ID'] : $ligne['serie_ID'];
+              $titre = htmlspecialchars_decode($ligne['type'] === 'film' ? $ligne['title'] : $ligne['serie_title']);
+              $titre = str_replace("_", " ", $titre);
+              $cheminImage = $ligne['type'] === 'film' ? $ligne['film_image_path'] : $ligne['serie_image_path'];
+              $type = $ligne['type'];
 
-            echo "<tr>";
-            echo "<td><img src='{$cheminImage}' alt='Affiche' style='width:50px;'></td>";
-            echo "<td>" . htmlspecialchars($titre) . "</td>";
-            echo "<td>" . htmlspecialchars($type) . "</td>";
-            echo "<td>" . htmlspecialchars($id) . "</td>";
-            echo "<td>
+              echo "<tr>";
+              echo "<td><img src='{$cheminImage}' alt='Affiche' style='width:50px;'></td>";
+              echo "<td>" . htmlspecialchars($titre) . "</td>";
+              echo "<td>" . htmlspecialchars($type) . "</td>";
+              echo "<td>" . htmlspecialchars($id) . "</td>";
+              echo "<td>
                 <a href='#' onclick='confirmDeleteVideo(\"?action=deleteVideo&ID={$id}&type={$type}&csrf_token={$_SESSION["csrf_token"]}\")'>
                     <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
                 </a>
             </td>";
-            echo "</tr>";
-        }
-        echo "</table>";
-    } else {
-        echo "Erreur de requête : " . mysqli_error($link);
-    }
+              echo "</tr>";
+            }
+            echo "</table>";
+          } else {
+            echo "Erreur de requête : " . mysqli_error($link);
+          }
 
-    // Liens de pagination
+          // Liens de pagination
 
-    $totalPages = ceil($totalFilmsSeries / $filmsSeriesParPage);
+          $totalPages = ceil($totalFilmsSeries / $filmsSeriesParPage);
 
-    echo "<div class='pagination'>";
-    for ($i = 1; $i <= $totalPages; $i++) {
-        $classeActive = $i === $pageActuelle ? 'active' : '';
-        echo "<a class='$classeActive' href='admin_page.php?page=$i'>$i</a>";
-    }
-    echo "</div>";
-    ?>
-</div>
-
+          echo "<div class='pagination'>";
+          for ($i = 1; $i <= $totalPages; $i++) {
+            $classeActive = $i === $pageActuelle ? 'active' : '';
+            echo "<a class='$classeActive' href='admin_page.php?page=$i'>$i</a>";
+          }
+          echo "</div>";
+          ?>
+        </div>
 
       </div>
-    </div>
 
-    <div id="saisonModal" class="saison_modal" style="display:none">
-      <div class="saison_modal_content">
-        <span class="close_saison_modal" id="closeSaisonModal" onclick="closeModal()">&times;</span>
-        <h2>Veuillez choisir une Série</h2>
-        <div id="saisonContainer">
-          <?php
+      <div id="saisonModal" class="saison_modal" style="display:none">
+        <div class="saison_modal_content">
+          <span class="close_saison_modal" id="closeSaisonModal" onclick="closeModal()">&times;</span>
+          <h2>Veuillez choisir une Série</h2>
+          <div id="saisonContainer">
+            <?php
 
-          function getSeriesByCategoryAdmin($link)
-          {
-            $sql = "SELECT
+            function getSeriesByCategoryAdmin($link)
+            {
+              $sql = "SELECT
             serie.serie_ID,
             serie.serie_title,
             serie.serie_tags,
@@ -378,54 +376,54 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             saison ON saison.saison_serie_ID = serie.serie_ID
             GROUP BY saison.saison_ID
             ORDER BY serie.serie_title ASC";
-            if ($stmt = mysqli_prepare($link, $sql)) {
-              mysqli_stmt_execute($stmt);
-              $result = mysqli_stmt_get_result($stmt);
+              if ($stmt = mysqli_prepare($link, $sql)) {
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
 
-              $Series = array();
-              if ($result && $result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                  array_push($Series, $row);
+                $Series = array();
+                if ($result && $result->num_rows > 0) {
+                  while ($row = $result->fetch_assoc()) {
+                    array_push($Series, $row);
+                  }
                 }
+                mysqli_stmt_close($stmt);
+                return $Series;
+              } else {
+                echo "Erreur de préparation de la requête : " . mysqli_error($link);
+                return array();
               }
-              mysqli_stmt_close($stmt);
-              return $Series;
-            } else {
-              echo "Erreur de préparation de la requête : " . mysqli_error($link);
-              return array();
-            }
-          }
-
-          $GetSeries = getSeriesByCategoryAdmin($link);
-
-          echo '<div class="container container_cat" id="adminContainer">';
-          echo '<div class="box box_admin">';
-
-          foreach ($GetSeries as $item) {
-            $id = htmlspecialchars($item['serie_ID']);
-            $title = htmlspecialchars($item['serie_title']);
-            $image_path = htmlspecialchars($item['serie_image_path']);
-            $synopsis = htmlspecialchars($item['serie_synopsis']);
-            $tags = htmlspecialchars($item['serie_tags']);
-            $categories = htmlspecialchars($item['categories']);
-
-            $categories_ids = [];
-
-            if (!empty($categories)) {
-              $liste_categories = explode(",", $categories);
-
-              echo "<pre>Categories: ";
-              print_r($liste_categories);
-              echo "</pre>";
-
-              $categories_ids = array_slice($liste_categories, 0, 3);
             }
 
-            $categorie_un_id = isset($categories_ids[0]) ? trim($categories_ids[0]) : "";
-            $categorie_deux_id = isset($categories_ids[1]) ? trim($categories_ids[1]) : "";
-            $categorie_trois_id = isset($categories_ids[2]) ? trim($categories_ids[2]) : "";
+            $GetSeries = getSeriesByCategoryAdmin($link);
 
-            echo '<div class="box_div" onclick="fillFormData(this)"
+            echo '<div class="container container_cat" id="adminContainer">';
+            echo '<div class="box box_admin">';
+
+            foreach ($GetSeries as $item) {
+              $id = htmlspecialchars($item['serie_ID']);
+              $title = htmlspecialchars($item['serie_title']);
+              $image_path = htmlspecialchars($item['serie_image_path']);
+              $synopsis = htmlspecialchars($item['serie_synopsis']);
+              $tags = htmlspecialchars($item['serie_tags']);
+              $categories = htmlspecialchars($item['categories']);
+
+              $categories_ids = [];
+
+              if (!empty($categories)) {
+                $liste_categories = explode(",", $categories);
+
+                echo "<pre>Categories: ";
+                print_r($liste_categories);
+                echo "</pre>";
+
+                $categories_ids = array_slice($liste_categories, 0, 3);
+              }
+
+              $categorie_un_id = isset($categories_ids[0]) ? trim($categories_ids[0]) : "";
+              $categorie_deux_id = isset($categories_ids[1]) ? trim($categories_ids[1]) : "";
+              $categorie_trois_id = isset($categories_ids[2]) ? trim($categories_ids[2]) : "";
+
+              echo '<div class="box_div" onclick="fillFormData(this)"
             data-id="' . $id . '"
             data-title="' . $title . '"
             data-synopsis="' . $synopsis . '"
@@ -436,12 +434,12 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             data-serie_categorie_trois_id="' . $categorie_trois_id . '">
             <img src="' . $image_path . '" alt="' . $title . '">
             </div>';
-          }
+            }
 
-          ?>
+            ?>
+          </div>
         </div>
       </div>
-    </div>
 
   </main>
   <script src="../js/progressBarSerie.js"></script>
