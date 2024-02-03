@@ -48,7 +48,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
         <source src="../video/trailer/trailer.mp4" type="video/mp4">
         Votre navigateur ne prend pas en charge la vidéo.
       </video>
-      <h2 class="text_video">Bienvenue sur BaldFlix</h2>
+      <h2 class="text_video">Bienvenue <?php echo $_SESSION["username"] ?></h2>
     </div>
   </section>
 

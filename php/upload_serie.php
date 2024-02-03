@@ -7,6 +7,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tags = filter_input(INPUT_POST, 'serie_tags', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $synopsis = filter_input(INPUT_POST, 'serie_synopsis', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $categories = array_map('intval', $_POST['serie_categories']);
+
+
     if ($numero_saison == 1) {
         $safe_nom_serie = preg_replace("/[^A-Za-z0-9 ]/", '', $nom_serie);
         $safe_nom_serie = str_replace(' ', '_', $safe_nom_serie);
@@ -20,20 +22,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
             exit("Erreur lors du téléchargement de l'image.");
         }
-
+    
+        // Vérifier si l'extension de l'image est différente de 'jpg'
         if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
-            $converted_image_file = $film_dir . $safe_title . '_Affiche.jpg';
-
-            $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " -vf 'scale=\"min(250\\, iw*355/ih)\":\"min(355\\, ih*250/iw)\",pad=250:355:(250-iw)/2:(355-ih)/2' " . escapeshellarg($converted_image_file);
+            $converted_image_file = $serie_dir . $safe_nom_serie . '_Affiche.jpg';
+    
+            // Définir la commande ffmpeg pour la conversion d'image
+            $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " " . escapeshellarg($converted_image_file);
+    
+            // Rediriger la sortie d'erreur vers la sortie standard
+            $ffmpeg_cmd_convert_image .= " 2>&1";
             exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
-
-            if ($return_var_image === 0 && file_exists($converted_image_file)) {
+            if ($return_var_image !== 0) {
+                error_log("Échec de la conversion de l'image avec ffmpeg. Sortie: " . implode("\n", $output_image));
+                exit("Erreur lors de la conversion de l'image.");
+            } else {
+                // La conversion a réussi, supprimer l'ancien fichier si différent du nouveau
                 if (file_exists($image_target_file)) {
                     unlink($image_target_file);
                 }
+                // Mise à jour du chemin de l'image pour utiliser l'image convertie
                 $image_target_file = $converted_image_file;
-            } else {
-                exit("Erreur lors de la conversion de l'image.");
             }
         }
 
@@ -41,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_begin_transaction($link);
         $sql_serie = "INSERT INTO serie (serie_title, serie_tags, serie_image_path, serie_synopsis) VALUES (?, ?, ?, ?)";
         if ($stmt_serie = mysqli_prepare($link, $sql_serie)) {
-            $param_nom_serie = $nom_serie;
+            $param_nom_serie = $safe_nom_serie;
             $param_tags = $tags;
             $param_image_path = $image_target_file;
             $param_synopsis = $synopsis;
@@ -160,6 +169,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     } else {
+
+
+
+
+
+        
         $serie_id = filter_input(INPUT_POST, 'serie_ID', FILTER_SANITIZE_NUMBER_INT);
         $safe_nom_serie = preg_replace("/[^A-Za-z0-9 ]/", '', $nom_serie);
         $safe_nom_serie = str_replace(' ', '_', $safe_nom_serie);

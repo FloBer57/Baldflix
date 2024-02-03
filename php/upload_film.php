@@ -50,18 +50,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
-        $converted_image_file = $film_dir . $safe_title . '_Affiche.jpg';
-    
-        $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " -vf 'scale=\"min(250\\, iw*355/ih)\":\"min(355\\, ih*250/iw)\",pad=250:355:(250-iw)/2:(355-ih)/2' " . escapeshellarg($converted_image_file);
+        $converted_image_file = $film_dir. $safe_title . '_Affiche.jpg';
+
+        // Définir la commande ffmpeg pour la conversion d'image
+        $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " " . escapeshellarg($converted_image_file);
+
+        // Rediriger la sortie d'erreur vers la sortie standard
+        $ffmpeg_cmd_convert_image .= " 2>&1";
         exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
-    
-        if ($return_var_image === 0 && file_exists($converted_image_file)) {
+        if ($return_var_image !== 0) {
+            error_log("Échec de la conversion de l'image avec ffmpeg. Sortie: " . implode("\n", $output_image));
+            exit("Erreur lors de la conversion de l'image.");
+        } else {
+            // La conversion a réussi, supprimer l'ancien fichier si différent du nouveau
             if (file_exists($image_target_file)) {
                 unlink($image_target_file);
             }
+            // Mise à jour du chemin de l'image pour utiliser l'image convertie
             $image_target_file = $converted_image_file;
-        } else {
-            exit("Erreur lors de la conversion de l'image.");
         }
     }
 
