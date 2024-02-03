@@ -22,6 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedValue !== '1') {
             imageUploadInput.disabled = true;
             btnopenSaisonModal.style.display = "inline-block";
+            titleInput.style.display = "none";
+            tagsInput.style.display = "none";
+            synopsisInput.style.display = "none";
+            serieIdInput.style.display = "none";
+            categoriesInputDeux.style.display = "none";
+            categoriesInputTrois.style.display = "none";
+            categoriesInputUn.style.display = "none";
         } else {
             btnopenSaisonModal.style.display = "none";
             imageUploadInput.disabled = false;

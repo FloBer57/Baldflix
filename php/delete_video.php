@@ -1,6 +1,22 @@
 <?php 
 require_once "config.php";
 
+function deleteFiles($path) {
+  if (is_file($path)) {
+      unlink($path); // Utiliser unlink pour supprimer un fichier
+  } elseif (is_dir($path)) {
+      $files = array_diff(scandir($path), ['.', '..']);
+      foreach ($files as $file) {
+          deleteFiles($path . '/' . $file);
+      }
+      rmdir($path); // Supprimer un dossier vide
+  }
+}
+
+$film_dir = "../video/film/";
+$serie_dir = "../video/serie/";
+
+
 if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["ID"]) && isset($_GET["type"]) && isset($_GET["csrf_token"])) {
   if ($_GET["csrf_token"] === $_SESSION["csrf_token"]) {
     $idToDelete = $_GET["ID"];
@@ -11,7 +27,8 @@ if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["I
 
     try {
       if ($typeToDelete === 'film') {
-        // Supprimer les entrées dans filmXcategorie
+        $path = $film_dir . $titleToDelete;
+        deleteFiles($path);
         $sql = "DELETE FROM film_categorie WHERE filmXcategorie_film_ID = ?";
         $stmt = mysqli_prepare($link, $sql);
         mysqli_stmt_bind_param($stmt, "i", $idToDelete);
@@ -21,6 +38,9 @@ if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["I
         // Supprimer le film
         $sql = "DELETE FROM film WHERE film_ID = ?";
       } elseif ($typeToDelete === 'serie') {
+        $path = $serie_dir . $titleToDelete;
+        deleteFiles($path);
+    
         // Supprimer les entrées dans serieXcategorie
         $sql = "DELETE FROM serie_categorie WHERE serieXcategorie_serie_ID = ?";
         $stmt = mysqli_prepare($link, $sql);
