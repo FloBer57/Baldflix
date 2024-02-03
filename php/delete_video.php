@@ -1,16 +1,5 @@
-<?php
-session_start();
+<?php 
 require_once "config.php";
-
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: baldflix_login.php");
-    exit;
-}
-if ($_SESSION["user_role_ID"] != 2) {
-    header("location: profile.php");
-    exit;
-}
-
 
 if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["ID"]) && isset($_GET["type"]) && isset($_GET["csrf_token"])) {
   if ($_GET["csrf_token"] === $_SESSION["csrf_token"]) {

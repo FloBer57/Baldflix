@@ -29,7 +29,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         <?php
 if (isset($_SESSION["login_err"])) {
   echo '<div class="alert alert_danger">' . $_SESSION["login_err"] . '</div>';
-  unset($_SESSION["login_err"]); // Nettoyer le message d'erreur après l'affichage
+  unset($_SESSION["login_err"]); 
 }
         ?>
         <form action="login.php" method="post">

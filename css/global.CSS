@@ -658,9 +658,10 @@ progress {
   overflow: auto;
 }
 
-.btnListSerie {
-  display: none;
+.list_btn_modal {
+display: none;
 }
+
 /* CATEGORIE */
 
 .container_cat {

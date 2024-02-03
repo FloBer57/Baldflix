@@ -54,19 +54,19 @@ mysqli_close($link);
       <div class="sub_container">
         <nav class="account_nav">
           <ul>
-            <li data-tab="profileTabContent" class="menu_dropdown" onclick="showTab('profileTabContent')">Mon profil</li>
-            <li data-tab="passwordTabContent" class="menu_dropdown" onclick="showTab('passwordTabContent')">Mot de passe et
+            <li data-tab="profileTabContent" class ="menu_dropdown" onclick="showTab('profileTabContent')">Mon profil</li>
+            <li data-tab="passwordTabContent" class ="menu_dropdown" onclick="showTab('passwordTabContent')">Mot de passe et
               Sécurité</li>
-            <li data-tab="deleteTabContent" class="menu_dropdown" onclick="showTab('deleteTabContent')">Supprimer le compte
+            <li data-tab="deleteTabContent" class ="menu_dropdown" onclick="showTab('deleteTabContent')">Supprimer le compte
             </li>
-            <li data-tab="suggestTabContent" class="menu_dropdown" onclick="showTab('suggestTabContent')">Une suggestion?
+            <li data-tab="suggestTabContent" class ="menu_dropdown" onclick="showTab('suggestTabContent')">Une suggestion?
             </li>
           </ul>
         </nav>
 
         <div id="profileTabContent" class="tab_content">
           <h2>Modifier la photo de profil</h2>
-          <?php if (isset($_SESSION["profile_picture"])) : ?>
+          <?php if (isset($_SESSION["profile_picture"])): ?>
             <p class="text_modify">Actuellement : </p>
             <img class="choose_picture" src="<?php echo $_SESSION["profile_picture"]; ?>" alt="Photo actuelle">
           <?php endif; ?>
@@ -78,7 +78,7 @@ mysqli_close($link);
             <span class="close"><img id="closeModal" src="../image/icon/close.svg" alt="Close"></span>
             <h2>Choisir une icône</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-              <div class="icon_container" id="iconContainer">
+              <div class ="icon_container" id="iconContainer">
                 <?php
                 $imagesDirectory = '../image/users_icon/';
                 $images = glob($imagesDirectory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
@@ -103,7 +103,9 @@ mysqli_close($link);
           <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form_group">
               <label for="new_password" class="new_password">Nouveau mot de passe*</label>
-              <input type="password" placeholder="Nouveau mot de passe" name="new_password" id="newPassword" required class="form_control <?php echo (!empty($new_password_err)) ? 'is_invalid' : ''; ?>" value="<?php echo $new_password; ?>">
+              <input type="password" placeholder="Nouveau mot de passe" name="new_password" id="newPassword" required
+                class="form_control <?php echo (!empty($new_password_err)) ? 'is_invalid' : ''; ?>"
+                value="<?php echo $new_password; ?>">
               <span class="invalid_feedback">
                 <?php echo $new_password_err; ?>
               </span>
@@ -111,7 +113,10 @@ mysqli_close($link);
             </div>
             <div class="form_group">
               <label for="confirm_new_password">Confirmer le nouveau mot de passe :</label>
-              <input type="password" placeholder="Confirmez le mot de passe" name="confirm_password" id="confirmNewPassword" required class="form_control <?php echo (!empty($confirm_password_err)) ? 'is_invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
+              <input type="password" placeholder="Confirmez le mot de passe" name="confirm_password"
+                id="confirmNewPassword" required
+                class="form_control <?php echo (!empty($confirm_password_err)) ? 'is_invalid' : ''; ?>"
+                value="<?php echo $confirm_password; ?>">
               <span class="invalid_feedback">
                 <?php echo $confirm_password_err; ?>
                 <br>
@@ -127,7 +132,8 @@ mysqli_close($link);
           <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form_group">
               <label for="password_delete">Entrez votre mot de passe pour confirmer :</label>
-              <input type="password" placeholder="Mot de passe" name="password_delete" id="password_delete" required class="form_control <?php echo (!empty($password_err)) ? 'is_invalid' : ''; ?>">
+              <input type="password" placeholder="Mot de passe" name="password_delete" id="password_delete" required
+                class="form_control <?php echo (!empty($password_err)) ? 'is_invalid' : ''; ?>">
               <span class="invalid_feedback">
                 <?php echo $password_err; ?>
               </span>
@@ -143,17 +149,20 @@ mysqli_close($link);
           <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form_group">
               <label for="suggestion_firstname">Prénom :</label>
-              <input type="text" placeholder="Prénom" name="suggestion_firstname" id="suggestionFirstname" required class="form_control">
+              <input type="text" placeholder="Prénom" name="suggestion_firstname" id="suggestionFirstname" required
+                class="form_control">
               <br>
             </div>
             <div class="form_group">
               <label for="suggestion_lastname">Nom :</label>
-              <input type="text" placeholder="Nom" name="suggestion_lastname" id="suggestionLastname" required class="form_control">
+              <input type="text" placeholder="Nom" name="suggestion_lastname" id="suggestionLastname" required
+                class="form_control">
               <br>
             </div>
             <div class="form_group">
               <label for="suggestion_message">Message :</label>
-              <textarea placeholder="Votre suggestion" class="suggestion_message" name="suggestion_message" id="suggestionMessage" required class="form_control"></textarea>
+              <textarea placeholder="Votre suggestion" class="suggestion_message" name="suggestion_message" id="suggestionMessage" required
+                class="form_control"></textarea>
               <br>
             </div>
             <div class="form_group">

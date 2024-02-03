@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) 
         $mail->Host = 'ssl0.ovh.net'; // Serveur SMTP
         $mail->SMTPAuth = true; // Activer l'authentification SMTP
         $mail->Username = 'florent.bernar@outlook.fr'; // SMTP username
-        $mail->Password = MAIL_PASSWORD; // SMTP password
+        $mail->Password = MAIL_PASSWORD;// SMTP password
         $mail->SMTPSecure = 'ssl'; // Activer TLS (ou 'ssl')
         $mail->Port = 587; // Port TCP pour se connecter
 

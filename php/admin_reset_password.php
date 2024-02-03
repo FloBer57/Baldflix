@@ -2,11 +2,6 @@
 session_start();
 require_once "config.php";
 
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: baldflix_login.php");
-    exit;
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $user_ID = $_POST["user_ID"];

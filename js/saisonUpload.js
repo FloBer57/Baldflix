@@ -21,13 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Désactivez l'input de l'image si la saison n'est pas "Saison 1"
         if (selectedValue !== '1') {
             imageUploadInput.disabled = true;
-            titleInput.disabled = true;
-            tagsInput.disabled = true;
-            synopsisInput.disabled = true;
-            serieIdInput.disabled = true;
-            categoriesInputDeux.disabled = true;
-            categoriesInputTrois.disabled = true;
-            categoriesInputUn.disabled = true;
             btnopenSaisonModal.style.display = "inline-block";
         } else {
             btnopenSaisonModal.style.display = "none";
