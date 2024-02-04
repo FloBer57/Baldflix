@@ -83,6 +83,10 @@ body {
   text-decoration: none;
 }
 
+.container_form a {
+  color: var(--light);
+  text-decoration: none;
+}
 .message_Demo {
   text-align: center;
   margin-top: 50px;

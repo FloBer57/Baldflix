@@ -25,14 +25,7 @@ function fillFormData(element) {
 
   const numeroSaisonDropdown = document.getElementById('numeroSaison');
   const imageUploadInput = document.getElementById('fileInputImageSerie');
-  const titleInput = document.getElementById('serieTitle');
-  const tagsInput = document.getElementById('serieTags');
-  const synopsisInput = document.getElementById('serieSynopsis');
-  const serieIdInput = document.getElementById('serieID');
-  const categoriesInputUn = document.getElementById('serieCategorieUn');
-  const categoriesInputDeux = document.getElementById('serieCategorieDeux');
-  const categoriesInputTrois = document.getElementById('serieCategorieTrois');
-  const btnopenSaisonModal = document.getElementById('openSaisonModal');
+
 
   const id = element.getAttribute('data-id');
   const title = element.getAttribute('data-title');

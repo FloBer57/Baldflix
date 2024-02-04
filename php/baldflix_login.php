@@ -40,7 +40,6 @@ if (isset($_SESSION["login_err"])) {
           <span class="invalid_feedback">
             <?php echo $username_err; ?>
           </span>
-          <br><br>
 
           <label for="password">Mot de passe* :</label>
           <input type="password" placeholder="Mot de passe" id="password" name="password" required
@@ -48,10 +47,10 @@ if (isset($_SESSION["login_err"])) {
           <span class="invalid_feedback">
             <?php echo $password_err; ?>
           </span>
-          <br><br>
 
           <input class="input" id="inepute" type="submit" value="Connexion">
-          <p>Vous n'avez pas de compte? Dommage.</p>
+          <p>Vous n'avez pas de compte?</p>
+          <a href="baldflix_register.php">Créer un compte</a>
         </form>
       </div>
 
