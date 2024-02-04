@@ -1,6 +1,8 @@
 <?php
 session_start();
  
+require "config.php";
+
 if ($_SESSION["user_role_ID"] == 3) {
     $delete_sql = "DELETE FROM user WHERE user_ID = ?";
     if ($delete_stmt = mysqli_prepare($link, $delete_sql)) {

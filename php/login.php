@@ -75,6 +75,7 @@ else {
               $profileData = getProfileData($id);
               $_SESSION["user_role_ID"] = $profileData['user_role_ID'];
               $_SESSION["profile_picture"] = $profileData['profile_picture'];
+              $_SESSION['last_action'] = time();
               header("location: ../index.php");
             } else {
               $login_err = "Nom d'utilisateur ou mot de passe invalide.";

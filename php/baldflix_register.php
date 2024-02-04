@@ -60,7 +60,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
                 <div class="title">
                     <h1>Baldflix</h1>
                 </div>
-                <p class="message_demo">Bienvenu! Vous pouvez créer un compte de démo ICI !</p>
+                <p class="message_demo">Bienvenue! Vous pouvez créer un compte de démo ICI !</p>
 
             </div>
         </div>
