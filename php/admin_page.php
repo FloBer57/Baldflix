@@ -128,7 +128,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         <div id="adminVideoTabContent" class="tab_content admin_content active_tab admin_video_tab_content">
           <h2>Administration des films</h2>
           <form id="uploadForm" action="upload_film.php" method="post" enctype="multipart/form-data">
-            <div class="admin_video_first">
+            <div class="admin_video_first" id="">
               <div class="title_tags">
                 <label for="film_title">Titre du film:</label>
                 <input type="text" id="filmTitle" class="film_title" name="film_title" required>
@@ -215,7 +215,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                 </select>
               </div>
 
-              <button class="list_btn_modal"  id="openSaisonModal">Liste séries</button>
+              <button class="list_btn_modal" id="openSaisonModal">Liste séries</button>
               <input class="serie_ID_input_btn" type="number" id="serieID" name="serie_ID">
 
               <div class="form_row row1">
@@ -272,14 +272,15 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           <h2>Suppression des vidéos</h2>
 
           <?php
-          function afficherContenu() {
+          function afficherContenu()
+          {
             global $link;
-          $filmsSeriesParPage = 5;
+            $filmsSeriesParPage = 5;
 
-          $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+            $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
-          $offset = ($pageActuelle - 1) * $filmsSeriesParPage;
-          $sql = "SELECT film.film_ID, film.film_image_path, film.film_title AS title, NULL AS serie_ID, NULL AS serie_title, NULL AS serie_image_path, 'film' AS type
+            $offset = ($pageActuelle - 1) * $filmsSeriesParPage;
+            $sql = "SELECT film.film_ID, film.film_image_path, film.film_title AS title, NULL AS serie_ID, NULL AS serie_title, NULL AS serie_image_path, 'film' AS type
         FROM film
         GROUP BY film.film_ID
         UNION ALL
@@ -289,74 +290,75 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         ORDER BY title ASC
         LIMIT $filmsSeriesParPage OFFSET $offset";
 
-          $resultat = mysqli_query($link, $sql);
+            $resultat = mysqli_query($link, $sql);
 
-          if ($resultat) {
-            echo "<table id=\"videoList\">";
-            echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
-            while ($ligne = mysqli_fetch_assoc($resultat)) {
-              $id = $ligne['type'] === 'film' ? $ligne['film_ID'] : $ligne['serie_ID'];
-              $titre = htmlspecialchars_decode($ligne['type'] === 'film' ? $ligne['title'] : $ligne['serie_title']);
-              $titre = str_replace("_", " ", $titre);
-              $cheminImage = $ligne['type'] === 'film' ? $ligne['film_image_path'] : $ligne['serie_image_path'];
-              $type = $ligne['type'];
+            if ($resultat) {
+              echo "<table id=\"videoList\">";
+              echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
+              while ($ligne = mysqli_fetch_assoc($resultat)) {
+                $id = $ligne['type'] === 'film' ? $ligne['film_ID'] : $ligne['serie_ID'];
+                $titre = htmlspecialchars_decode($ligne['type'] === 'film' ? $ligne['title'] : $ligne['serie_title']);
+                $titre = str_replace("_", " ", $titre);
+                $cheminImage = $ligne['type'] === 'film' ? $ligne['film_image_path'] : $ligne['serie_image_path'];
+                $type = $ligne['type'];
 
-              echo "<tr>";
-              echo "<td><img src='{$cheminImage}' alt='Affiche' style='width:50px;'></td>";
-              echo "<td>" . htmlspecialchars($titre) . "</td>";
-              echo "<td>" . htmlspecialchars($type) . "</td>";
-              echo "<td>" . htmlspecialchars($id) . "</td>";
-              echo "<td>
+                echo "<tr>";
+                echo "<td><img src='{$cheminImage}' alt='Affiche' style='width:50px;'></td>";
+                echo "<td>" . htmlspecialchars($titre) . "</td>";
+                echo "<td>" . htmlspecialchars($type) . "</td>";
+                echo "<td>" . htmlspecialchars($id) . "</td>";
+                echo "<td>
                 <a href='#' onclick='confirmDeleteVideo(\"?action=deleteVideo&ID={$id}&type={$type}&csrf_token={$_SESSION["csrf_token"]}\")'>
                     <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
                 </a>
             </td>";
-              echo "</tr>";
+                echo "</tr>";
+              }
+              echo "</table>";
+            } else {
+              echo "Erreur de requête : " . mysqli_error($link);
             }
-            echo "</table>";
-          } else {
-            echo "Erreur de requête : " . mysqli_error($link);
           }
-        }
 
-        function afficherpagination() {
-          global $link;
+          function afficherpagination()
+          {
+            global $link;
 
-        $sqlCount = 'SELECT COUNT(*) AS total FROM (
+            $sqlCount = 'SELECT COUNT(*) AS total FROM (
       SELECT film.film_ID FROM film GROUP BY film.film_ID
       UNION ALL
       SELECT serie.serie_ID FROM serie GROUP BY serie.serie_ID
   ) AS totalFilmsSeries ';
 
-        $resultCount = mysqli_query($link, $sqlCount);
+            $resultCount = mysqli_query($link, $sqlCount);
 
-        if ($resultCount && mysqli_num_rows($resultCount) > 0) {
-          $row = mysqli_fetch_assoc($resultCount);
-          $totalFilmsSeries = $row['total'];
-        } else {
-          $totalFilmsSeries = 0;
-        }
-        // Définir le nombre de films/series par page
-        $filmsSeriesParPage = 5;
+            if ($resultCount && mysqli_num_rows($resultCount) > 0) {
+              $row = mysqli_fetch_assoc($resultCount);
+              $totalFilmsSeries = $row['total'];
+            } else {
+              $totalFilmsSeries = 0;
+            }
+            // Définir le nombre de films/series par page
+            $filmsSeriesParPage = 5;
 
-        // Récupérer le numéro de page actuel depuis l'URL
-        $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+            // Récupérer le numéro de page actuel depuis l'URL
+            $pageActuelle = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
-        $totalPages = ceil($totalFilmsSeries / $filmsSeriesParPage);
-        echo "<div class='pagination' id='paginationContainer'>";
-        for ($i = 1; $i <= $totalPages; $i++) {
-          $classeActive = $i === $pageActuelle ? 'active' : '';
-          echo "<a class='page-link $classeActive' href='#' data-page='$i'>$i</a>";
-        }
-        echo "</div>";
-      }
+            $totalPages = ceil($totalFilmsSeries / $filmsSeriesParPage);
+            echo "<div class='pagination' id='paginationContainer'>";
+            for ($i = 1; $i <= $totalPages; $i++) {
+              $classeActive = $i === $pageActuelle ? 'active' : '';
+              echo "<a class='page-link $classeActive' href='#' data-page='$i'>$i</a>";
+            }
+            echo "</div>";
+          }
 
-        if (!isset($_GET['ajax'])) {
-          afficherContenu();
-          afficherpagination();
-        }else{
-          afficherContenu();
-        }
+          if (!isset($_GET['ajax'])) {
+            afficherContenu();
+            afficherpagination();
+          } else {
+            afficherContenu();
+          }
           ?>
         </div>
 
@@ -369,27 +371,27 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
           <div id="saisonContainer">
             <?php
 
-function getSeriesByCategoryAdmin($link)
+            function getSeriesByCategoryAdmin($link)
             {
               $sql = "SELECT
-            serie.serie_ID,
-            serie.serie_title,
-            serie.serie_tags,
-            serie.serie_image_path,
-            serie.serie_synopsis,
-            saison.saison_ID,
-            saison.saison_number,
-            GROUP_CONCAT(DISTINCT categorie.categorie_ID ORDER BY categorie.categorie_ID ASC SEPARATOR ',') AS categories
-            FROM
-            serie
-            INNER JOIN
-            serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
-            INNER JOIN
-            categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
-            INNER JOIN
-            saison ON saison.saison_serie_ID = serie.serie_ID
-            GROUP BY saison.saison_ID
-            ORDER BY serie.serie_title ASC";
+              serie.serie_ID,
+              serie.serie_title,
+              serie.serie_tags,
+              serie.serie_image_path,
+              serie.serie_synopsis,
+              saison.saison_ID,
+              GROUP_CONCAT(DISTINCT saison.saison_number ORDER BY saison.saison_number ASC SEPARATOR ',') AS saisons,
+              GROUP_CONCAT(DISTINCT categorie.categorie_ID ORDER BY categorie.categorie_ID ASC SEPARATOR ',') AS categories
+              FROM
+              serie
+              INNER JOIN
+              serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
+              INNER JOIN
+              categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
+              INNER JOIN
+              saison ON saison.saison_serie_ID = serie.serie_ID
+              GROUP BY serie.serie_ID
+              ORDER BY serie.serie_title ASC";
               if ($stmt = mysqli_prepare($link, $sql)) {
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_get_result($stmt);
@@ -407,6 +409,7 @@ function getSeriesByCategoryAdmin($link)
                 return array();
               }
             }
+
             $GetSeries = getSeriesByCategoryAdmin($link);
 
             echo '<div class="container container_cat" id="adminContainer">';
@@ -415,10 +418,17 @@ function getSeriesByCategoryAdmin($link)
             foreach ($GetSeries as $item) {
               $id = htmlspecialchars($item['serie_ID']);
               $title = htmlspecialchars($item['serie_title']);
+              $title = str_replace('_', ' ',$title);
               $image_path = htmlspecialchars($item['serie_image_path']);
               $synopsis = htmlspecialchars($item['serie_synopsis']);
               $tags = htmlspecialchars($item['serie_tags']);
               $categories = htmlspecialchars($item['categories']);
+              $saisons = htmlspecialchars($item['saisons']);
+
+
+              $saisonsPrises = explode(",", $saisons); 
+              $dataSaisonsDisponibles = implode(',', range(1, 20));
+              $dataSaisonsPrises = implode(',', $saisonsPrises);
 
               $categories_ids = [];
 
@@ -436,19 +446,20 @@ function getSeriesByCategoryAdmin($link)
               $categorie_deux_id = isset($categories_ids[1]) ? trim($categories_ids[1]) : "";
               $categorie_trois_id = isset($categories_ids[2]) ? trim($categories_ids[2]) : "";
 
-              echo '<div class="box_div" onclick="fillFormData(this)"
-            data-id="' . $id . '"
-            data-title="' . $title . '"
-            data-synopsis="' . $synopsis . '"
-            data-tags="' . $tags . '"
-            data-image="' . $image_path . '"
-            data-serie_categorie_un_id="' . $categorie_un_id . '"
-            data-serie_categorie_deux_id="' . $categorie_deux_id . '"
-            data-serie_categorie_trois_id="' . $categorie_trois_id . '">
-            <img src="' . $image_path . '" alt="' . $title . '">
-            </div>';
-            }
-
+              echo '<div class="box_div" onclick="fillFormData(this)" '.
+              'data-id="'.$id.'" '.
+              'data-title="'.$title.'" '.
+              'data-synopsis="'.$synopsis.'" '.
+              'data-tags="'.$tags.'" '.
+              'data-image="'.$image_path.'" '.
+              'data-serie_categorie_un_id="'.$categorie_un_id.'" '.
+              'data-serie_categorie_deux_id="'.$categorie_deux_id.'" '.
+              'data-serie_categorie_trois_id="'.$categorie_trois_id.'" '.
+              'data-saisons-disponibles="'.$dataSaisonsDisponibles.'" '.
+              'data-saisons-prises="'.$dataSaisonsPrises.'">'.
+              '<img src="'.$image_path.'" alt="'.$title.'">'.
+              '</div>';
+     }
             ?>
           </div>
         </div>

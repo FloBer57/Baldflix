@@ -1,7 +1,7 @@
-var btnOpenSaisonModal = document.getElementById("openSaisonModal");
-var saisonModal = document.getElementById("saisonModal");
-var btnCloseSaisonModal = document.getElementById("closeSaisonModal");
-var saisonContainer = document.getElementById("saisonContainer");
+const btnOpenSaisonModal = document.getElementById("openSaisonModal");
+const saisonModal = document.getElementById("saisonModal");
+const btnCloseSaisonModal = document.getElementById("closeSaisonModal");
+const saisonContainer = document.getElementById("saisonContainer");
 
 const body = document.body; // L'élément body
 
@@ -16,13 +16,24 @@ btnCloseSaisonModal.onclick = function () {
 }
 
 function closeModal() {
-    var modal = document.getElementById('saisonModal');
+    const modal = document.getElementById('saisonModal');
     modal.style.display = 'none'; // Cache la modale
     document.body.classList.remove('body_no_scroll'); // Réactive le scroll du body
 }
 
 function fillFormData(element) {
-  // Récupérer les données
+
+  const numeroSaisonDropdown = document.getElementById('numeroSaison');
+  const imageUploadInput = document.getElementById('fileInputImageSerie');
+  const titleInput = document.getElementById('serieTitle');
+  const tagsInput = document.getElementById('serieTags');
+  const synopsisInput = document.getElementById('serieSynopsis');
+  const serieIdInput = document.getElementById('serieID');
+  const categoriesInputUn = document.getElementById('serieCategorieUn');
+  const categoriesInputDeux = document.getElementById('serieCategorieDeux');
+  const categoriesInputTrois = document.getElementById('serieCategorieTrois');
+  const btnopenSaisonModal = document.getElementById('openSaisonModal');
+
   const id = element.getAttribute('data-id');
   const title = element.getAttribute('data-title');
   const synopsis = element.getAttribute('data-synopsis');
@@ -30,8 +41,29 @@ function fillFormData(element) {
   const categorieUnId = element.getAttribute('data-serie_categorie_un_id');
   const categorieDeuxId = element.getAttribute('data-serie_categorie_deux_id');
   const categorieTroisId = element.getAttribute('data-serie_categorie_trois_id');
+  const saisonsDisponibles = element.getAttribute('data-saisons-disponibles').split(',');
+  const saisonsPrises = element.getAttribute('data-saisons-prises').split(',');
+  const selectSaison = document.getElementById('numeroSaison');
+  selectSaison.innerHTML = ''; // Nettoyer les options existantes
 
-  // Remplir le formulaire
+  saisonsDisponibles.forEach(function(saison) {
+      const option = document.createElement('option');
+      option.value = saison;
+      option.text = `Saison ${saison}`;
+      if (saisonsPrises.includes(saison)) {
+          option.disabled = true; // Désactiver les saisons prises
+      }
+      selectSaison.appendChild(option);
+      if (saison !== '1') {
+        imageUploadInput.disabled = true;
+    } else {
+        imageUploadInput.disabled = false;
+    }
+    if (numeroSaisonDropdown.value !== '1') {
+        imageUploadInput.disabled = true;
+    }
+  });
+
   document.getElementById('serieID').value = id;
   document.getElementById('serieTitle').value = title;
   document.getElementById('serieSynopsis').value = synopsis;
@@ -45,3 +77,4 @@ function fillFormData(element) {
   saisonModal.style.display = "block";
   body.classList.add('body_no_scroll');
 }
+

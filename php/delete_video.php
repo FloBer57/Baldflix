@@ -21,7 +21,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["I
   if ($_GET["csrf_token"] === $_SESSION["csrf_token"]) {
     $idToDelete = $_GET["ID"];
     $typeToDelete = $_GET["type"];
-
+    $titleToDelete = $_GET["title"];
     // Débuter une transaction
     mysqli_begin_transaction($link);
 
