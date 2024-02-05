@@ -79,4 +79,4 @@ https://doc.florentbernar.fr/en/Système/Configuration/Nginx
 
 ## Erreur
 
-J'ai probablement fait beaucoup d'erreur ou utiliser des mauvaises méthodes, j'ai fait de mon mieux avec mes connaissances et j'ai travailler après mes cours afin d'apprendre les technologies et languages qui m'ont servi à déployer la V1 de baldflix. Je suis ouvert à toutes critique ou améliorations. 
+J'ai probablement fait beaucoup d'erreur ou utiliser des mauvaises méthodes, j'ai fait de mon mieux avec mes connaissances et j'ai travailler après mes cours afin d'apprendre les technologies et languages qui m'ont servi à déployer la V1 de baldflix. Je suis ouvert à toutes critique ou améliorations. Je suis joignable par mail à contact@florentbernar.fr
