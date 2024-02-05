@@ -2,20 +2,19 @@
   
 require_once "config.php";
 
-// Initialisation des variables avec des chaines vides
+
 $username = $password = $confirm_password = $email = "";
 $username_err = $password_err = $confirm_password_err = $email_err = "";
 
-// Traitement des données du formulaire lorsqu'il est soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Validation du nom d'utilisateur
+
     if (empty(trim($_POST["username"]))) {
         $username_err = "Veuillez entrer un nom d'utilisateur.";
     } elseif (!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))) {
         $username_err = "Le nom d'utilisateur ne peut contenir que des lettres, des chiffres et des underscores.";
     } else {
-        // Préparation d'une déclaration SELECT pour vérifier si le nom d'utilisateur existe déjà
+
         $sql = "SELECT user_ID FROM user WHERE username = ?";
         if ($stmt = mysqli_prepare($link, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_username);
@@ -36,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Validation du mot de passe
+
     if (empty(trim($_POST["password"]))) {
         $password_err = "Veuillez entrer un mot de passe.";
     } elseif (strlen(trim($_POST["password"])) < 10) {
@@ -45,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = trim($_POST["password"]);
     }
 
-    // Validation de la confirmation du mot de passe
+
     if (empty(trim($_POST["confirm_password"]))) {
         $confirm_password_err = "Veuillez confirmer le mot de passe.";
     } else {
@@ -55,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Validation de l'email (facultatif)
+
     if (!empty(trim($_POST["email"])) && !filter_var(trim($_POST["email"]), FILTER_VALIDATE_EMAIL)) {
         $email_err = "Veuillez entrer une adresse email valide.";
     } else {
@@ -69,10 +68,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_bind_result($stmt, $user_count);
                 mysqli_stmt_fetch($stmt);
                 if ($user_count == 0) {
-                    // S'il s'agit du premier utilisateur, attribuez-lui le rôle d'administrateur
+
                     $role = 1; 
                 } else {
-                    $role = 3; // Rôle par défaut (démo)
+                    $role = 3; 
                 }
             } else {
                 echo "Oops! Quelque chose s'est mal passé lors de la vérification du nombre d'utilisateurs.";

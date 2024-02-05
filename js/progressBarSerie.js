@@ -4,7 +4,7 @@ document.getElementById('uploadFormSerie').addEventListener('submit', function (
     var xhr = new XMLHttpRequest();
     xhr.open('POST', this.action, true);
 
-    // Afficher la barre de progression
+
     document.getElementById('progressBarContainerSerie').style.display = 'block';
 
     xhr.upload.onprogress = function (e) {
@@ -22,7 +22,7 @@ document.getElementById('uploadFormSerie').addEventListener('submit', function (
   });
 
 document.getElementById('btnRestartSerie').addEventListener('click', function () {
-    // Réinitialiser le formulaire
+
     document.getElementById('uploadFormSerie').reset();
     document.getElementById('uploadProgressSerie').value = 0;
     document.getElementById('progressBarContainerSerie').style.display = 'none';

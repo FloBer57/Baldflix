@@ -48,7 +48,7 @@
         <li class="nav_item"><a href="../php/categorie.php?categorie=Serie" class="nav_link">Séries</a></li>
         <li class="nav_item"><a href="../php/categorie.php?categorie=Film" class="nav_link">Films</a></li>
         <li class="nav_item"><a href="../php/categorie.php?categorie=Anime" class="nav_link">Anime</a></li>
-        <li class="nav_item"><a href="../php/categorie.php?categorie=Spectacles" class="nav_link">Spectacles</a></li>
+        <li class="nav_item"><a href="../php/categorie.php?categorie=Spectacle" class="nav_link">Spectacles</a></li>
         <li class="nav_item"><a href="../php/categorie.php?categorie=Bald" class="nav_link">Bald</a></li>
         <li class="nav_item">
           <a href="../php/logout.php" class="nav_link">Déconnexion</a>
@@ -60,9 +60,11 @@
   </div>
   </nav>
 
-  <div class="search_nav">
+  <div class="search_nav"
+  <form action="../php/search.php" method="get">
     <input type="text" class="search" id="search" placeholder="Rechercher...">
     <button class="search_button" onclick="searchFunction()">Rechercher</button>
+    </form>
   </div>
 
   <div class="search_phone" role="search">

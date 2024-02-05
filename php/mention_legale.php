@@ -59,4 +59,5 @@ require_once "config.php";
     <?php
     include "../includes/footer.php";
     ?>
+    <script src="../js/burger.js"></script>
 </body>

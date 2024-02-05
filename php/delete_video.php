@@ -4,13 +4,13 @@ require_once "config.php";
 
 function deleteFiles($path) {
   if (is_file($path)) {
-      unlink($path); // Utiliser unlink pour supprimer un fichier
+      unlink($path); 
   } elseif (is_dir($path)) {
       $files = array_diff(scandir($path), ['.', '..']);
       foreach ($files as $file) {
           deleteFiles($path . '/' . $file);
       }
-      rmdir($path); // Supprimer un dossier vide
+      rmdir($path); 
   }
 }
 
@@ -23,7 +23,6 @@ if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["I
     $idToDelete = $_GET["ID"];
     $typeToDelete = $_GET["type"];
     $titleToDelete = $_GET["title"];
-    // Débuter une transaction
     mysqli_begin_transaction($link);
 
     try {
@@ -62,8 +61,6 @@ if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["I
         mysqli_stmt_bind_param($stmt, "i", $idToDelete);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
-
-        // Préparer à supprimer la série
         $sql = "DELETE FROM serie WHERE serie_ID = ?";
       } else {
         throw new Exception("Type inconnu pour la suppression.");
@@ -75,10 +72,8 @@ if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["I
       mysqli_stmt_execute($stmt);
       mysqli_stmt_close($stmt);
 
-      // Valider la transaction
       mysqli_commit($link);
     } catch (Exception $e) {
-      // Annuler la transaction en cas d'erreur
       mysqli_rollback($link);
       echo "<p>Erreur lors de la suppression : " . $e->getMessage() . "</p>";
     }

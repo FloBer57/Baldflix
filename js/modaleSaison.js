@@ -7,18 +7,18 @@ const body = document.body; // L'élément body
 
 btnOpenSaisonModal.onclick = function () {
     saisonModal.style.display = "block";
-    document.body.classList.add('body_no_scroll'); // Ajout de no-scroll ici
+    document.body.classList.add('body_no_scroll'); 
 }
 
 btnCloseSaisonModal.onclick = function () {
     saisonModal.style.display = "none";
-    document.body.classList.remove('body_no_scroll'); // Retrait de no-scroll ici
+    document.body.classList.remove('body_no_scroll'); 
 }
 
 function closeModal() {
     const modal = document.getElementById('saisonModal');
-    modal.style.display = 'none'; // Cache la modale
-    document.body.classList.remove('body_no_scroll'); // Réactive le scroll du body
+    modal.style.display = 'none'; 
+    document.body.classList.remove('body_no_scroll'); 
 }
 
 function fillFormData(element) {
@@ -37,14 +37,14 @@ function fillFormData(element) {
   const saisonsDisponibles = element.getAttribute('data-saisons-disponibles').split(',');
   const saisonsPrises = element.getAttribute('data-saisons-prises').split(',');
   const selectSaison = document.getElementById('numeroSaison');
-  selectSaison.innerHTML = ''; // Nettoyer les options existantes
+  selectSaison.innerHTML = ''; 
 
   saisonsDisponibles.forEach(function(saison) {
       const option = document.createElement('option');
       option.value = saison;
       option.text = `Saison ${saison}`;
       if (saisonsPrises.includes(saison)) {
-          option.disabled = true; // Désactiver les saisons prises
+          option.disabled = true; 
       }
       selectSaison.appendChild(option);
       if (saison !== '1') {

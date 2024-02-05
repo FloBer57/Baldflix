@@ -27,7 +27,7 @@ function openModal(element) {
         modal.querySelector('.tags_duree_modale').innerHTML = '<p>' + 'Durée: ' + duration + '</p>';
     }
 
-    modal.style.display = 'block'; // Affiche la modale
+    modal.style.display = 'block'; 
 }
 
 function closeModal() {
@@ -40,6 +40,6 @@ function closeModal() {
         videoPlayer.load();
     }
 
-    modal.style.display = 'none'; // Cache la modale
-    document.body.classList.remove('body_no_scroll'); // Réactive le scroll du body
+    modal.style.display = 'none'; 
+    document.body.classList.remove('body_no_scroll'); 
 }

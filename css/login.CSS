@@ -74,7 +74,6 @@ span.invalid_feedback {
   font-weight: bold;
   text-align: center;
   margin-top: -50px;
-  /* Ajustez la marge supérieure selon vos préférences */
 }
 
 .title a {
@@ -97,7 +96,6 @@ span.invalid_feedback {
   font-size: 15px;
   margin-right: 10px;
   margin-left: 10px;
-  /* Ajustez la marge supérieure selon vos préférences */
 }
 
 #username,

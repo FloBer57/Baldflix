@@ -16,7 +16,7 @@ function loadFirstEpisode(serieId, saisonNumber) {
     loadEpisodes(saisonNumber, serieId, function() {
         var episodeSelect = document.getElementById('episodeSelect');
         if (episodeSelect && episodeSelect.options.length > 1) {
-            episodeSelect.selectedIndex = 0; // Sélectionnez le premier épisode
+            episodeSelect.selectedIndex = 0; 
             updateEpisode(episodeSelect.value);
         }
     });
@@ -26,5 +26,5 @@ function loadFirstEpisode(serieId, saisonNumber) {
 function updateEpisode(episodePath) {
     var videoPlayer = document.getElementById('myVideo');
     videoPlayer.src = episodePath;
-    videoPlayer.load(); // Important pour recharger la source vidéo
+    videoPlayer.load(); 
 }
