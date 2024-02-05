@@ -1,6 +1,5 @@
 <?php
 
-session_start();
 require_once "config.php";
 
 function getProfileData($userId)
@@ -82,7 +81,4 @@ else {
   }
   mysqli_close($link);
 }
-if ($_SERVER["REQUEST_METHOD"] != "POST" || !empty($login_err)) {
-  header("location: baldflix_login.php");
-  exit;
-}
+?>

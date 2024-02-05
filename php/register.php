@@ -1,10 +1,5 @@
-<?php 
-
-session_start();
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: baldflix_login.php");
-    exit;
-  }
+<?php
+  
 require_once "config.php";
 
 // Initialisation des variables avec des chaines vides
@@ -67,34 +62,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = htmlspecialchars(trim($_POST["email"]));
     }
 
-    // Vérification des erreurs avant l'insertion dans la base de données
     if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($email_err)) {
+        $sql = "SELECT COUNT(*) FROM user";
+        if ($stmt = mysqli_prepare($link, $sql)) {
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_bind_result($stmt, $user_count);
+                mysqli_stmt_fetch($stmt);
+                if ($user_count == 0) {
+                    // S'il s'agit du premier utilisateur, attribuez-lui le rôle d'administrateur
+                    $role = 1; 
+                } else {
+                    $role = 3; // Rôle par défaut (démo)
+                }
+            } else {
+                echo "Oops! Quelque chose s'est mal passé lors de la vérification du nombre d'utilisateurs.";
+            }
+            mysqli_stmt_close($stmt);
+        }
 
-        // Préparation d'une déclaration INSERT
         $sql = "INSERT INTO user (username, password, user_role_ID, email) VALUES (?, ?, ?, ?)";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             mysqli_stmt_bind_param($stmt, "ssis", $param_username, $param_password, $param_role, $param_email);
 
-            // Paramètres
+
             $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Création d'un hash pour le mot de passe
-            $param_role = 3; // Rôle par défaut ( démo )
+            $param_password = password_hash($password, PASSWORD_DEFAULT); 
+            $param_role = $role;
             $param_email = $email;
 
-            // Exécution de la déclaration préparée
             if (mysqli_stmt_execute($stmt)) {
-                // Redirection vers la page de login
+ 
                 header("location: baldflix_login.php");
             } else {
                 echo "Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
             }
 
-            // Fermeture de la déclaration
+
             mysqli_stmt_close($stmt);
         }
     }
 
-    // Fermeture de la connexion
+
     mysqli_close($link);
 }
+?>

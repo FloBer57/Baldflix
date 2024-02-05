@@ -1,9 +1,9 @@
 <?php
 session_start();
 require_once "config.php";
-
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-  header("location: ../index.php");
+require_once "login.php";
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+  header("location: ../index.php"); 
   exit;
 }
 
@@ -32,7 +32,7 @@ if (isset($_SESSION["login_err"])) {
   unset($_SESSION["login_err"]); 
 }
         ?>
-        <form action="login.php" method="post">
+        <form action="#" method="post">
           <label for="username" class="username">Nom d'utilisateur*</label>
           <input type="text" placeholder="Nom d'utilisateur" id="username" name="username" required
             class="form_control <?php echo (!empty($username_err)) ? 'is_invalid' : ''; ?>"

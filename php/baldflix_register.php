@@ -1,10 +1,11 @@
 <?php
 session_start();
 require_once "config.php";
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location: baldflix_login.php");
+require_once "register.php";
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("location: ../index.php"); 
     exit;
-}
+  }
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +33,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
                     echo '<div class="alert alert_danger">' . $login_err . '</div>';
                 }
                 ?>
-                <form action="../php/register.php" method="post">
+                <form action="#" method="post">
                     <label for="username" class="username">Nom d'utilisateur*</label>
                     <input type="text" placeholder="Nom d'utilisateur" id="username" name="username" required class="form_control <?php echo (!empty($username_err)) ? 'is_invalid' : ''; ?>" value="<?php echo $username; ?>">
                     <span class="invalid_feedback">
