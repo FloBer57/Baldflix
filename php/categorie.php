@@ -138,7 +138,7 @@ function submitForm() {
   document.getElementById("triForm").submit();
 }
 </script>';
-    echo '<div class="box box_' . $lower_categorie . '">';
+    echo '<div class="box box_cat box_' . $lower_categorie . '">';
 
     foreach ($filmsOrSeries as $item) {
       $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);

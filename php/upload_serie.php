@@ -2,16 +2,15 @@
 session_start();
 require_once "config.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nom_serie = filter_input(INPUT_POST, 'serie_title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $numero_saison = filter_input(INPUT_POST, 'numero_saison', FILTER_SANITIZE_NUMBER_INT);
-    $tags = filter_input(INPUT_POST, 'serie_tags', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $synopsis = filter_input(INPUT_POST, 'serie_synopsis', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $nom_serie = htmlspecialchars($_POST["serie_title"]);
+    $numero_saison = intval($_POST["serie_title"]);
+    $tags = htmlspecialchars($_POST["serie_tags"]);
+    $synopsis = htmlspecialchars($_POST["serie_synopsis"]);
     $categories = array_map('intval', $_POST['serie_categories']);
 
 
     if ($numero_saison == 1) {
-        $safe_nom_serie = preg_replace("/[^A-Za-z0-9 ]/", '', $nom_serie);
-        $safe_nom_serie = str_replace(' ', '_', $safe_nom_serie);
+        $safe_nom_serie = str_replace(' ', '_', $nom_serie);
         $serie_dir = "../video/series/" . $safe_nom_serie . "/saison_" . $numero_saison . "/";
         if (!file_exists($serie_dir)) {
             mkdir($serie_dir, 0755, true);
@@ -22,26 +21,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
             exit("Erreur lors du téléchargement de l'image.");
         }
-    
-        // Vérifier si l'extension de l'image est différente de 'jpg'
+
         if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
             $converted_image_file = $serie_dir . $safe_nom_serie . '_Affiche.jpg';
     
-            // Définir la commande ffmpeg pour la conversion d'image
             $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " " . escapeshellarg($converted_image_file);
     
-            // Rediriger la sortie d'erreur vers la sortie standard
             $ffmpeg_cmd_convert_image .= " 2>&1";
             exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
             if ($return_var_image !== 0) {
                 error_log("Échec de la conversion de l'image avec ffmpeg. Sortie: " . implode("\n", $output_image));
                 exit("Erreur lors de la conversion de l'image.");
             } else {
-                // La conversion a réussi, supprimer l'ancien fichier si différent du nouveau
                 if (file_exists($image_target_file)) {
                     unlink($image_target_file);
                 }
-                // Mise à jour du chemin de l'image pour utiliser l'image convertie
                 $image_target_file = $converted_image_file;
             }
         }
@@ -78,7 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $sql_saison = "INSERT INTO saison (saison_number, saison_serie_ID) VALUES (?, ?)";
         if ($stmt_saison = mysqli_prepare($link, $sql_saison)) {
-            // Utiliser des variables nommées pour les paramètres
             $param_numero_saison = $numero_saison;
             $param_serie_id = $serie_id;
             mysqli_stmt_bind_param($stmt_saison, "ii", $param_numero_saison, $param_serie_id);
@@ -115,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (file_exists($video_target_file)) {
                         unlink($video_target_file);
                     }
-                    $video_target_file = $converted_video_file; // Utilisez le fichier converti pour la suite
+                    $video_target_file = $converted_video_file; 
                 } else {
                     exit("Erreur lors de la conversion de la vidéo.");
                 }
@@ -123,11 +116,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $ffmpeg_cmd_duration = escapeshellcmd("ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " . escapeshellarg($video_target_file));
             $duree = shell_exec($ffmpeg_cmd_duration);
-            error_log("Durée formatée: " . $duree);
             $total_seconds = round(floatval($duree));
-            error_log("Durée formatée: " . $total_seconds);
             $duration_formatted = gmdate("H:i:s", $total_seconds);
-            error_log("Durée formatée: " . $duration_formatted);
 
             $random_time = rand(1, $total_seconds);
             $video_target_miniature = $serie_dir . 'miniature_' . 'EP_0' . ($index + 1) . '.jpg';
@@ -175,9 +165,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         
-        $serie_id = filter_input(INPUT_POST, 'serie_ID', FILTER_SANITIZE_NUMBER_INT);
-        $safe_nom_serie = preg_replace("/[^A-Za-z0-9 ]/", '', $nom_serie);
-        $safe_nom_serie = str_replace(' ', '_', $safe_nom_serie);
+        $serie_id = htmlspecialchars($_POST["serie_ID"]);
+        $safe_nom_serie = str_replace(' ', '_', $nom_serie);
         $serie_dir = "../video/series/" . $safe_nom_serie . "/saison_" . $numero_saison . "/";
         if (!file_exists($serie_dir)) {
             mkdir($serie_dir, 0755, true);
@@ -229,11 +218,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $ffmpeg_cmd_duration = escapeshellcmd("ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " . escapeshellarg($video_target_file));
             $duree = shell_exec($ffmpeg_cmd_duration);
-            error_log("Durée formatée: " . $duree);
             $total_seconds = round(floatval($duree));
-            error_log("Durée formatée: " . $total_seconds);
             $duration_formatted = gmdate("H:i:s", $total_seconds);
-            error_log("Durée formatée: " . $duration_formatted);
 
             $random_time = rand(1, $total_seconds);
             $video_target_miniature = $serie_dir . 'miniature_' . 'EP_0' . ($index + 1) . '.jpg';

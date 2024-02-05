@@ -1,4 +1,5 @@
 <?php 
+
 require_once "config.php";
 
 function deleteFiles($path) {
@@ -17,7 +18,7 @@ $film_dir = "../video/film/";
 $serie_dir = "../video/serie/";
 
 
-if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["ID"]) && isset($_GET["type"]) && isset($_GET["csrf_token"])) {
+if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["ID"]) && isset($_GET["type"]) && isset($_GET["title"]) && isset($_GET["csrf_token"])) {
   if ($_GET["csrf_token"] === $_SESSION["csrf_token"]) {
     $idToDelete = $_GET["ID"];
     $typeToDelete = $_GET["type"];

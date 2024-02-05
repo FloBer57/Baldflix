@@ -3,11 +3,9 @@ session_start();
 require_once "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $titre = filter_input(INPUT_POST, 'film_title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $synopsis = filter_input(INPUT_POST, 'film_synopsis', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $tags = filter_input(INPUT_POST, 'film_tags', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-    $safe_title = preg_replace("/[^A-Za-z0-9 ]/", '', $titre);
+    $titre = htmlspecialchars($_POST["film_title"]);
+    $synopsis = htmlspecialchars($_POST["film_synopsis"]);
+    $tags = htmlspecialchars($_POST["film_tags"]);
     $safe_title = str_replace(' ', '_', $safe_title);
 
     $target_dir = "../video/film/";
@@ -74,11 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $ffmpeg_cmd_duration = escapeshellcmd("ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " . escapeshellarg($video_target_file));
     $duree = shell_exec($ffmpeg_cmd_duration);
-    error_log("Durée formatée: " . $duree);
     $total_seconds = round(floatval($duree));
-    error_log("Durée formatée: " . $total_seconds);
     $duration_formatted = gmdate("H:i:s", $total_seconds);
-    error_log("Durée formatée: " . $duration_formatted);
 
     $random_time = rand(1, $total_seconds);
     $video_target_miniature = $film_dir . 'miniature.jpg';

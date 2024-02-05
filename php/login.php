@@ -1,17 +1,6 @@
 <?php
 
-session_start([
-    'cookie_lifetime' => 86400,
-    'cookie_secure' => true, 
-    'cookie_httponly' => true, 
-    'use_strict_mode' => true, 
-]);
-
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-  header("location: ../index.php");
-  exit;
-}
-
+session_start();
 require_once "config.php";
 
 function getProfileData($userId)

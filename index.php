@@ -87,10 +87,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   "film" AS type
 FROM
   film
-INNER JOIN
-  film_categorie ON film.film_ID = film_categorie.filmXcategorie_film_ID
-INNER JOIN
-  categorie ON film_categorie.filmXcategorie_categorie_ID = categorie.categorie_ID
 GROUP BY
   film.film_ID
 UNION ALL
@@ -112,10 +108,6 @@ SELECT
   "serie" AS serie_type
 FROM
   serie
-INNER JOIN
-  serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
-INNER JOIN
-  categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
 GROUP BY
   serie.serie_ID
   ORDER BY ' . $orderBy;
@@ -157,12 +149,12 @@ function submitForm() {
   document.getElementById("triForm").submit();
 }
 </script>';
-    echo '<div class="box box_' . "index" . '">';
+    echo '<div class="box box_cat box_' . "index" . '">';
 
     foreach ($filmsOrSeries as $item) {
       $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);
       $type = htmlspecialchars($item['type']); // Ajout du type (film ou serie)
-      $title = htmlspecialchars_decode($item['title']);
+      $title = htmlspecialchars_decode($item['type'] === 'film' ? $item['title'] : $item['serie_title']);
       $title = str_replace("_", " ", $title);
       $image_path = htmlspecialchars($item['type'] === 'film' ? $item['film_image_path'] : $item['serie_image_path']);
       $synopsis = htmlspecialchars_decode($item['type'] === 'film' ? $item['film_synopsis'] : $item['serie_synopsis']);

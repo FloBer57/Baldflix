@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 require_once "config.php"; 
 
 if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["user_ID"])) {

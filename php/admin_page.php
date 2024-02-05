@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include_once "admin_delete.php";
   }
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
-  if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["ID"]) && isset($_GET["type"]) && isset($_GET["csrf_token"])) {
+  if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["ID"]) && isset($_GET["type"]) && isset($_GET["title"]) && isset($_GET["csrf_token"])) {
     include_once "delete_video.php";
   }
 }
@@ -297,6 +297,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               echo "<tr><th>Affiche</th><th>Titre</th><th>Type</th><th>ID</th><th>Supprimer</th></tr>";
               while ($ligne = mysqli_fetch_assoc($resultat)) {
                 $id = $ligne['type'] === 'film' ? $ligne['film_ID'] : $ligne['serie_ID'];
+                $title = htmlspecialchars_decode($ligne['type'] === 'film' ? $ligne['title'] : $ligne['serie_title']);
                 $titre = htmlspecialchars_decode($ligne['type'] === 'film' ? $ligne['title'] : $ligne['serie_title']);
                 $titre = str_replace("_", " ", $titre);
                 $cheminImage = $ligne['type'] === 'film' ? $ligne['film_image_path'] : $ligne['serie_image_path'];
@@ -308,7 +309,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
                 echo "<td>" . htmlspecialchars($type) . "</td>";
                 echo "<td>" . htmlspecialchars($id) . "</td>";
                 echo "<td>
-                <a href='#' onclick='confirmDeleteVideo(\"?action=deleteVideo&ID={$id}&type={$type}&csrf_token={$_SESSION["csrf_token"]}\")'>
+                <a href='#' onclick='confirmDeleteVideo(\"?action=deleteVideo&ID={$id}&type={$type}&type={$title}&csrf_token={$_SESSION["csrf_token"]}\")'>
                     <img src='../image/icon/delete.svg' alt='Supprimer' title='Supprimer'>
                 </a>
             </td>";
@@ -434,10 +435,6 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
               if (!empty($categories)) {
                 $liste_categories = explode(",", $categories);
-
-                echo "<pre>Categories: ";
-                print_r($liste_categories);
-                echo "</pre>";
 
                 $categories_ids = array_slice($liste_categories, 0, 3);
               }

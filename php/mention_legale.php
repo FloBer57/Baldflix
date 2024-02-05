@@ -1,11 +1,6 @@
 <?php
 session_start();
-require_once "../php/config.php";
-
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: ../php/baldflix_login.php");
-    exit;
-}
+require_once "config.php";
 
 ?>
 
