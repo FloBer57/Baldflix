@@ -23,7 +23,8 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  background: url("../image/background/main_background.svg") center center no-repeat fixed;
+  background: url("../image/background/main_background.svg") center center
+    no-repeat fixed;
   background-size: cover;
   font-family: Arial, Helvetica, sans-serif;
   box-sizing: border-box;
@@ -100,6 +101,8 @@ span.invalid_feedback {
 
 #username,
 #password,
+#confirmPassword,
+#email,
 .input {
   padding: 15px;
   font-size: 15px;
@@ -116,7 +119,7 @@ span.invalid_feedback {
 
 input[type="submit"] {
   background-color: var(--light);
-  color: var(--red)
+  color: var(--red);
 }
 
 .input {
@@ -154,18 +157,19 @@ input[type="submit"] {
     padding: 25px;
     order: 2;
     margin-bottom: 15vh;
-    
   }
   form {
     display: flex;
     flex-direction: column;
-}
-input#email {
-  border-radius: 10px;
-}
-input#confirmPassword {
-  border-radius: 20px;
-}
+    justify-content: center;
+    align-items: center;
+  }
+  input#email {
+    border-radius: 10px;
+  }
+  input#confirmPassword {
+    border-radius: 20px;
+  }
 
   h1 {
     margin-top: 15vh;

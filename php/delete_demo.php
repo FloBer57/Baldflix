@@ -1,4 +1,14 @@
 <?php
+if (php_sapi_name() !== 'cli') {
+    echo "Ce script ne peut être exécuté que depuis la ligne de commande (CLI).";
+    exit;
+}
+
+if ($_SERVER['REMOTE_ADDR'] !== '127.0.0.1') {
+    echo "L'accès à ce script n'est autorisé que depuis l'adresse IP locale.";
+    exit;
+}
+
 require_once 'config.php';
 
 try {
@@ -11,4 +21,3 @@ try {
     echo "Erreur !: " . $e->getMessage() . "<br/>";
     die();
 }
-?>

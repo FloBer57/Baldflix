@@ -1,22 +1,28 @@
-<?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-  header("location: baldflix_login.php");
+<?php
+
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+  header("location: ../php/baldflix_login.php");
   exit;
 }
 
-function getFilmsOrSeriesIndex($link)
+function getFilmsOrSeriesByCategory($link, $categorie)
 {
+  // Liste des champs valides pour le tri
   $validFields = ['title'];
   $validDirections = ['ASC', 'DESC'];
-  $orderBy = "title ASC";
-  if (isset($_GET['tri'])) {
-    list($field, $direction) = explode('_', $_GET['tri'] . '_');
-    $direction = strtoupper($direction);
+  $orderBy = "title ASC"; // Valeur par défaut sûre
 
+  if (isset($_GET['tri'])) {
+    list($field, $direction) = explode('_', $_GET['tri'] . '_'); // Sécurité supplémentaire pour éviter les notices PHP
+    $direction = strtoupper($direction); // Normalisation en majuscules
+
+    // Validation des entrées
     if (in_array($field, $validFields) && in_array($direction, $validDirections)) {
       $orderBy = "$field $direction";
-    }
+    } // Sinon, utilise la valeur par défaut
   }
 
+  // Construction de la requête SQL sécurisée
   $sql = "SELECT
             film.film_ID,
             film.film_image_path,
@@ -34,6 +40,12 @@ function getFilmsOrSeriesIndex($link)
             'film' AS type
           FROM
             film
+          INNER JOIN
+            film_categorie ON film.film_ID = film_categorie.filmXcategorie_film_ID
+          INNER JOIN
+            categorie ON film_categorie.filmXcategorie_categorie_ID = categorie.categorie_ID
+          WHERE
+            categorie.categorie_nom = ?
           GROUP BY
             film.film_ID
           UNION ALL
@@ -54,11 +66,19 @@ function getFilmsOrSeriesIndex($link)
             'serie' AS serie_type
           FROM
             serie
+          INNER JOIN
+            serie_categorie ON serie.serie_ID = serie_categorie.serieXcategorie_serie_ID
+          INNER JOIN
+            categorie ON serie_categorie.serieXcategorie_categorie_ID = categorie.categorie_ID
+          WHERE
+            categorie.categorie_nom = ?
           GROUP BY
             serie.serie_ID
           ORDER BY $orderBy";
 
+  // Préparation et exécution de la requête sécurisée
   if ($stmt = mysqli_prepare($link, $sql)) {
+    mysqli_stmt_bind_param($stmt, "ss", $categorie, $categorie);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
@@ -76,11 +96,12 @@ function getFilmsOrSeriesIndex($link)
   }
 }
 
-$filmsOrSeries = getFilmsOrSeriesIndex($link);
 
-echo '<div class="container container_cat" id="' . "index" . 'Container">';
+$filmsOrSeries = getFilmsOrSeriesByCategory($link, $categorie);
+
+echo '<div class="container container_cat" id="' . $lower_categorie . 'Container">';
 echo '<div class="cat_select">';
-echo '<h3 id="' . "index" . '">' . "Film & Serie" . '</h3>';
+echo '<h3 id="' . $lower_categorie . '">' . htmlspecialchars($categorie) . '</h3>';
 echo '<form id="triForm" method="get">';
 echo '<input type="radio" id="title_asc" name="tri" value="title_asc" onchange="submitForm()" ' . (isset($_GET['tri']) && $_GET['tri'] == 'title_asc' ? 'checked' : '') . '>';
 echo '<label for="title_asc">Titre (A-Z)</label>';
@@ -93,7 +114,7 @@ function submitForm() {
   document.getElementById("triForm").submit();
 }
 </script>';
-echo '<div class="box box_cat box_' . "index" . '">';
+echo '<div class="box box_cat box_' . $lower_categorie . '">';
 
 foreach ($filmsOrSeries as $item) {
   $id = htmlspecialchars($item['type'] === 'film' ? $item['film_ID'] : $item['serie_ID']);

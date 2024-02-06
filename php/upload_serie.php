@@ -24,9 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
             $converted_image_file = $serie_dir . $safe_nom_serie . '_Affiche.jpg';
-    
+
             $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " " . escapeshellarg($converted_image_file);
-    
+
             $ffmpeg_cmd_convert_image .= " 2>&1";
             exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
             if ($return_var_image !== 0) {
@@ -108,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (file_exists($video_target_file)) {
                         unlink($video_target_file);
                     }
-                    $video_target_file = $converted_video_file; 
+                    $video_target_file = $converted_video_file;
                 } else {
                     exit("Erreur lors de la conversion de la vidéo.");
                 }
@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-        
+
         $serie_id = htmlspecialchars($_POST["serie_ID"]);
         $safe_nom_serie = str_replace(' ', '_', $nom_serie);
         $serie_dir = "../video/series/" . $safe_nom_serie . "/saison_" . $numero_saison . "/";
@@ -210,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (file_exists($video_target_file)) {
                         unlink($video_target_file);
                     }
-                    $video_target_file = $converted_video_file; // Utilisez le fichier converti pour la suite
+                    $video_target_file = $converted_video_file;
                 } else {
                     exit("Erreur lors de la conversion de la vidéo.");
                 }

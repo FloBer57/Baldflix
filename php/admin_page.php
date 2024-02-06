@@ -31,8 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include_once "delete_video.php";
   }
 }
-
-include_once "delete_video.php";
 $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 
 ?>
@@ -419,7 +417,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             foreach ($GetSeries as $item) {
               $id = htmlspecialchars($item['serie_ID']);
               $title = htmlspecialchars($item['serie_title']);
-              $title = str_replace('_', ' ',$title);
+              $title = str_replace('_', ' ', $title);
               $image_path = htmlspecialchars($item['serie_image_path']);
               $synopsis = htmlspecialchars($item['serie_synopsis']);
               $tags = htmlspecialchars($item['serie_tags']);
@@ -427,7 +425,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               $saisons = htmlspecialchars($item['saisons']);
 
 
-              $saisonsPrises = explode(",", $saisons); 
+              $saisonsPrises = explode(",", $saisons);
               $dataSaisonsDisponibles = implode(',', range(1, 20));
               $dataSaisonsPrises = implode(',', $saisonsPrises);
 
@@ -443,20 +441,20 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               $categorie_deux_id = isset($categories_ids[1]) ? trim($categories_ids[1]) : "";
               $categorie_trois_id = isset($categories_ids[2]) ? trim($categories_ids[2]) : "";
 
-              echo '<div class="box_div" onclick="fillFormData(this)" '.
-              'data-id="'.$id.'" '.
-              'data-title="'.$title.'" '.
-              'data-synopsis="'.$synopsis.'" '.
-              'data-tags="'.$tags.'" '.
-              'data-image="'.$image_path.'" '.
-              'data-serie_categorie_un_id="'.$categorie_un_id.'" '.
-              'data-serie_categorie_deux_id="'.$categorie_deux_id.'" '.
-              'data-serie_categorie_trois_id="'.$categorie_trois_id.'" '.
-              'data-saisons-disponibles="'.$dataSaisonsDisponibles.'" '.
-              'data-saisons-prises="'.$dataSaisonsPrises.'">'.
-              '<img src="'.$image_path.'" alt="'.$title.'" id="btnAddSaison">'.
-              '</div>';
-     }
+              echo '<div class="box_div" onclick="fillFormData(this)" ' .
+                'data-id="' . $id . '" ' .
+                'data-title="' . $title . '" ' .
+                'data-synopsis="' . $synopsis . '" ' .
+                'data-tags="' . $tags . '" ' .
+                'data-image="' . $image_path . '" ' .
+                'data-serie_categorie_un_id="' . $categorie_un_id . '" ' .
+                'data-serie_categorie_deux_id="' . $categorie_deux_id . '" ' .
+                'data-serie_categorie_trois_id="' . $categorie_trois_id . '" ' .
+                'data-saisons-disponibles="' . $dataSaisonsDisponibles . '" ' .
+                'data-saisons-prises="' . $dataSaisonsPrises . '">' .
+                '<img src="' . $image_path . '" alt="' . $title . '" id="btnAddSaison">' .
+                '</div>';
+            }
             ?>
           </div>
         </div>

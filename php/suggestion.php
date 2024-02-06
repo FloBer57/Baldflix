@@ -14,34 +14,35 @@ require '../vendor/phpmailer/phpmailer/src/Exception.php';
 require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require '../vendor/phpmailer/phpmailer/src/SMTP.php';
 
-// Assurez-vous que MAIL_PASSWORD est bien défini dans "config.php"
-// define('MAIL_PASSWORD', 'votre_mot_de_passe_ici');
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) {
+    if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
+        die("Token CSRF invalide");
+    }
+
     $suggestion_firstname = htmlspecialchars(trim($_POST["suggestion_firstname"]));
     $suggestion_lastname = htmlspecialchars(trim($_POST["suggestion_lastname"]));
     $suggestion_message = htmlspecialchars(trim($_POST["suggestion_message"]));
+    $suggestion_email = htmlspecialchars(trim($_POST["suggestion_email"]));
 
-    // Création d'une instance de PHPMailer
     $mail = new PHPMailer(true);
 
     try {
-        $mail->isSMTP(); // Utiliser SMTP
+        $mail->isSMTP();
         $mail->Host = 'florentbernar.fr';
-        $mail->SMTPAuth = true; // Activer l'authentification SMTP
-        $mail->Username = 'contact@florentbernar.fr'; 
-        $mail->Password = MAIL_PASSWORD; 
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
-        $mail->Port = 587; 
+        $mail->SMTPAuth = true;
+        $mail->Username = 'contact@florentbernar.fr';
+        $mail->Password = MAIL_PASSWORD;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
-        // Destinataires
-        $mail->setFrom('contact@florentbernar.fr', $suggestion_firstname . '  ' . $suggestion_lastname);
-        $mail->addAddress('contact@florentbernar.fr'); 
+        $mail->setFrom('noreply@florentbernar.fr');
+        $mail->addAddress('contact@florentbernar.fr', 'Florent BERNAR');
 
-        // Contenu
-        $mail->isHTML(true); // Définir le format de l'email en HTML
-        $mail->Subject = "Nouvelle suggestion de $suggestion_firstname $suggestion_lastname";
-        $mail->Body    = nl2br($suggestion_message); // Utiliser $suggestion_message pour le corps du mail
+        $mail->addReplyTo('contact@florentbernar.fr', 'Florent BERNAR');
+
+        $mail->isHTML(true);
+        $mail->Subject = "Nouvelle suggestion de $suggestion_firstname  $suggestion_lastname" . " Email : " . $suggestion_email;
+        $mail->Body    = nl2br($suggestion_message);
 
         $mail->send();
         echo "Votre suggestion a été envoyée avec succès!";
@@ -49,4 +50,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_suggestion"])) 
         echo "Erreur lors de l'envoi de la suggestion. Mailer Error: {$mail->ErrorInfo}";
     }
 }
-?>

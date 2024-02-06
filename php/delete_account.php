@@ -4,8 +4,12 @@ require_once "config.php";
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: baldflix_login.php");
     exit;
-  }
-  
+}
+if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
+    die("Token CSRF invalide");
+}
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_account"])) {
 
     $password_err = "";

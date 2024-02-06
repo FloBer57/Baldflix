@@ -1,5 +1,5 @@
 <?php
-  
+
 require_once "config.php";
 
 
@@ -69,9 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_fetch($stmt);
                 if ($user_count == 0) {
 
-                    $role = 2; 
+                    $role = 2;
                 } else {
-                    $role = 3; 
+                    $role = 3;
                 }
             } else {
                 echo "Oops! Quelque chose s'est mal passé lors de la vérification du nombre d'utilisateurs.";
@@ -86,12 +86,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); 
+            $param_password = password_hash($password, PASSWORD_DEFAULT);
             $param_role = $role;
             $param_email = $email;
 
             if (mysqli_stmt_execute($stmt)) {
- 
+
                 header("location: baldflix_login.php");
             } else {
                 echo "Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
@@ -105,4 +105,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     mysqli_close($link);
 }
-?>

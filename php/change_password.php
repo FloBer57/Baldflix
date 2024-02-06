@@ -6,6 +6,9 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   exit;
 }
 
+if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
+  die("Token CSRF invalide");
+}
 require_once "config.php";
 
 $new_password = $confirm_password = "";

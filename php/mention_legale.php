@@ -4,7 +4,10 @@ require_once "config.php";
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: baldflix_login.php");
     exit;
-  }
+}
+
+$_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+
 
 ?>
 

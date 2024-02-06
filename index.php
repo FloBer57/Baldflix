@@ -7,6 +7,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   exit;
 }
 
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
 ?>
 
 <!DOCTYPE html>

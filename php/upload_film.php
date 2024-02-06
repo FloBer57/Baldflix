@@ -27,44 +27,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     if (strtolower(pathinfo($video_target_file, PATHINFO_EXTENSION)) != 'mp4') {
         $converted_video_file = $film_dir . $safe_title . ".mp4";
-    
+
         $ffmpeg_cmd_convert = "ffmpeg -i " . escapeshellarg($video_target_file) . " -c:v libx264 -preset slow -crf 22 -c:a aac " . escapeshellarg($converted_video_file);
         exec($ffmpeg_cmd_convert, $output, $return_var);
-    
+
         if ($return_var === 0 && file_exists($converted_video_file)) {
             if (file_exists($video_target_file)) {
                 unlink($video_target_file);
             }
-            $video_target_file = $converted_video_file; // Utilisez le fichier converti pour la suite
+            $video_target_file = $converted_video_file;
         } else {
             exit("Erreur lors de la conversion de la vidéo.");
         }
-    } 
+    }
 
 
-    
+
     if (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
         exit("Erreur lors du téléchargement de l'image.");
     }
 
     if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
-        $converted_image_file = $film_dir. $safe_title . '_Affiche.jpg';
+        $converted_image_file = $film_dir . $safe_title . '_Affiche.jpg';
 
-        // Définir la commande ffmpeg pour la conversion d'image
         $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " " . escapeshellarg($converted_image_file);
 
-        // Rediriger la sortie d'erreur vers la sortie standard
         $ffmpeg_cmd_convert_image .= " 2>&1";
         exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
         if ($return_var_image !== 0) {
             error_log("Échec de la conversion de l'image avec ffmpeg. Sortie: " . implode("\n", $output_image));
             exit("Erreur lors de la conversion de l'image.");
         } else {
-            // La conversion a réussi, supprimer l'ancien fichier si différent du nouveau
+
             if (file_exists($image_target_file)) {
                 unlink($image_target_file);
             }
-            // Mise à jour du chemin de l'image pour utiliser l'image convertie
+
             $image_target_file = $converted_image_file;
         }
     }
@@ -137,4 +135,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_close($stmt);
     }
 }
-

@@ -23,12 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   if (empty(trim($_POST["username"]))) {
     $username_err = "Veuillez rentrer votre nom d'utilisateur";
-} elseif(strlen(trim($_POST["username"])) < 3){
-  $username_err = "Votre nom d'utilisateur doit être de plus de trois caractères";
-} elseif(strlen(trim($_POST["username"])) > 30){
-  $username_err = "Votre nom d'utilisateur ne peux contenir plus de 30 caractères";
-}
-else {
+  } elseif (strlen(trim($_POST["username"])) < 3) {
+    $username_err = "Votre nom d'utilisateur doit être de plus de trois caractères";
+  } elseif (strlen(trim($_POST["username"])) > 30) {
+    $username_err = "Votre nom d'utilisateur ne peux contenir plus de 30 caractères";
+  } else {
     $username = trim($_POST["username"]);
     $username = htmlspecialchars($username);
   }
@@ -64,10 +63,11 @@ else {
               $_SESSION["user_role_ID"] = $profileData['user_role_ID'];
               $_SESSION["profile_picture"] = $profileData['profile_picture'];
               $_SESSION['last_action'] = time();
+              $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
               header("location: ../index.php");
             } else {
               $login_err = "Nom d'utilisateur ou mot de passe invalide.";
-              $_SESSION["login_err"] = $login_err; 
+              $_SESSION["login_err"] = $login_err;
             }
           }
         } else {
@@ -81,4 +81,3 @@ else {
   }
   mysqli_close($link);
 }
-?>

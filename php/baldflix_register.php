@@ -2,10 +2,10 @@
 session_start();
 require_once "config.php";
 require_once "register.php";
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: ../index.php"); 
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+    header("location: ../index.php");
     exit;
-  }
+}
 ?>
 
 <!DOCTYPE html>
