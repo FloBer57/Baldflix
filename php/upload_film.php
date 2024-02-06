@@ -2,11 +2,47 @@
 session_start();
 require_once "config.php";
 
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+}
+
+if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
+    die("Token CSRF invalide");
+}
+
+if ($_SESSION["user_role_ID"] != 2) {
+    header("location: profile.php");
+    exit;
+  }
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titre = htmlspecialchars($_POST["film_title"]);
     $synopsis = htmlspecialchars($_POST["film_synopsis"]);
     $tags = htmlspecialchars($_POST["film_tags"]);
-    $safe_title = str_replace(' ', '_', $safe_title);
+    $safe_title = str_replace(' ', '_', $titre);
+
+    
+    $allFilesAreValid = true;
+
+    $videoFileType = mime_content_type($_FILES["video"]["tmp_name"]);
+    $allowedVideoTypes = ['video/mp4', 'video/avi', 'video/mpeg', 'video/quicktime', 'video/mkv'];
+    if (!in_array($videoFileType, $allowedVideoTypes)) {
+        $allFilesAreValid = false;
+    }
+
+    $imageFileType = mime_content_type($_FILES["image"]["tmp_name"]);
+    $allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg']; 
+
+    if (!in_array($imageFileType, $allowedImageTypes)) {
+        $allFilesAreValid = false;
+    }
+
+    if (!$allFilesAreValid) {
+        $_SESSION['error_message'] = 'Format invalide.';
+        exit();
+    }
 
     $target_dir = "../video/film/";
     if (!file_exists($target_dir)) {
@@ -35,13 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (file_exists($video_target_file)) {
                 unlink($video_target_file);
             }
-            $video_target_file = $converted_video_file;
+            $video_target_file = $converted_video_file; // Utilisez le fichier converti pour la suite
         } else {
             exit("Erreur lors de la conversion de la vidéo.");
         }
     }
-
-
 
     if (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_target_file)) {
         exit("Erreur lors du téléchargement de l'image.");
@@ -50,19 +84,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (strtolower(pathinfo($image_target_file, PATHINFO_EXTENSION)) != 'jpg') {
         $converted_image_file = $film_dir . $safe_title . '_Affiche.jpg';
 
+        // Définir la commande ffmpeg pour la conversion d'image
         $ffmpeg_cmd_convert_image = "ffmpeg -i " . escapeshellarg($image_target_file) . " " . escapeshellarg($converted_image_file);
 
+        // Rediriger la sortie d'erreur vers la sortie standard
         $ffmpeg_cmd_convert_image .= " 2>&1";
         exec($ffmpeg_cmd_convert_image, $output_image, $return_var_image);
         if ($return_var_image !== 0) {
             error_log("Échec de la conversion de l'image avec ffmpeg. Sortie: " . implode("\n", $output_image));
             exit("Erreur lors de la conversion de l'image.");
         } else {
-
+            // La conversion a réussi, supprimer l'ancien fichier si différent du nouveau
             if (file_exists($image_target_file)) {
                 unlink($image_target_file);
             }
-
+            // Mise à jour du chemin de l'image pour utiliser l'image convertie
             $image_target_file = $converted_image_file;
         }
     }

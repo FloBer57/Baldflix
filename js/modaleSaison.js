@@ -2,7 +2,6 @@ const btnOpenSaisonModal = document.getElementById("openSaisonModal");
 const saisonModal = document.getElementById("saisonModal");
 const btnCloseSaisonModal = document.getElementById("closeSaisonModal");
 const saisonContainer = document.getElementById("saisonContainer");
-const btnAddSaison = document.getElementById("btnAddSaison");
 const body = document.body; // L'élément body
 
 btnOpenSaisonModal.onclick = function () {
@@ -11,11 +10,6 @@ btnOpenSaisonModal.onclick = function () {
 }
 
 btnCloseSaisonModal.onclick = function () {
-    saisonModal.style.display = "none";
-    document.body.classList.remove('body_no_scroll'); 
-}
-
-btnAddSaison.onclick = function () {
     saisonModal.style.display = "none";
     document.body.classList.remove('body_no_scroll'); 
 }
@@ -70,7 +64,7 @@ function fillFormData(element) {
   document.getElementById('serieCategorieDeux').value = categorieDeuxId;
   document.getElementById('serieCategorieTrois').value = categorieTroisId;
 
-
+  closeModal();
   // Afficher la modale
   saisonModal.style.display = "block";
   body.classList.add('body_no_scroll');

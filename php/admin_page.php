@@ -17,13 +17,13 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
   exit;
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  if (isset($_POST["reset_password"])) {
+  if (isset($_POST["reset_password"]) &&  isset($_GET["csrf_token"])) {
     include_once "admin_reset_password.php";
-  } elseif (isset($_POST["modify"])) {
+  } elseif (isset($_POST["modify"]) && isset($_GET["csrf_token"]) ) {
     include_once "admin_role.php";
   }
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
-  if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["user_ID"])) {
+  if (isset($_GET["action"]) && $_GET["action"] == "delete" && isset($_GET["user_ID"]) && isset($_GET["csrf_token"])) {
     include_once "admin_delete.php";
   }
 } elseif ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -178,11 +178,18 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             <input type="file" id="fileInputVideo" name="video" required>
             <label for="fileUploadImage">Affiche du film</label>
             <input type="file" id="fileInputImage" name="image" required>
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <input type="submit" class="btn_upload_film" id="btnUploadFilm" value="Ajouter la vidéo">
           </form>
           <div class="restart_btn">
             <button class="btn_restart" id="btnRestart" disabled>Recommencer</button>
           </div>
+          <?php 
+          if (isset($_SESSION['error_message_film'])) {
+            echo "<p>" . $_SESSION['error_message_film'] . "</p>"; 
+            unset($_SESSION['error_message_film']); 
+        }
+        ?>
           <div class="progress_bar_container" id="progressBarContainer" style="display:none;">
             <label for="uploadProgress">Progression du téléchargement :</label>
             <progress id="uploadProgress" value="0" max="100"></progress>
@@ -254,11 +261,18 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             <input type="file" id="fileInputVideoSerie" name="video[]" multiple required>
             <label for="fileUploadImageSerie">Affiche de la série :</label>
             <input type="file" id="fileInputImageSerie" name="image" required>
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <input type="submit" class="btn_upload_serie" id="btnUploadSerie" value="Ajouter la vidéo">
           </form>
           <div class="restart_btn">
             <button class="btn_restart_serie" id="btnRestartSerie" disabled>Recommencer</button>
           </div>
+          <?php 
+          if (isset($_SESSION['error_message_serie'])) {
+            echo "<p>" . $_SESSION['error_message_serie'] . "</p>"; 
+            unset($_SESSION['error_message_serie']); 
+        }
+        ?>
           <div class="progress_bar_container_serie" id="progressBarContainerSerie" style="display:none;">
             <label for="uploadProgressSerie">Progression du téléchargement :</label>
             <progress id="uploadProgressSerie" value="0" max="100"></progress>
@@ -417,7 +431,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
             foreach ($GetSeries as $item) {
               $id = htmlspecialchars($item['serie_ID']);
               $title = htmlspecialchars($item['serie_title']);
-              $title = str_replace('_', ' ', $title);
+              $title = str_replace('_', ' ',$title);
               $image_path = htmlspecialchars($item['serie_image_path']);
               $synopsis = htmlspecialchars($item['serie_synopsis']);
               $tags = htmlspecialchars($item['serie_tags']);
@@ -425,7 +439,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               $saisons = htmlspecialchars($item['saisons']);
 
 
-              $saisonsPrises = explode(",", $saisons);
+              $saisonsPrises = explode(",", $saisons); 
               $dataSaisonsDisponibles = implode(',', range(1, 20));
               $dataSaisonsPrises = implode(',', $saisonsPrises);
 
@@ -441,20 +455,20 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               $categorie_deux_id = isset($categories_ids[1]) ? trim($categories_ids[1]) : "";
               $categorie_trois_id = isset($categories_ids[2]) ? trim($categories_ids[2]) : "";
 
-              echo '<div class="box_div" onclick="fillFormData(this)" ' .
-                'data-id="' . $id . '" ' .
-                'data-title="' . $title . '" ' .
-                'data-synopsis="' . $synopsis . '" ' .
-                'data-tags="' . $tags . '" ' .
-                'data-image="' . $image_path . '" ' .
-                'data-serie_categorie_un_id="' . $categorie_un_id . '" ' .
-                'data-serie_categorie_deux_id="' . $categorie_deux_id . '" ' .
-                'data-serie_categorie_trois_id="' . $categorie_trois_id . '" ' .
-                'data-saisons-disponibles="' . $dataSaisonsDisponibles . '" ' .
-                'data-saisons-prises="' . $dataSaisonsPrises . '">' .
-                '<img src="' . $image_path . '" alt="' . $title . '" id="btnAddSaison">' .
-                '</div>';
-            }
+              echo '<div class="box_div" onclick="fillFormData(this)" '.
+              'data-id="'.$id.'" '.
+              'data-title="'.$title.'" '.
+              'data-synopsis="'.$synopsis.'" '.
+              'data-tags="'.$tags.'" '.
+              'data-image="'.$image_path.'" '.
+              'data-serie_categorie_un_id="'.$categorie_un_id.'" '.
+              'data-serie_categorie_deux_id="'.$categorie_deux_id.'" '.
+              'data-serie_categorie_trois_id="'.$categorie_trois_id.'" '.
+              'data-saisons-disponibles="'.$dataSaisonsDisponibles.'" '.
+              'data-saisons-prises="'.$dataSaisonsPrises.'">'.
+              '<img src="'.$image_path.'" alt="'.$title.'">'.
+              '</div>';
+     }
             ?>
           </div>
         </div>

@@ -8,6 +8,9 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION
   exit;
 }
 
+if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
+  die("Token CSRF invalide.");
+}
 function retrieveUserEmail($link, $user_ID)
 {
   $email_query = "SELECT email FROM user WHERE user_ID = ?";

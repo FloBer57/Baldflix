@@ -1,6 +1,7 @@
-<?php
+<?php 
 
 require_once "config.php";
+
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   header("location: baldflix_login.php");
   exit;
@@ -10,16 +11,16 @@ if ($_SESSION["user_role_ID"] != 2) {
   header("location: profile.php");
   exit;
 }
-function deleteFiles($path)
-{
+
+function deleteFiles($path) {
   if (is_file($path)) {
-    unlink($path);
+      unlink($path); 
   } elseif (is_dir($path)) {
-    $files = array_diff(scandir($path), ['.', '..']);
-    foreach ($files as $file) {
-      deleteFiles($path . '/' . $file);
-    }
-    rmdir($path);
+      $files = array_diff(scandir($path), ['.', '..']);
+      foreach ($files as $file) {
+          deleteFiles($path . '/' . $file);
+      }
+      rmdir($path); 
   }
 }
 
@@ -32,6 +33,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["I
     $idToDelete = $_GET["ID"];
     $typeToDelete = $_GET["type"];
     $titleToDelete = $_GET["title"];
+
     mysqli_begin_transaction($link);
 
     try {
@@ -49,7 +51,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "deleteVideo" && isset($_GET["I
       } elseif ($typeToDelete === 'serie') {
         $path = $serie_dir . $titleToDelete;
         deleteFiles($path);
-
+    
         // Supprimer les entrées dans serieXcategorie
         $sql = "DELETE FROM serie_categorie WHERE serieXcategorie_serie_ID = ?";
         $stmt = mysqli_prepare($link, $sql);

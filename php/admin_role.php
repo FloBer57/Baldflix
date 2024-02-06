@@ -16,10 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify"])) {
     if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
         die("Token CSRF invalide.");
     }
+
     $user_ID = $_POST["user_ID"];
     $new_role = $_POST["new_role"];
 
-    if (!in_array($new_role, [1, 2])) {
+    if (!in_array($new_role, [1, 2, 3])) {
         die("Choix de role invalide.");
     }
 

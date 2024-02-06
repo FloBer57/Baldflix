@@ -1,19 +1,62 @@
 <?php
 session_start();
 require_once "config.php";
+
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+}
+
+if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION["csrf_token"]) {
+    die("Token CSRF invalide");
+}
+
+if ($_SESSION["user_role_ID"] != 2) {
+    header("location: profile.php");
+    exit;
+  }
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nom_serie = htmlspecialchars($_POST["serie_title"]);
-    $numero_saison = intval($_POST["serie_title"]);
+    $numero_saison = intval($_POST["numero_saison"]);
     $tags = htmlspecialchars($_POST["serie_tags"]);
     $synopsis = htmlspecialchars($_POST["serie_synopsis"]);
     $categories = array_map('intval', $_POST['serie_categories']);
 
 
+    $allFilesAreValid = true; 
+
+    foreach ($_FILES["video"]["tmp_name"] as $index => $tmpName) {
+        $videoFileType = mime_content_type($tmpName);
+        $allowedVideoTypes = ['video/mp4', 'video/avi', 'video/mpeg', 'video/mkv'];
+        
+        if (!in_array($videoFileType, $allowedVideoTypes)) {
+            $allFilesAreValid = false; 
+            break; 
+        }
+    }
+
+    $imageFileType = mime_content_type($_FILES["image"]["tmp_name"]);
+    $allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!in_array($imageFileType, $allowedImageTypes)) {
+        $allFilesAreValid = false; 
+    }
+    
+    if (!$allFilesAreValid) {
+        $_SESSION['error_message_serie'] = 'Format invalide.';
+        exit();
+    }
+    
+    
     if ($numero_saison == 1) {
         $safe_nom_serie = str_replace(' ', '_', $nom_serie);
         $serie_dir = "../video/series/" . $safe_nom_serie . "/saison_" . $numero_saison . "/";
         if (!file_exists($serie_dir)) {
             mkdir($serie_dir, 0755, true);
+        }
+
+        if (!in_array($imageFileType, $allowedImageTypes)) {
+            die("Le fichier image n'est pas dans un format autorisé.");
         }
 
         $image_new_name = $serie_dir . $safe_nom_serie .  '_Affiche.' . pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
@@ -88,6 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
         }
         foreach ($_FILES["video"]["name"] as $index => $fileName) {
+
             $safe_episode_title = $safe_nom_serie . "_S" . str_pad($numero_saison, 2, "0", STR_PAD_LEFT) . "_EP" . str_pad($index + 1, 2, "0", STR_PAD_LEFT);
             $video_extension = pathinfo($fileName, PATHINFO_EXTENSION);
             $video_target_file = $serie_dir . $safe_episode_title . "." . $video_extension;
@@ -161,10 +205,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
 
 
-
-
-
-
         $serie_id = htmlspecialchars($_POST["serie_ID"]);
         $safe_nom_serie = str_replace(' ', '_', $nom_serie);
         $serie_dir = "../video/series/" . $safe_nom_serie . "/saison_" . $numero_saison . "/";
@@ -190,6 +230,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
         }
         foreach ($_FILES["video"]["name"] as $index => $fileName) {
+
             $safe_episode_title = $safe_nom_serie . "_S" . str_pad($numero_saison, 2, "0", STR_PAD_LEFT) . "_EP" . str_pad($index + 1, 2, "0", STR_PAD_LEFT);
             $video_extension = pathinfo($fileName, PATHINFO_EXTENSION);
             $video_target_file = $serie_dir . $safe_episode_title . "." . $video_extension;
@@ -210,7 +251,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (file_exists($video_target_file)) {
                         unlink($video_target_file);
                     }
-                    $video_target_file = $converted_video_file;
+                    $video_target_file = $converted_video_file; // Utilisez le fichier converti pour la suite
                 } else {
                     exit("Erreur lors de la conversion de la vidéo.");
                 }
