@@ -1,7 +1,11 @@
 <?php
 session_start();
 require_once "config.php"; 
-
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+  }
+  
 if (isset($_GET['serieId'])) {
     $serieId = $_GET['serieId'];
 

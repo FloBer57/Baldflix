@@ -1,8 +1,8 @@
-var btnOpenIconModal = document.getElementById("openIconModal");
-var iconModal = document.getElementById("iconModal");
-var btnCloseIconModal = document.getElementById("closeModal");
-var iconContainer = document.getElementById("iconContainer");
-var selectedIcon = null; 
+let btnOpenIconModal = document.getElementById("openIconModal");
+let iconModal = document.getElementById("iconModal");
+let btnCloseIconModal = document.getElementById("closeModal");
+let iconContainer = document.getElementById("iconContainer");
+let selectedIcon = null; 
 
 btnOpenIconModal.onclick = function () {
   iconModal.style.display = "block";
@@ -20,9 +20,9 @@ document.querySelectorAll('.modal_radio').forEach(function(radio) {
       });
 
      
-      var labelParent = this.closest('.icon_label');
+      let labelParent = this.closest('.icon_label');
       if (labelParent) {
-          var img = labelParent.querySelector('.icon_preview');
+          let img = labelParent.querySelector('.icon_preview');
           if (img) {
               img.classList.add('icon_selected');
           }

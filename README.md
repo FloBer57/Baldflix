@@ -14,8 +14,12 @@
     - [Maquettes](#maquettes)
   - [Présentation du site](#présentation-du-site)
   - [Partie administrateur](#partie-administrateur)
+  - [Upload des Vidéos](#upload-des-vidéos)
   - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Gestion des mails](#gestion-des-mails)
   - [Erreur](#erreur)
+  - [Remerciement](#remerciement)
     
 ## Introduction
 
@@ -70,13 +74,57 @@ L'administrateur a accès à une interface de gestion des utilisateurs, des film
 - Modifier un utilisateur  ![Interface de Baldflix](image/developpement/Admin_user.png "Modification d'un utilisateur")
 - Créer un nouveau film/serie ![Interface de Baldflix](image/developpement/Admin_video.png "ajout video") ![Interface de Baldflix](image/developpement/Admin_serie.png "Ajout serie")
 - Supprimer un film/serie ![Interface de Baldflix](image/developpement/Admin_suppr.png "suppresion")
-- 
+
+## Upload des Vidéos
+Upload et Traitement de l'Image : Pour chaque nouvelles vidéos crée, le script vérifie s'il y a déjà un dossier, sinon il le crée. Il convertit la vidéo grâce à FFMPEG au format MP4 si la vidéo n'est pas en MP4. L'image de l'affiche est téléchargée et convertie en JPG si nécessaire, en utilisant ffmpeg pour assurer la compatibilité.
+
+Gestion des Saisons Supplémentaires : Pour l'ajout de saisons supplémentaires à une série existante, le processus est similaire mais sans la nécessité de recréer les informations de base de la série.
+
+Modalité de Sélection de Série
+La modalité de sélection de série est une fonctionnalité interactive permettant aux utilisateurs de choisir facilement une série existante lors de l'ajout de nouvelles saisons. Une fois une série sélectionnée, le formulaire est automatiquement rempli avec les informations pertinentes, y compris le numéro de saison suivant disponible. Cependant, il est recommandé de ne pas modifier les champs pré-remplis pour éviter des erreurs.
 ## Installation
 
-Je me suis entrainé sur mon Rasbperr Pi 5 pour le développement de baldflix. J'ai fait une page entière sur wikiJS qui explique comment faire pour réinstaller le serveur et le sécuriser chez vous. 
+Je me suis entrainé sur mon Rasbperry Pi 5 pour le développement de baldflix. J'ai fait une page entière sur wikiJS qui explique comment faire pour réinstaller le serveur et le sécuriser chez vous. 
+Dans le dossier bdd_vierge, il y à (tiens donc) une copie de la Base de Données vierge que j'ai utilisée pour le développement.
+Vous pouvez l'importer. De plus, le script d'inscription gère le fait que s'il n'y a aucun utilisateur, le premier créé sera administrateur. 
 
 https://doc.florentbernar.fr/en/Système/Configuration/Nginx
 
+## Configuration
+
+Pour crée l'utilisateur qui permet de gérer toute la BDD, voici la requête SQL
+
+GRANT USAGE ON *.* TO `baldflix_admin`@`%` IDENTIFIED BY PASSWORD '*57014412ECC8E17653C056AF7AB2531E9B47A12A';
+
+GRANT ALL PRIVILEGES ON `baldflix_db`.* TO `baldflix_admin`@`%`;
+
+Voici un exemple d'un config.php : 
+<?php
+
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'baldflix_admin');
+define('DB_PASSWORD', 'VotreMotDePasseBDD');
+define('DB_NAME', 'baldflix_db');
+define('MAIL_PASSWORD', 'votreMotDePasseMail');
+
+$link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+
+// Check connection
+if($link === false){
+    die("ERROR: Could not connect. " . mysqli_connect_error());
+}
+
+## Gestion des mails 
+
+J'ai laissé dans le projet les configurations du serveur SMTP.
+Voici un lien qui vous explique comment le configurer. 
+
+https://analyse-innovation-solution.fr/publication/fr/php/comment-envoyer-un-mail-en-php
+
 ## Erreur
 
-J'ai probablement fait beaucoup d'erreur ou utiliser des mauvaises méthodes, j'ai fait de mon mieux avec mes connaissances et j'ai travailler après mes cours afin d'apprendre les technologies et languages qui m'ont servi à déployer la V1 de baldflix. Je suis ouvert à toutes critique ou améliorations. Je suis joignable par mail à contact@florentbernar.fr
+J'ai probablement fait beaucoup d'erreur ou utiliser des mauvaises méthodes, j'ai fait de mon mieux avec mes connaissances et j'ai travaillé après mes cours afin d'apprendre les technologies et languages qui m'ont servi à déployer la V1 de baldflix. Je suis ouvert à toutes critique ou améliorations. Je suis joignable par mail à contact@florentbernar.fr
+
+## Remerciement 
+
+Je tiens à remercier mes professeurs pour leur soutien tout au long de ce projet Baldflix. Vos conseils, votre patience et votre expertise ont été indispensables. Merci d'avoir partagé votre savoir et de m'avoir motivé à aller plus loin. Ce projet n'aurait pas été le même sans vous.

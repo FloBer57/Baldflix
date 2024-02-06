@@ -1,6 +1,10 @@
 <?php
 session_start();
 require_once "config.php";
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+  }
 
 ?>
 
@@ -35,7 +39,7 @@ require_once "config.php";
         </div>
         <div class="legal">
             <h2>Protection et traitement des données personnelles :</h2>
-            <p>La confidentialité et la protection des données des utilisateurs de Baldflix sont de la plus haute importance. Les informations personnelles recueillies (nom, adresse e-mail, etc.) le sont pour le bon fonctionnement du service et ne sont en aucun cas cédées ou vendues à des tiers. Les utilisateurs disposent d'un droit d'accès, de modification, et de suppression de leurs données personnelles, qu'ils peuvent exercer à tout moment en contactant l'adresse e-mail [Adresse e-mail de contact]. De plus, le compte utilisé pour cette "démo" sont stocké temporairement, et à votre déconnexion, est détruit.</p>
+            <p>La confidentialité et la protection des données des utilisateurs de Baldflix sont de la plus haute importance. Les informations personnelles recueillies (nom, adresse e-mail, etc.) le sont pour le bon fonctionnement du service et ne sont en aucun cas cédées ou vendues à des tiers. Les utilisateurs disposent d'un droit d'accès, de modification, et de suppression de leurs données personnelles, qu'ils peuvent exercer à tout moment en contactant l'adresse e-mail contact.florentbernar.fr. De plus, le compte utilisé pour cette "démo" sont stocké temporairement, et à votre déconnexion, est détruit.</p>
         </div>
         <div class="legal">
             <h2>Conditions Générales d'Utilisation (CGU) :</h2>

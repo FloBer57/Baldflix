@@ -11,20 +11,20 @@ function showTab(tabId) {
     });
   
 
-    var currentTab = document.getElementById(tabId);
+    let currentTab = document.getElementById(tabId);
   
     if (currentTab) {
       currentTab.style.display = 'block';
       currentTab.classList.add('active_tab'); 
   
 
-      var tabLink = document.querySelector('[data-tab="' + tabId + '"]');
+      let tabLink = document.querySelector('[data-tab="' + tabId + '"]');
       if (tabLink) {
         tabLink.classList.add('active_onglet');
       }
   
 
-      var prevElements = document.querySelector('.prev');
+      let prevElements = document.querySelector('.prev');
       if (tabId === 'admin_video_tab_content' && prevElements) {
         prevElements.style.display = 'block';
       } else if (prevElements) {
@@ -38,7 +38,7 @@ function showTab(tabId) {
   document.querySelectorAll('.tab_header').forEach(function(tabHeader) {
     tabHeader.addEventListener('click', function() {
 
-      var tabId = this.getAttribute('data-tab-id');
+      let tabId = this.getAttribute('data-tab-id');
 
       showTab(tabId);
     });

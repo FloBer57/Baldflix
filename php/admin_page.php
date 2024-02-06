@@ -454,7 +454,7 @@ $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
               'data-serie_categorie_trois_id="'.$categorie_trois_id.'" '.
               'data-saisons-disponibles="'.$dataSaisonsDisponibles.'" '.
               'data-saisons-prises="'.$dataSaisonsPrises.'">'.
-              '<img src="'.$image_path.'" alt="'.$title.'">'.
+              '<img src="'.$image_path.'" alt="'.$title.'" id="btnAddSaison">'.
               '</div>';
      }
             ?>

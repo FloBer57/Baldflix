@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-    var duckLink = document.getElementById("duckLink");
+    let duckLink = document.getElementById("duckLink");
   
     duckLink.addEventListener("click", function (event) {
       event.preventDefault(); // Empêcher la navigation vers une autre page
 
-      var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      let audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-      var audioSource = audioContext.createBufferSource();
-      var request = new XMLHttpRequest();
+      let audioSource = audioContext.createBufferSource();
+      let request = new XMLHttpRequest();
       request.open("GET", "../audio/honk.mp3", true);
       request.responseType = "arraybuffer";
   

@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+  header("location: baldflix_login.php");
+  exit;
+}
+
 require_once "config.php";
 
 $new_password = $confirm_password = "";

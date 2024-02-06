@@ -43,7 +43,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
       <h2>Bienvenue sur BaldFlix !</h2>
       <p>Découvrez mon petit projet perso d'étudiant !</p>
         <p>Actuellement stagiaire en tant que Concepteur Développeur d'application à Metz Numeric School, j'ai créé le site BaldFlix dans le cadre de ma formation. Ce projet est pour moi une excellente occasion de mettre en pratique et d'approfondir mes connaissances en PHP, JavaScript, HTML, CSS, et Ajax. À travers le développement de ce site, je cherche à appliquer concrètement les notions apprises en cours et à améliorer mes compétences en développement web, tout en proposant une plateforme divertissante. Ceci est la V.1 de mon site, je met mon projet en pause pour me consacrer pleinement à mon apprentissage du C#.</p>
-        <p>Le compte que vous avez crée précedemment est un compte démo. Le serveur étant hébergé sur mon Raspberry Pi, les comptes seront supprimés à minuit. Si vous souhaitez avoir un compte permenant, envoyez moi un mail à @ ou directement dans la section suggestion du site dans profile :) </p>
+        <p>Le compte que vous avez crée précedemment est un compte démo. Le serveur étant hébergé sur mon Raspberry Pi, les comptes seront supprimés à minuit. Si vous souhaitez avoir un compte permenant, envoyez moi un mail à contact@florentbernar.fr ou directement dans la section suggestion du site dans profile :) </p>
     </div>
   </div>";
 

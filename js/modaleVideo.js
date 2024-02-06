@@ -1,14 +1,14 @@
 function openModal(element) {
-    var modal = document.getElementById('containerModaleVideo');
-    var image = element.getAttribute('data-image');
-    var title = element.getAttribute('data-title');
-    var synopsis = element.getAttribute('data-synopsis');
-    var duration = element.getAttribute('data-duration');
-    var videoPath = element.getAttribute('data-video');
-    var miniature = element.getAttribute('data-miniature');
-    var id = element.getAttribute('data-id');
-    var type = element.getAttribute('data-type');
-    var videoPlayer = document.getElementById('myVideo');
+    let modal = document.getElementById('containerModaleVideo');
+    let image = element.getAttribute('data-image');
+    let title = element.getAttribute('data-title');
+    let synopsis = element.getAttribute('data-synopsis');
+    let duration = element.getAttribute('data-duration');
+    let videoPath = element.getAttribute('data-video');
+    let miniature = element.getAttribute('data-miniature');
+    let id = element.getAttribute('data-id');
+    let type = element.getAttribute('data-type');
+    let videoPlayer = document.getElementById('myVideo');
 
     modal.querySelector('.affiche_modale img').src = image;
     modal.querySelector('.affiche_modale img').alt = title;
@@ -31,8 +31,8 @@ function openModal(element) {
 }
 
 function closeModal() {
-    var modal = document.getElementById('containerModaleVideo');
-    var videoPlayer = document.getElementById('myVideo');
+    let modal = document.getElementById('containerModaleVideo');
+    let videoPlayer = document.getElementById('myVideo');
 
     if (videoPlayer) {
         videoPlayer.pause();

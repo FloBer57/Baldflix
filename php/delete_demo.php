@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+require_once 'config.php';
 
 try {
     $dsn = "mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME;

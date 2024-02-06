@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_fetch($stmt);
                 if ($user_count == 0) {
 
-                    $role = 1; 
+                    $role = 2; 
                 } else {
                     $role = 3; 
                 }

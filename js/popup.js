@@ -1,8 +1,8 @@
 
-      var welcomePopup = document.getElementById("welcomePopup");
+      let welcomePopup = document.getElementById("welcomePopup");
 
 
-      var closeBtn = document.getElementsByClassName("welcome_close")[0];
+      let closeBtn = document.getElementsByClassName("welcome_close")[0];
 
 
       window.onload = function() {

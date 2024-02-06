@@ -1,4 +1,9 @@
-<?php function getFilmsOrSeries($link)
+<?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: baldflix_login.php");
+    exit;
+  }
+  
+  function getFilmsOrSeries($link)
     {
       $orderBy = "title ASC";
       if (isset($_GET['tri'])) {

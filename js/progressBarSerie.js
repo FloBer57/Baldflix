@@ -1,7 +1,7 @@
 document.getElementById('uploadFormSerie').addEventListener('submit', function (e) {
     e.preventDefault();
-    var formData = new FormData(this);
-    var xhr = new XMLHttpRequest();
+    let formData = new FormData(this);
+    let xhr = new XMLHttpRequest();
     xhr.open('POST', this.action, true);
 
 
@@ -9,7 +9,7 @@ document.getElementById('uploadFormSerie').addEventListener('submit', function (
 
     xhr.upload.onprogress = function (e) {
       if (e.lengthComputable) {
-        var percentComplete = (e.loaded / e.total) * 100;
+        let percentComplete = (e.loaded / e.total) * 100;
         document.getElementById('uploadProgressSerie').value = percentComplete;
         if (percentComplete === 100) {
           document.getElementById('btnRestartSerie').disabled = false;

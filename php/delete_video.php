@@ -1,7 +1,15 @@
 <?php 
 
 require_once "config.php";
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+  header("location: baldflix_login.php");
+  exit;
+}
 
+if ($_SESSION["user_role_ID"] != 2) {
+  header("location: profile.php");
+  exit;
+}
 function deleteFiles($path) {
   if (is_file($path)) {
       unlink($path); 
