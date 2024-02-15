@@ -5,6 +5,7 @@
 - [Documentation Baldflix](#documentation-baldflix)
   - [Table des Matières](#table-des-matières)
   - [Introduction](#introduction)
+  - [Démo du site](#démo-du-site)
   - [Compétences Abordées](#compétences-abordées)
   - [Cahier des Charges](#cahier-des-charges)
   - [Présentation de Baldflix](#présentation-de-baldflix)
@@ -24,6 +25,11 @@
 ## Introduction
 
 Bienvenue dans la documentation de Baldflix, un projet personnel qui m'a permit d'appliquer les connaissances apprisent en cours et personnel. Cette documentation vise à fournir un aperçu complet de la conception, du développement, et des caractéristiques techniques de Baldflix. 
+
+## Démo du site 
+
+Une démo du site est disponible directement sur internet, auto-hébergé sur mon raspberry pi. balflix.florentbernar.fr
+
 ## Compétences Abordées
 
 Le développement de Baldflix a permis de couvrir un large éventail de compétences informatiques :
